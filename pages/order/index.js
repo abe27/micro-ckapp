@@ -1,7 +1,7 @@
 import { NavBar } from "../../components";
 import { useSession } from "next-auth/react";
 import { Fragment, useEffect, useState } from "react";
-import { Spinner } from "@chakra-ui/react";
+import { Spinner, Input } from "@chakra-ui/react";
 import {
   CloudIcon,
   CalendarIcon,
@@ -128,10 +128,10 @@ const OrderPlanPage = () => {
                   onClick={() => setShowFilterDate(true)}
                 >
                   <CalendarIcon
-                    className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
+                    className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400 hover:cursor-pointer"
                     aria-hidden="true"
                   />
-                  <span>Plan on {filterDate}</span>
+                  <span>Filter on {filterDate}</span>
                 </div>
               </div>
             </div>
