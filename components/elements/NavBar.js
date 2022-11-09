@@ -298,7 +298,7 @@ const NavBar = ({
                         "group inline-flex items-center rounded-md bg-white text-base font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                       )}
                     >
-                      <span>ข้อมูลส่วนตัว</span>
+                      <span>สวัสดี {user.fullName}</span>
                       <ChevronDownIcon
                         className={classNames(
                           open ? "text-gray-600" : "text-gray-400",
