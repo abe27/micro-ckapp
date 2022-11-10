@@ -94,7 +94,7 @@ const OrderPlanPage = () => {
         setData(data.data);
       }
       setIsLoading(false);
-      console.dir(data);
+      // console.dir(data);
       return;
     }
   };
