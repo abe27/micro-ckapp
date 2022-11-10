@@ -24,7 +24,7 @@ const reInvoice = (i) => {
   ).slice(-4)}${i.shipment.title}`;
 };
 
-const OrderInformation = ({ data }) => {
+const OrderInformation = ({ data, isEdit = true }) => {
   const toast = useToast();
   const { data: session } = useSession();
   const [etd, setEtd] = useState("");
@@ -170,6 +170,7 @@ const OrderInformation = ({ data }) => {
                   name="etddate"
                   id="etddate"
                   autoComplete="etd date"
+                  disabled={isEdit}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   defaultValue={etd}
                 />
@@ -185,6 +186,7 @@ const OrderInformation = ({ data }) => {
                   id="shipment"
                   name="shipment"
                   autoComplete="shipment"
+                  disabled={isEdit}
                   className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                   value={shipmentid}
                   onChange={(e) => setShipmentId(e.target.value)}
@@ -208,6 +210,7 @@ const OrderInformation = ({ data }) => {
                   id="pc"
                   name="pc"
                   autoComplete="pc"
+                  disabled={isEdit}
                   className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                   value={pcid}
                   onChange={(e) => setPcId(e.target.value)}
@@ -231,6 +234,7 @@ const OrderInformation = ({ data }) => {
                   id="commercial"
                   name="commercial"
                   autoComplete="commercial"
+                  disabled={isEdit}
                   className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                   value={commercialid}
                   onChange={(e) => setCommercialId(e.target.value)}
@@ -257,6 +261,7 @@ const OrderInformation = ({ data }) => {
                   name="affcode"
                   id="affcode"
                   autoComplete="affcode"
+                  disabled={isEdit}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   value={affcode}
                   onChange={(e) => setAffCode(e.target.value)}
@@ -275,6 +280,7 @@ const OrderInformation = ({ data }) => {
                   name="custcode"
                   id="custcode"
                   autoComplete="custcode"
+                  disabled={isEdit}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   value={custcode}
                   onChange={(e) => setCustCode(e.target.value)}
@@ -293,6 +299,7 @@ const OrderInformation = ({ data }) => {
                   name="country"
                   id="country"
                   autoComplete="country"
+                  disabled={isEdit}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   value={country}
                   onChange={(e) => setCountry(e.target.value)}
@@ -310,6 +317,7 @@ const OrderInformation = ({ data }) => {
                   name="invno"
                   id="invno"
                   autoComplete="invno"
+                  disabled={isEdit}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   value={invoiceno}
                   onChange={(e) => setInvoiceNo(e.target.value)}
@@ -328,6 +336,7 @@ const OrderInformation = ({ data }) => {
                   name="zonecode"
                   id="zonecode"
                   autoComplete="zonecode"
+                  disabled={isEdit}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   value={zonecode}
                   onChange={(e) => setZoneCode(e.target.value)}
@@ -346,6 +355,7 @@ const OrderInformation = ({ data }) => {
                   name="bioat"
                   id="bioat"
                   autoComplete="bioat"
+                  disabled={isEdit}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   value={bioat}
                   onChange={(e) => setBioat(e.target.value)}
@@ -363,6 +373,7 @@ const OrderInformation = ({ data }) => {
                   id="zoneid"
                   name="zoneid"
                   autoComplete="zoneid"
+                  disabled={isEdit}
                   className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                   value={zone_id}
                   onChange={(e) => setZone(e.target.value)}
@@ -389,6 +400,7 @@ const OrderInformation = ({ data }) => {
                   name="loading_area"
                   id="loading_area"
                   autoComplete="loading_area"
+                  disabled={isEdit}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   value={loading_area}
                   onChange={(e) => setLoadingArea(e.target.value)}
@@ -407,6 +419,7 @@ const OrderInformation = ({ data }) => {
                   name="city"
                   id="city"
                   autoComplete="city"
+                  disabled={isEdit}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   value={order_title}
                   onChange={(e) => setOrderTitle(e.target.value)}
@@ -425,6 +438,7 @@ const OrderInformation = ({ data }) => {
                   name="order_privilege"
                   id="order_privilege"
                   autoComplete="order_privilege"
+                  disabled={isEdit}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   value={privilege}
                   onChange={(e) => setPrivilege(e.target.value)}
@@ -443,6 +457,7 @@ const OrderInformation = ({ data }) => {
                   name="carrier_code"
                   id="carrier_code"
                   autoComplete="carrier_code"
+                  disabled={isEdit}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   value={carrier_code}
                   onChange={(e) => setCarrierCode(e.target.value)}
@@ -453,7 +468,12 @@ const OrderInformation = ({ data }) => {
           <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
             <button
               type="submit"
-              className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              disabled={isEdit}
+              className={
+                isEdit
+                  ? `inline-flex justify-center rounded-md border border-transparent bg-gray-600 py-2 px-4 text-sm font-medium text-white shadow-sm`
+                  : `inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2`
+              }
             >
               บันทึกข้อมูล
             </button>

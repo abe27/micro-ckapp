@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import ModalOrderPart from "./ModalOrderPart";
 import ConfirmDialog from "./ConfirmDeleteItemDialog";
 import ModalAddNewItem from "./ModalAddNewItem";
+import { Tooltip } from "@chakra-ui/react";
 
 const ReDateTime = (txt) => {
   let d = new Date(txt);
@@ -63,6 +64,7 @@ const OrderDetail = ({ data }) => {
 
   useEffect(() => {
     if (data) {
+      console.dir(data.order_detail);
       setOrderDetail(data.order_detail);
     }
   }, [data]);
@@ -86,7 +88,10 @@ const OrderDetail = ({ data }) => {
       </thead>
       <tbody>
         {orderDetail?.map((i, x) => (
-          <tr key={i.id} className="hover">
+          <tr
+            key={i.id}
+            className={i.is_matched ? `hover` : `hover text-rose-500`}
+          >
             <th>{x + 1}</th>
             <td>{i.pono}</td>
             <td>{i.ledger.part.title}</td>
@@ -103,7 +108,13 @@ const OrderDetail = ({ data }) => {
                   : `0`}
               </div>
             </td>
-            <td>{i.orderplan.reasoncd}</td>
+            <td>
+              <Tooltip label={i.orderplan.revise_order.description}>
+                <span className="hover:cursor-pointer">
+                  {i.orderplan.reasoncd}
+                </span>
+              </Tooltip>
+            </td>
             <td>
               <div className="flex justify-end">
                 {ReDateTime(i.orderplan.updtime)}

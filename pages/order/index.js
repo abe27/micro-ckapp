@@ -1,7 +1,20 @@
 import { NavBar } from "../../components";
 import { useSession } from "next-auth/react";
 import { Fragment, useEffect, useState } from "react";
-import { Spinner, Input, Tooltip } from "@chakra-ui/react";
+import {
+  Spinner,
+  Input,
+  Tooltip,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverFooter,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverAnchor,
+} from "@chakra-ui/react";
 import {
   CloudIcon,
   CalendarIcon,
@@ -138,10 +151,30 @@ const OrderPlanPage = () => {
                   <Link href={`/order/edi`}>Remote EDI</Link>
                 </div>
                 <div className="mt-2 flex items-center text-sm text-gray-500">
-                  <CalendarIcon
-                    className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400 hover:cursor-pointer"
-                    aria-hidden="true"
-                  />
+                  <Popover>
+                    <PopoverTrigger>
+                      <CalendarIcon
+                        className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400 hover:cursor-pointer"
+                        aria-hidden="true"
+                      />
+                    </PopoverTrigger>
+                    <PopoverContent>
+                      <PopoverArrow />
+                      <PopoverCloseButton />
+                      <PopoverHeader>เลือกวันที่!</PopoverHeader>
+                      <PopoverBody>
+                        <input
+                          type="date"
+                          placeholder="Type here"
+                          className="input input-bordered w-full"
+                          defaultValue={filterDate}
+                          onChange={(e) =>
+                            setFilterDate(ReDate(e.target.value))
+                          }
+                        />
+                      </PopoverBody>
+                    </PopoverContent>
+                  </Popover>
                   <span>Filter on {filterDate}</span>
                 </div>
               </div>
