@@ -74,9 +74,15 @@ const OrderDetail = ({ data }) => {
         <tr>
           <th></th>
           <th>เลขที่เอกสาร</th>
-          <th>สินค้า</th>
-          <th></th>
-          <th>จำนวน</th>
+          <th>
+            <div className="flex justify-center">สินค้า</div>
+          </th>
+          <th>
+            <div className="flex justify-center">รายละเอียด</div>
+          </th>
+          <th>
+            <div className="flex justify-end">จำนวน</div>
+          </th>
           <th></th>
           <th>การแก้ไข</th>
           <th colSpan={2}>
