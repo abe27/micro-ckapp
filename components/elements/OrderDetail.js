@@ -73,12 +73,12 @@ const OrderDetail = ({ data }) => {
       <thead>
         <tr>
           <th></th>
-          <th>Po</th>
-          <th>Part</th>
+          <th>เลขที่เอกสาร</th>
+          <th>สินค้า</th>
           <th></th>
-          <th>qty</th>
-          <th>ctn</th>
-          <th>revise</th>
+          <th>จำนวน</th>
+          <th></th>
+          <th>การแก้ไข</th>
           <th colSpan={2}>
             <div className="flex items-end justify-end">
               <ModalAddNewItem />
@@ -132,7 +132,7 @@ const OrderDetail = ({ data }) => {
       <tfoot>
         <tr>
           <th colSpan={4}>
-            <div className="flex justify-center">Summary</div>
+            <div className="flex justify-center">ผลรวม</div>
           </th>
           <th>
             <div className="flex justify-end">{SumQty(orderDetail)}</div>
