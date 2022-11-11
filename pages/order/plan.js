@@ -12,6 +12,7 @@ import {
   BriefcaseIcon,
   CalendarIcon,
   CloudIcon,
+  CogIcon,
   PencilIcon,
   PrinterIcon,
 } from "@heroicons/react/20/solid";
@@ -151,34 +152,6 @@ const OrderDetailPage = () => {
                   />
                   {isEdit ? `ปิดแก้ไข` : `เปิดแก้ไข`}
                 </button>
-                {/* <input
-                  type="checkbox"
-                  id="my-modal-etd-date"
-                  className="modal-toggle"
-                />
-                <label
-                  htmlFor="my-modal-etd-date"
-                  className="modal cursor-pointer"
-                >
-                  <label className="modal-box relative" htmlFor="">
-                    <h3 className="text-lg font-bold">เลือกวันที่</h3>
-                    <p className="py-4">
-                      <input
-                        type="date"
-                        placeholder="Type here"
-                        className="input input-bordered w-full"
-                        defaultValue={filterDate}
-                        onChange={(e) => setFilterDate(ReDate(e.target.value))}
-                      />
-                    </p>
-                    <div className="modal-action">
-                      <label htmlFor="my-modal-etd-date" className="btn">
-                        ตกลง
-                      </label>
-                    </div>
-                  </label>
-                </label> */}
-                {/* Start modal*/}
               </span>
               <span className="ml-3 hidden sm:block">
                 <Link
@@ -195,6 +168,24 @@ const OrderDetailPage = () => {
                       aria-hidden="true"
                     />
                     JobList
+                  </button>
+                </Link>
+              </span>
+              <span className="ml-3 hidden sm:block">
+                <Link
+                  href={`/order/pallet?id=${id}`}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  <button
+                    type="button"
+                    className="inline-flex items-center rounded-md border border-transparent bg-orange-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+                  >
+                    <CogIcon
+                      className="-ml-1 mr-2 h-5 w-5"
+                      aria-hidden="true"
+                    />
+                    ตั้งค่าพาเลท
                   </button>
                 </Link>
               </span>

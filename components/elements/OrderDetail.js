@@ -75,15 +75,17 @@ const OrderDetail = ({ data }) => {
           <th></th>
           <th>เลขที่เอกสาร</th>
           <th>
-            <div className="flex justify-center">สินค้า</div>
+            <div className="flex">สินค้า</div>
           </th>
           <th>
-            <div className="flex justify-center">รายละเอียด</div>
+            <div className="flex">รายละเอียด</div>
           </th>
           <th>
             <div className="flex justify-end">จำนวน</div>
           </th>
-          <th></th>
+          <th>
+            <div className="flex justify-end">ต่อหน่วย</div>
+          </th>
           <th>การแก้ไข</th>
           <th colSpan={2}>
             <div className="flex items-end justify-end">
@@ -96,7 +98,7 @@ const OrderDetail = ({ data }) => {
         {orderDetail?.map((i, x) => (
           <tr
             key={i.id}
-            className={i.is_matched ? `hover` : `hover text-rose-500`}
+            className={i.is_matched ? `hover` : `hover text-violet-500`}
           >
             <th>{x + 1}</th>
             <td>{i.pono}</td>

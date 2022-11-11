@@ -315,7 +315,13 @@ const OrderPlanPage = () => {
                   {data.map((i, x) => (
                     <tr className="hover hover:cursor-pointer" key={i.id}>
                       <th>
-                        <Link href={`/order/plan?id=${i.id}`}>{x + 1}</Link>
+                        <Link
+                          href={`/order/plan?id=${i.id}`}
+                          rel="noopener noreferrer"
+                          target="_blank"
+                        >
+                          {x + 1}
+                        </Link>
                       </th>
                       <td>
                         <span

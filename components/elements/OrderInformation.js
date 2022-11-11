@@ -1,6 +1,7 @@
 import { useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+import { FolderPlusIcon } from "@heroicons/react/20/solid";
 
 const reDate = (txt) => {
   var d = new Date(txt);
@@ -475,6 +476,10 @@ const OrderInformation = ({ data, isEdit = true }) => {
                   : `inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2`
               }
             >
+              <FolderPlusIcon
+                className="-ml-1 mr-2 h-5 w-5"
+                aria-hidden="true"
+              />
               บันทึกข้อมูล
             </button>
           </div>
