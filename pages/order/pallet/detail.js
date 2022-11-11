@@ -33,6 +33,7 @@ const PalletDetailPage = () => {
   // Variable
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState(null);
+  const [prefixFticket, setPrefixFticket] = useState(null);
 
   const FetchPalletDetail = async () => {
     setIsLoading(true);
@@ -52,7 +53,8 @@ const PalletDetailPage = () => {
 
     if (res.ok) {
       const data = await res.json();
-      console.dir(data.data);
+      console.dir(data.data.order);
+      // setPrefixFticket(data.data.order.consignee.factory.label_prefix);
       setData(data.data);
     }
     setIsLoading(false);
@@ -169,12 +171,14 @@ const PalletDetailPage = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <th>1</th>
-                  <td>Cy Ganderton</td>
-                  <td>Quality Control Specialist</td>
-                  <td>Blue</td>
-                </tr>
+                {data?.order.pallet_detail.map((i, x) => (
+                  <tr key={i.id}>
+                    <th>{x + 1}</th>
+                    <td>Cy Ganderton</td>
+                    <td>Quality Control Specialist</td>
+                    <td>Blue</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
