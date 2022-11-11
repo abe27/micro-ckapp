@@ -2,7 +2,7 @@ import {
   NavBar,
   ModalAddNewPallet,
   AlertDialogQuestion,
-} from "../../components";
+} from "../../../components";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -32,6 +32,16 @@ const ReInvoice = (i) => {
   return "-";
 };
 
+const Summary = (i) => {
+  let x = 0;
+  i?.map((j) => {
+    if (j.pallet_detail !== undefined) {
+      x += j.pallet_detail.length;
+    }
+  });
+  return x.toLocaleString();
+};
+
 const PalletPage = () => {
   const router = useRouter();
   const { id } = router.query;
@@ -44,7 +54,6 @@ const PalletPage = () => {
 
   const FetchOrderDetail = async () => {
     setData(null);
-    setPalletList(null);
     if (session !== undefined) {
       setIsLoading(true);
       var myHeaders = new Headers();
@@ -56,7 +65,7 @@ const PalletPage = () => {
         redirect: "follow",
       };
       const res = await fetch(
-        `${process.env.API_HOST}/order/ent/${id}`,
+        `${process.env.API_HOST}/order/pallet?order_id=${id}`,
         requestOptions
       );
 
@@ -66,51 +75,67 @@ const PalletPage = () => {
 
       if (res.ok) {
         const obj = await res.json();
+        // console.dir(obj.data);
         setData(obj.data);
-        console.dir(data);
       }
       setIsLoading(false);
-      return;
     }
-    return;
   };
 
-  const AddNewPallet = (obj) => {
+  const AddNewPallet = async (obj) => {
     let plPrefix = "P";
     if (obj[1][0]["type"] === "-") {
       plPrefix = "C";
     }
-    let palletId = ("000" + obj[0]).slice(-3);
-    let pl = [
-      {
-        palletId: `${plPrefix}${palletId}`,
-        typeId: obj[1]["id"], //"3hrEp6IjxiIV-ydZvwJlT"
-        palletType: obj[1][0]["type"],
-        floors: obj[1][0]["floors"], // 6
-        limit_total: obj[1][0]["limit_total"], // 36
-        pallet_size_hight: obj[1][0]["pallet_size_hight"], // 13
-        pallet_size_length: obj[1][0]["pallet_size_length"], // 115
-        pallet_size_width: obj[1][0]["pallet_size_width"], // 110
-      },
-    ];
-    if (palletList === null) {
-      setPalletList(pl);
-      return;
+
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", session?.user.accessToken);
+    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+    var urlencoded = new URLSearchParams();
+    urlencoded.append("order_id", id);
+    urlencoded.append("pallet_type_id", obj[1][0]["id"]);
+    urlencoded.append("pallet_prefix", plPrefix);
+    urlencoded.append("pallet_no", obj[0]);
+    urlencoded.append("pallet_total", obj[1][0]["limit_total"]);
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: urlencoded,
+      redirect: "follow",
+    };
+
+    const res = await fetch(
+      `${process.env.API_HOST}/order/pallet`,
+      requestOptions
+    );
+
+    if (res.ok) {
+      FetchOrderDetail();
     }
-    setPalletList([...palletList, ...pl]);
   };
 
-  const DeletePallet = (id, isDelete) => {
-    // console.log(id);
-    // console.dir(isDelete);
+  const DeletePallet = async (pl_id, isDelete) => {
     if (isDelete) {
-      let obj = [];
-      palletList.map((i) => {
-        if (i.palletId !== id) {
-          obj.push(i);
-        }
-      });
-      setPalletList(obj);
+      console.dir(`delete ${pl_id}`);
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", session?.user.accessToken);
+
+      var requestOptions = {
+        method: "DELETE",
+        headers: myHeaders,
+        redirect: "follow",
+      };
+
+      const res = await fetch(
+        `${process.env.API_HOST}/order/pallet/${pl_id}`,
+        requestOptions
+      );
+
+      if (res.ok) {
+        FetchOrderDetail();
+      }
     }
   };
 
@@ -137,7 +162,7 @@ const PalletPage = () => {
           <div className="lg:flex lg:items-center lg:justify-between">
             <div className="min-w-0 flex-1">
               <strong className="tfont-bold text-gray-900">
-                เลขที่เอกสาร: {ReInvoice(data)}
+                เลขที่เอกสาร: {ReInvoice(data?.order)}
               </strong>
               <div className="mt-1 flex flex-col sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6">
                 <div className="mt-2 flex items-center text-sm text-gray-500">
@@ -166,7 +191,7 @@ const PalletPage = () => {
             <div className="mt-5 flex lg:mt-0 lg:ml-4">
               <span className="ml-3 hidden sm:block">
                 <ModalAddNewPallet
-                  lastPalletNo={palletList}
+                  lastPalletNo={data?.length}
                   onCommitData={AddNewPallet}
                 />
               </span>
@@ -212,6 +237,7 @@ const PalletPage = () => {
             <table className="table table-compact w-full">
               <thead>
                 <tr>
+                  <th></th>
                   <th>เลขที่</th>
                   <th>ประเภท</th>
                   <th>กว้าง</th>
@@ -224,23 +250,35 @@ const PalletPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {palletList !== null &&
-                  palletList.map((i, x) => (
-                    <tr key={i.palletId}>
-                      <th>{i.palletId}</th>
-                      <td>{i.palletType}</td>
-                      <td>{i.pallet_size_width}</td>
-                      <td>{i.pallet_size_length}</td>
-                      <td>{i.pallet_size_hight}</td>
-                      <td>{i.limit_total}</td>
-                      <td>{i.floors}</td>
+                {data != null &&
+                  data?.map((i, x) => (
+                    <tr key={i.id}>
+                      <th>{x + 1}</th>
+                      <td>
+                        <Link
+                          href={`/order/pallet/detail?id=${i.id}`}
+                          rel="noopener noreferrer"
+                          target="_blank"
+                        >
+                          {`${i.pallet_prefix}${("000" + i.pallet_no).slice(
+                            -3
+                          )}`}
+                        </Link>
+                      </td>
+                      <td>{i.pallet_type.type}</td>
+                      <td>{i.pallet_type.pallet_size_width}</td>
+                      <td>{i.pallet_type.pallet_size_length}</td>
+                      <td>{i.pallet_type.pallet_size_hight}</td>
+                      <td>
+                        {i.pallet_detail === null
+                          ? `0`
+                          : i.pallet_detail?.length}
+                      </td>
+                      <td>{i.pallet_type.floors}</td>
                       <td>CM./P</td>
                       <td>
                         <div className="flex justify-end space-x-2">
-                          <span
-                            className="hover:cursor-pointer"
-                            onClick={showDetail(i)}
-                          >
+                          <span className="hover:cursor-pointer">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               className="icon icon-tabler icon-tabler-pencil text-orange-600"
@@ -268,9 +306,15 @@ const PalletPage = () => {
                             </svg>
                           </span>
                           <AlertDialogQuestion
-                            id={i.palletId}
-                            title={`ลบ ${i.palletId}`}
-                            description={`คุณต้องการที่จะลบ ${i.palletId} นี้ใช่หรือไม่?`}
+                            id={i.id}
+                            title={`ลบ ${i.pallet_prefix}${(
+                              "000" + i.pallet_no
+                            ).slice(-3)}`}
+                            description={`คุณต้องการที่จะลบ ${`${
+                              i.pallet_prefix
+                            }${("000" + i.pallet_no).slice(
+                              -3
+                            )}`} นี้ใช่หรือไม่?`}
                             onCommit={DeletePallet}
                           />
                         </div>
@@ -278,6 +322,17 @@ const PalletPage = () => {
                     </tr>
                   ))}
               </tbody>
+              <tfoot>
+                <tr>
+                  <th colSpan={6}>
+                    <div className="flex justify-center">ผลรวม</div>
+                  </th>
+                  <th>{Summary(data)}</th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </tfoot>
             </table>
           </div>
           {showPalletDetail ? (

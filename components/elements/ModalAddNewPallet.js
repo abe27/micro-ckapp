@@ -18,7 +18,7 @@ import { PlusIcon } from "@heroicons/react/20/solid";
 import { useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
 
-const ModalAddNewPallet = ({ lastPalletNo = [], onCommitData }) => {
+const ModalAddNewPallet = ({ lastPalletNo = 0, onCommitData }) => {
   const { data: session } = useSession();
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -54,9 +54,7 @@ const ModalAddNewPallet = ({ lastPalletNo = [], onCommitData }) => {
       if (e.target.value === i.id) {
         if (palletLimit === 0) {
           setPalletLimit(i.limit_total);
-          return;
         }
-        return;
       }
     });
   };
@@ -84,7 +82,6 @@ const ModalAddNewPallet = ({ lastPalletNo = [], onCommitData }) => {
             }
           }
           p.push(i);
-          return;
         }
       });
     }
@@ -96,15 +93,7 @@ const ModalAddNewPallet = ({ lastPalletNo = [], onCommitData }) => {
 
   useEffect(() => {
     if (isOpen) {
-      let lastPl = 0;
-      if (lastPalletNo) {
-        lastPalletNo.map((i) => {
-          if (i.palletType !== "-") {
-            lastPl++;
-          }
-        });
-      }
-      setPalletNo(lastPl + 1);
+      setPalletNo(lastPalletNo + 1);
       setPalletTypeId(null);
       setPalletLimit(0);
       FetchPalletType();
@@ -132,7 +121,7 @@ const ModalAddNewPallet = ({ lastPalletNo = [], onCommitData }) => {
                 type="number"
                 value={palletNo}
                 onChange={(e) => setPalletNo(e.target.value)}
-                placeholder="First name"
+                placeholder="ระบุเลขที่พาเลท"
               />
             </FormControl>
 
