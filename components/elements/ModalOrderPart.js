@@ -20,6 +20,9 @@ const ModalOrderPart = ({ data, onCommitData }) => {
   const updateData = () => {
     data.orderplan.balqty = balqty;
     data.order_ctn = ctn;
+    if (data.total_on_pallet === undefined) {
+      data.total_on_pallet = 0;
+    }
     onCommitData(data);
     onClose();
   };

@@ -45,7 +45,7 @@ const SumQty = (obj) => {
   return ctn.toLocaleString();
 };
 
-const OrderDetail = ({ data, delData, updateData }) => {
+const OrderDetail = ({ data, delData, updateData, addNewItem }) => {
   return (
     <table className="table table-compact w-full">
       <thead>
@@ -70,7 +70,7 @@ const OrderDetail = ({ data, delData, updateData }) => {
           <th>การแก้ไข</th>
           <th colSpan={2}>
             <div className="flex items-end justify-end">
-              <ModalAddNewItem />
+              <ModalAddNewItem addData={addNewItem} />
             </div>
           </th>
         </tr>

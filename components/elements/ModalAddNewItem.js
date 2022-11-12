@@ -14,7 +14,7 @@ import {
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 
-const ModalAddNewItem = ({ isAdd = false }) => {
+const ModalAddNewItem = ({ isAdd = false, addData }) => {
   const { data: session } = useSession();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [poNo, setPoNo] = useState(null);
@@ -25,6 +25,15 @@ const ModalAddNewItem = ({ isAdd = false }) => {
   const [ctn, setCtn] = useState(0);
 
   const updateData = () => {
+    let obj = {
+      pono: poNo,
+      partno: partNo,
+      part: part,
+      part_name: partName,
+      qty: qty,
+      ctn: ctn,
+    };
+    addData(obj);
     onClose();
   };
 
@@ -41,7 +50,7 @@ const ModalAddNewItem = ({ isAdd = false }) => {
       redirect: "follow",
     };
 
-    console.dir(`${process.env.API_HOST}/part/${partNo}`);
+    // console.dir(`${process.env.API_HOST}/part/${partNo}`);
 
     const res = await fetch(
       `${process.env.API_HOST}/part/${partNo}`,
@@ -50,7 +59,7 @@ const ModalAddNewItem = ({ isAdd = false }) => {
 
     if (res.ok) {
       const data = await res.json();
-      console.dir(data.data);
+      // console.dir(data.data);
       setPart(data.data.title);
       setPartName(data.data.description);
     }

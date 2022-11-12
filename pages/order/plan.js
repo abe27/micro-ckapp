@@ -129,6 +129,7 @@ const OrderDetailPage = () => {
     if (!res.ok) {
       toast({
         title: `เกิดข้อผิดพลาด ${res.status}!`,
+        duration: 3000,
         status: "error",
         position: "top",
         isClosable: true,
@@ -157,7 +158,15 @@ const OrderDetailPage = () => {
     );
 
     if (!res.ok) {
-      console.log(res.status);
+      const data = await res.json();
+      toast({
+        title: `เกิดข้อผิดพลาด รหัส: ${res.status}!`,
+        description: data.message,
+        duration: 3000,
+        status: "error",
+        position: "top",
+        isClosable: true,
+      });
     }
 
     if (res.ok) {
@@ -181,6 +190,8 @@ const OrderDetailPage = () => {
     urlencoded.append("order_plan_id", obj.order_plan_id);
     urlencoded.append("order_ctn", obj.order_ctn);
     urlencoded.append("total_on_pallet", obj.total_on_pallet);
+
+    console.log(urlencoded);
 
     var requestOptions = {
       method: "PUT",
@@ -238,6 +249,55 @@ const OrderDetailPage = () => {
     if (res.status === 404) {
       toast({
         title: `ไม่พบข้อมูลที่ต้องการลบ!`,
+        duration: 3000,
+        status: "error",
+        position: "top",
+        isClosable: true,
+      });
+    }
+
+    if (res.ok) {
+      const data = await res.json();
+      toast({
+        title: data.message,
+        duration: 3000,
+        status: "success",
+        position: "top",
+        isClosable: true,
+      });
+      FetchOrderDetail();
+    }
+  };
+
+  const confirmAddNewItem = async (obj) => {
+    // console.log("add new item");
+    // console.dir(obj);
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", session?.user.accessToken);
+    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+    var urlencoded = new URLSearchParams();
+    urlencoded.append("pono", obj.pono);
+    urlencoded.append("part_no", obj.partno);
+    urlencoded.append("order_balqty", obj.qty);
+    urlencoded.append("order_ctn", obj.ctn);
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: urlencoded,
+      redirect: "follow",
+    };
+
+    const res = await fetch(
+      `${process.env.API_HOST}/order/detail?order_id=${id}`,
+      requestOptions
+    );
+
+    if (!res.ok) {
+      const data = await res.json();
+      toast({
+        title: data.message,
         duration: 3000,
         status: "error",
         position: "top",
@@ -402,6 +462,7 @@ const OrderDetailPage = () => {
                       data={orderDetail}
                       delData={confirmDeleteDetail}
                       updateData={confirmUpdateDetail}
+                      addNewItem={confirmAddNewItem}
                     />
                   </TabPanel>
                   <TabPanel>
