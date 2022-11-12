@@ -23,6 +23,18 @@ const SumCtn = (obj) => {
   return ctn.toLocaleString();
 };
 
+const SumSetPalletCtn = (obj) => {
+  let ctn = 0;
+  if (obj) {
+    obj.map((i) => {
+      if (i.total_on_pallet > 0) {
+        ctn += i.total_on_pallet;
+      }
+    });
+  }
+  return ctn.toLocaleString();
+};
+
 const SumQty = (obj) => {
   let ctn = 0;
   if (obj) {
@@ -33,41 +45,7 @@ const SumQty = (obj) => {
   return ctn.toLocaleString();
 };
 
-const OrderDetail = ({ data }) => {
-  const [orderDetail, setOrderDetail] = useState(null);
-  const onCommitData = (obj) => {
-    let order = [];
-    if (obj) {
-      orderDetail.map((i) => {
-        if (i.id === obj.id) {
-          i = obj;
-        }
-        order.push(i);
-      });
-      // console.dir(obj.id);
-    }
-    setOrderDetail(order);
-  };
-
-  const onCommitDeleteData = (obj) => {
-    let order = [];
-    if (obj) {
-      orderDetail.map((i) => {
-        if (i.id !== obj.id) {
-          order.push(i);
-        }
-      });
-      // console.dir(obj.id);
-      setOrderDetail(order);
-    }
-  };
-
-  useEffect(() => {
-    if (data) {
-      console.dir(data.order_detail);
-      setOrderDetail(data.order_detail);
-    }
-  }, [data]);
+const OrderDetail = ({ data, delData, updateData }) => {
   return (
     <table className="table table-compact w-full">
       <thead>
@@ -86,6 +64,9 @@ const OrderDetail = ({ data }) => {
           <th>
             <div className="flex justify-end">ต่อหน่วย</div>
           </th>
+          <th>
+            <div className="flex justify-end">ทำพาเลท</div>
+          </th>
           <th>การแก้ไข</th>
           <th colSpan={2}>
             <div className="flex items-end justify-end">
@@ -95,47 +76,70 @@ const OrderDetail = ({ data }) => {
         </tr>
       </thead>
       <tbody>
-        {orderDetail?.map((i, x) => (
-          <tr
-            key={i.id}
-            className={i.is_matched ? `hover` : `hover text-violet-500`}
-          >
-            <th>{x + 1}</th>
-            <td>{i.pono}</td>
-            <td>{i.ledger.part.title}</td>
-            <td>{i.ledger.part.description}</td>
-            <td>
-              <div className="flex justify-end">
-                {i.orderplan.balqty.toLocaleString()}
-              </div>
-            </td>
-            <td>
-              <div className="flex justify-end">
-                {i.orderplan.balqty > 0
-                  ? (i.orderplan.balqty / i.orderplan.bistdp).toLocaleString()
-                  : `0`}
-              </div>
-            </td>
-            <td>
-              <Tooltip label={i.orderplan.revise_order.description}>
-                <span className="hover:cursor-pointer">
-                  {i.orderplan.reasoncd}
-                </span>
-              </Tooltip>
-            </td>
-            <td>
-              <div className="flex justify-end">
-                {ReDateTime(i.orderplan.updtime)}
-              </div>
-            </td>
-            <td>
-              <div className="flex justify-end space-x-4">
-                <ModalOrderPart data={i} onCommitData={onCommitData} />
-                <ConfirmDialog data={i} onCommitData={onCommitDeleteData} />
-              </div>
-            </td>
-          </tr>
-        ))}
+        {data?.map(
+          (i, x) =>
+            i.orderplan.balqty > 0 && (
+              <tr
+                key={i.id}
+                className={i.is_matched ? `hover` : `hover text-violet-500`}
+              >
+                <th>{x + 1}</th>
+                <td>
+                  <span className="text-blue-600">{i.pono}</span>
+                </td>
+                <td>{i.ledger.part.title}</td>
+                <td>{i.ledger.part.description}</td>
+                <td>
+                  <div className="flex justify-end text-orange-600">
+                    {i.orderplan.balqty.toLocaleString()}
+                  </div>
+                </td>
+                <td>
+                  <div className={`flex justify-end`}>
+                    <span
+                      className={
+                        i.total_on_pallet !==
+                        i.orderplan.balqty / i.orderplan.bistdp
+                          ? `text-rose-600`
+                          : `text-gray-600`
+                      }
+                    >
+                      {i.orderplan.balqty > 0
+                        ? (
+                            i.orderplan.balqty / i.orderplan.bistdp
+                          ).toLocaleString()
+                        : `0`}
+                    </span>
+                  </div>
+                </td>
+                <td>
+                  <div className="flex justify-end">
+                    {i.total_on_pallet > 0
+                      ? i.total_on_pallet.toLocaleString()
+                      : `0`}
+                  </div>
+                </td>
+                <td>
+                  <Tooltip label={i.orderplan.revise_order.description}>
+                    <span className="hover:cursor-pointer hover:bg-violet-600 hover:text-gray-100">
+                      {i.orderplan.reasoncd}
+                    </span>
+                  </Tooltip>
+                </td>
+                <td>
+                  <div className="flex justify-end">
+                    {ReDateTime(i.updated_at)}
+                  </div>
+                </td>
+                <td>
+                  <div className="flex justify-end space-x-4">
+                    <ModalOrderPart data={i} onCommitData={updateData} />
+                    <ConfirmDialog data={i} onCommitData={delData} />
+                  </div>
+                </td>
+              </tr>
+            )
+        )}
       </tbody>
       <tfoot>
         <tr>
@@ -143,10 +147,13 @@ const OrderDetail = ({ data }) => {
             <div className="flex justify-center">ผลรวม</div>
           </th>
           <th>
-            <div className="flex justify-end">{SumQty(orderDetail)}</div>
+            <div className="flex justify-end">{SumQty(data)}</div>
           </th>
           <th>
-            <div className="flex justify-end">{SumCtn(orderDetail)}</div>
+            <div className="flex justify-end">{SumCtn(data)}</div>
+          </th>
+          <th>
+            <div className="flex justify-end">{SumSetPalletCtn(data)}</div>
           </th>
           <th></th>
           <th></th>

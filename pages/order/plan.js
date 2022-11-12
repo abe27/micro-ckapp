@@ -2,6 +2,7 @@ import {
   NavBar,
   OrderInformation,
   OrderDetail,
+  OrderPallet,
   SkeletonLoading,
 } from "../../components";
 import { useSession } from "next-auth/react";
@@ -17,7 +18,15 @@ import {
   PrinterIcon,
 } from "@heroicons/react/20/solid";
 import Link from "next/link";
-import { Spinner } from "@chakra-ui/react";
+import {
+  Spinner,
+  useToast,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+} from "@chakra-ui/react";
 
 const ReDate = (txt) => {
   let d = new Date(txt);
@@ -50,6 +59,7 @@ const ReInvoice = (i) => {
 };
 
 const OrderDetailPage = () => {
+  const toast = useToast();
   const router = useRouter();
   const { data: session } = useSession();
   const { id } = router.query;
@@ -58,8 +68,10 @@ const OrderDetailPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [invoiceNo, setInvoiceNo] = useState(null);
   const [data, setData] = useState(null);
+  const [orderDetail, setOrderDetail] = useState(null);
+  const [orderPallet, setOrderPallet] = useState(null);
 
-  const FetchOrderDetail = async () => {
+  const FetchOrder = async () => {
     setData(null);
     if (session !== undefined) {
       setIsLoading(true);
@@ -80,23 +92,175 @@ const OrderDetailPage = () => {
       );
 
       if (!res.ok) {
-        console.log(res.status);
+        toast({
+          title: `เกิดข้อผิดพลาด ${res.status}!`,
+          duration: 3000,
+          status: "error",
+          position: "top",
+          isClosable: true,
+        });
       }
 
       if (res.ok) {
         const obj = await res.json();
         setData(obj.data);
-        console.dir(data);
+        setOrderDetail(obj.data.order_detail);
+        setOrderPallet(obj.data.pallet);
       }
       setIsLoading(false);
-      return;
     }
-    return;
+  };
+
+  const FetchOrderDetail = async () => {
+    // setIsLoading(true);
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", session?.user.accessToken);
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    const res = await fetch(
+      `${process.env.API_HOST}/order/detail?order_id=${id}`,
+      requestOptions
+    );
+
+    if (!res.ok) {
+      toast({
+        title: `เกิดข้อผิดพลาด ${res.status}!`,
+        status: "error",
+        position: "top",
+        isClosable: true,
+      });
+    }
+
+    if (res.ok) {
+      const obj = await res.json();
+      setOrderDetail(obj.data);
+    }
+    // setIsLoading(false);
+  };
+
+  const FetchPalletList = async () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", session?.user.accessToken);
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+    const res = await fetch(
+      `${process.env.API_HOST}/order/pallet?order_id=${id}`,
+      requestOptions
+    );
+
+    if (!res.ok) {
+      console.log(res.status);
+    }
+
+    if (res.ok) {
+      const obj = await res.json();
+      // console.dir(obj.data);
+      setOrderPallet(obj.data);
+    }
+  };
+
+  const confirmUpdateDetail = async (obj) => {
+    // setIsLoading(true);
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", session?.user.accessToken);
+    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+    var urlencoded = new URLSearchParams();
+    urlencoded.append("revise_id", "Q");
+    urlencoded.append("order_id", obj.order_id);
+    urlencoded.append("pono", obj.pono);
+    urlencoded.append("ledger_id", obj.ledger_id);
+    urlencoded.append("order_plan_id", obj.order_plan_id);
+    urlencoded.append("order_ctn", obj.order_ctn);
+    urlencoded.append("total_on_pallet", obj.total_on_pallet);
+
+    var requestOptions = {
+      method: "PUT",
+      headers: myHeaders,
+      body: urlencoded,
+      redirect: "follow",
+    };
+
+    const res = await fetch(
+      `${process.env.API_HOST}/order/detail/${obj.id}`,
+      requestOptions
+    );
+
+    if (!res.ok) {
+      const data = await res.json();
+      toast({
+        title: `เกิดข้อผิดพลาด รหัส: ${res.status}!`,
+        description: data.message,
+        duration: 3000,
+        status: "error",
+        position: "top",
+        isClosable: true,
+      });
+    }
+
+    if (res.ok) {
+      const data = await res.json();
+      toast({
+        title: data.message,
+        duration: 3000,
+        status: "success",
+        position: "top",
+        isClosable: true,
+      });
+      FetchOrderDetail();
+    }
+    // setIsLoading(false);
+  };
+
+  const confirmDeleteDetail = async (obj) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", session?.user.accessToken);
+
+    var requestOptions = {
+      method: "DELETE",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    const res = await fetch(
+      `${process.env.API_HOST}/order/detail/${obj.id}`,
+      requestOptions
+    );
+
+    if (res.status === 404) {
+      toast({
+        title: `ไม่พบข้อมูลที่ต้องการลบ!`,
+        duration: 3000,
+        status: "error",
+        position: "top",
+        isClosable: true,
+      });
+    }
+
+    if (res.ok) {
+      const data = await res.json();
+      toast({
+        title: data.message,
+        duration: 3000,
+        status: "success",
+        position: "top",
+        isClosable: true,
+      });
+      FetchOrderDetail();
+    }
   };
 
   useEffect(() => {
     if (id) {
-      FetchOrderDetail();
+      FetchOrder();
     }
   }, [id]);
 
@@ -181,11 +345,11 @@ const OrderDetailPage = () => {
                     type="button"
                     className="inline-flex items-center rounded-md border border-transparent bg-orange-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
                   >
-                    <CogIcon
+                    <PrinterIcon
                       className="-ml-1 mr-2 h-5 w-5"
                       aria-hidden="true"
                     />
-                    ตั้งค่าพาเลท
+                    Dimension
                   </button>
                 </Link>
               </span>
@@ -194,7 +358,7 @@ const OrderDetailPage = () => {
                 <button
                   type="button"
                   className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                  onClick={() => FetchOrderDetail()}
+                  onClick={() => FetchOrder()}
                 >
                   {isLoading ? (
                     <Spinner size={`sm`} />
@@ -210,19 +374,51 @@ const OrderDetailPage = () => {
             </div>
           </div>
           {/* /End replace */}
-          {data ? (
-            <div className="flex flex-col w-full border-opacity-50">
-              <div className="grid place-items-center">
-                <OrderInformation data={data} isEdit={isEdit} />
-              </div>
-              <div className="divider" />
-              <div className="grid place-items-center">
-                <OrderDetail data={data} />
-              </div>
-            </div>
-          ) : (
-            <SkeletonLoading />
-          )}
+          <section className="mt-4">
+            {isLoading ? (
+              <SkeletonLoading />
+            ) : data ? (
+              <Tabs isLazy align="end" variant="enclosed">
+                <TabList>
+                  <Tab>
+                    <span className="text-sm">รายละเอียด</span>
+                  </Tab>
+                  <Tab>
+                    <span className="text-sm">รายการสินค้า</span>
+                  </Tab>
+                  <Tab>
+                    <span className="text-sm">ข้อมูลพาเลท</span>
+                  </Tab>
+                  <Tab>
+                    <span className="text-sm">ข้อมูล ลาเบล</span>
+                  </Tab>
+                </TabList>
+                <TabPanels>
+                  <TabPanel>
+                    <OrderInformation data={data} isEdit={isEdit} />
+                  </TabPanel>
+                  <TabPanel>
+                    <OrderDetail
+                      data={orderDetail}
+                      delData={confirmDeleteDetail}
+                      updateData={confirmUpdateDetail}
+                    />
+                  </TabPanel>
+                  <TabPanel>
+                    <OrderPallet
+                      data={orderPallet}
+                      reloadData={FetchPalletList}
+                    />
+                  </TabPanel>
+                  <TabPanel>
+                    <p>label</p>
+                  </TabPanel>
+                </TabPanels>
+              </Tabs>
+            ) : (
+              <SkeletonLoading />
+            )}
+          </section>
         </div>
       </main>
     </>

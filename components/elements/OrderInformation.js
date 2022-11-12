@@ -15,7 +15,7 @@ const reDate = (txt) => {
 };
 
 const reInvoice = (i) => {
-  console.dir(i);
+  // console.dir(i);
   let pref = i.consignee.factory.inv_prefix;
   if (i.commercial.prefix != "-") {
     pref = "NO";

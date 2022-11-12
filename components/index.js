@@ -7,6 +7,7 @@ import ConfirmDeleteItemDialog from "./elements/ConfirmDeleteItemDialog";
 import ModalAddNewItem from "./elements/ModalAddNewItem";
 import ModalAddNewPallet from "./elements/ModalAddNewPallet";
 import AlertDialogQuestion from "./elements/AlertDialogQuestion";
+import OrderPallet from "./elements/OrderPallet";
 
 export {
   AlertDialogQuestion,
@@ -18,4 +19,5 @@ export {
   NavBar,
   OrderInformation,
   OrderDetail,
+  OrderPallet,
 };
