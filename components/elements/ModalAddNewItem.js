@@ -153,7 +153,7 @@ const ModalAddNewItem = ({ isAdd = false, addData }) => {
                         </strong>{" "}
                       </p>
                       <p>
-                        Description:{" "}
+                        Desc:
                         <strong className="text-blue-600">{partName}</strong>
                       </p>
                     </dd>

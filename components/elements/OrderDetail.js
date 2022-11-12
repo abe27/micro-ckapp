@@ -3,6 +3,7 @@ import ModalOrderPart from "./ModalOrderPart";
 import ConfirmDialog from "./ConfirmDeleteItemDialog";
 import ModalAddNewItem from "./ModalAddNewItem";
 import { Tooltip } from "@chakra-ui/react";
+import Link from "next/link";
 
 const ReDateTime = (txt) => {
   let d = new Date(txt);
@@ -85,7 +86,15 @@ const OrderDetail = ({ data, delData, updateData, addNewItem }) => {
               >
                 <th>{x + 1}</th>
                 <td>
-                  <span className="text-blue-600">{i.pono}</span>
+                  <Tooltip label="คลิกที่นี้เพิ่มเข้าดูข้อมูลเพิ่มเติม">
+                    <Link
+                      href={`/order/history?vendor=${i.orderplan.vendor}&tagrp=${i.orderplan.tagrp}&pono=${i.orderplan.pono}&part_no=${i.orderplan.part_no}&bishpc=${i.orderplan.bishpc}&biac=${i.orderplan.biac}`}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span className="text-blue-600">{i.pono}</span>
+                    </Link>
+                  </Tooltip>
                 </td>
                 <td>{i.ledger.part.title}</td>
                 <td>{i.ledger.part.description}</td>

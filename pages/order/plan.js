@@ -359,7 +359,7 @@ const OrderDetailPage = () => {
                     className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400 hover:cursor-pointer"
                     aria-hidden="true"
                   />
-                  <span>Filter on {invoiceNo}</span>
+                  <span>Filter on {ReDate(data?.etd_date)}</span>
                 </div>
               </div>
             </div>
