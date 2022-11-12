@@ -20,7 +20,33 @@ const IndexPage = () => {
   // Get Variable
   const { vendor, tagrp, pono, part_no, bishpc, biac } = router.query;
 
-  useEffect(() => {}, [session?.user]);
+  const FetchData = async () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", session?.user.accessToken);
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    console.dir(
+      `${process.env.API_HOST}/order/plan?vendor=${vendor}&tagrp=${tagrp}&pono=${pono}&part_no=${part_no}&bishpc=${bishpc}&biac=${biac}`
+    );
+    const res = await fetch(
+      `${process.env.API_HOST}/order/plan?vendor=${vendor}&tagrp=${tagrp}&pono=${pono}&part_no=${part_no}&bishpc=${bishpc}&biac=${biac}`,
+      requestOptions
+    );
+
+    if (res.ok) {
+      const data = await res.json();
+      console.dir(data.data);
+    }
+  };
+
+  useEffect(() => {
+    FetchData();
+  }, [session?.user]);
   return (
     <>
       <NavBar title={``} description={``} user={session?.user} />
