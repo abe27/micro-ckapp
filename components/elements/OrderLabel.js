@@ -9,12 +9,15 @@ import {
   PopoverArrow,
   PopoverCloseButton,
   PopoverAnchor,
+  InputGroup,
+  InputRightElement,
+  Input,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import SkeletonLoading from "./SkeletonLoading";
 import AlertDialogQuestion from "./AlertDialogQuestion";
 import AlertDialogPrintShippingLabel from "./AlertDialogPrintShippingLabel";
-import { PrinterIcon } from "@heroicons/react/20/solid";
+import { CheckIcon, PrinterIcon } from "@heroicons/react/20/solid";
 
 const ReDateTime = (txt) => {
   let d = new Date(txt);
@@ -28,14 +31,17 @@ const ReDateTime = (txt) => {
 const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
   const [fticketData, setFTicketData] = useState(null);
   const [filterPart, setFilterPart] = useState(null);
+  const [sortList, setSortList] = useState(fticketData);
+
+  const sortData = () => {
+    console.dir(filterPart);
+    return sortList.filter((x) => x.part_no.includes(filterPart));
+  };
 
   const filterData = (e) => {
-    // const filterPartList = fticketData.filter(
-    //   (p) => p.part_no === e.target.value
-    // );
-    // setFilterPart(e.target.value);
-    // return filterPartList;
-    return fticketData;
+    setFilterPart(e.target.value);
+    let doc = sortData();
+    setSortList(doc);
   };
 
   useEffect(() => {
@@ -64,13 +70,14 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
       });
 
       setFTicketData(doc);
+      setSortList(doc);
     }
   }, [data]);
   return (
     <>
       {fticketData ? (
         <>
-          <div className="overflow-x-auto min-h-fit">
+          <div className="overflow-x-auto">
             <table className="table table-compact w-full">
               <thead>
                 <tr>
@@ -113,13 +120,21 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
                         <PopoverCloseButton />
                         <PopoverHeader>กรองข้อมูลสินค้า!</PopoverHeader>
                         <PopoverBody>
-                          <input
-                            type="text"
-                            placeholder="Type here"
-                            className="input input-bordered input-sm w-full max-w-xs"
-                            defaultValue={filterPart}
-                            onChange={(e) => filterData(e)}
-                          />
+                          <InputGroup>
+                            <Input
+                              placeholder="ระบุสินค้า"
+                              defaultValue={filterPart}
+                              onChange={filterData}
+                            />
+                            <InputRightElement
+                              children={
+                                <CheckIcon
+                                  onClick={() => setFilterPart("")}
+                                  className="-ml-1 mr-2 h-5 w-5 text-green-600 hover:cursor-pointer"
+                                />
+                              }
+                            />
+                          </InputGroup>
                         </PopoverBody>
                       </PopoverContent>
                     </Popover>
@@ -144,8 +159,8 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
                 </tr>
               </thead>
               <tbody>
-                {/* {filterData ? (
-                  filterData.map((i, x) => (
+                {sortList ? (
+                  sortList.map((i, x) => (
                     <tr className="hover" key={i.shipping_id}>
                       <th>{x + 1}</th>
                       <td>
@@ -183,11 +198,11 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
                   ))
                 ) : (
                   <></>
-                )} */}
+                )}
               </tbody>
             </table>
           </div>
-          {fticketData?.length > 30 && (
+          {/* {fticketData?.length > 30 && (
             <div className="mt-4 flex justify-center">
               <div className="btn-group">
                 <button className="btn btn-sm">1</button>
@@ -196,7 +211,7 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
                 <button className="btn btn-sm">4</button>
               </div>
             </div>
-          )}
+          )} */}
         </>
       ) : (
         <SkeletonLoading />
