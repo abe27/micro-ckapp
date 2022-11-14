@@ -33,14 +33,24 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
   const [filterPart, setFilterPart] = useState(null);
   const [sortList, setSortList] = useState(fticketData);
 
-  const sortData = () => {
-    console.dir(filterPart);
-    return sortList.filter((x) => x.part_no.includes(filterPart));
+  const sortData = (txt) => {
+    return sortList.filter((x) => x.part_no.includes(txt));
   };
 
   const filterData = (e) => {
-    setFilterPart(e.target.value);
-    let doc = sortData();
+    let doc = fticketData;
+    if (e.target.value) {
+      doc = sortData(e.target.value);
+      // console.dir(doc);
+      setSortList(doc);
+      setFilterPart(e.target.value);
+    }
+    setSortList(doc);
+  };
+
+  const clearFilter = () => {
+    let doc = fticketData;
+    setFilterPart(null);
     setSortList(doc);
   };
 
@@ -124,12 +134,13 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
                             <Input
                               placeholder="ระบุสินค้า"
                               defaultValue={filterPart}
+                              value={filterPart}
                               onChange={filterData}
                             />
                             <InputRightElement
                               children={
                                 <CheckIcon
-                                  onClick={() => setFilterPart("")}
+                                  onClick={clearFilter}
                                   className="-ml-1 mr-2 h-5 w-5 text-green-600 hover:cursor-pointer"
                                 />
                               }
