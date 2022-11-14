@@ -1,17 +1,7 @@
-import { NavBar, ModalAddNewPallet, AlertDialogQuestion } from "../index";
+import { ModalAddNewPallet, AlertDialogQuestion } from "../index";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { Spinner, useToast } from "@chakra-ui/react";
-import {
-  ArrowPathIcon,
-  BriefcaseIcon,
-  CalendarIcon,
-  CloudIcon,
-  CogIcon,
-  PlusIcon,
-  PrinterIcon,
-} from "@heroicons/react/20/solid";
+import { useToast } from "@chakra-ui/react";
 import Link from "next/link";
 
 const ReInvoice = (i) => {
