@@ -9,18 +9,14 @@ import {
   Tooltip,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
-
-const AlertDialogQuestion = ({
+const AlertDialogPrintShippingLabel = ({
   id,
   title = "ลบข้อมูลนี้",
   description = `คุณต้องการที่จะลบ...ใช่หรือไม่!`,
+  SvgIcon,
   onCommit,
-  iconName = `icon-tabler-trash`,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
@@ -36,7 +32,7 @@ const AlertDialogQuestion = ({
         <span className="hover:cursor-pointer" onClick={onOpen}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className={`icon icon-tabler icon-tabler-trash text-rose-500 hover:text-rose-700 hover:cursor-pointer`}
+            className="icon icon-tabler icon-tabler-printer text-violet-400 hover:text-violet-700"
             width="16"
             height="16"
             viewBox="0 0 24 24"
@@ -47,11 +43,9 @@ const AlertDialogQuestion = ({
             strokeLinejoin="round"
           >
             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-            <line x1="4" y1="7" x2="20" y2="7"></line>
-            <line x1="10" y1="11" x2="10" y2="17"></line>
-            <line x1="14" y1="11" x2="14" y2="17"></line>
-            <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path>
-            <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
+            <path d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2"></path>
+            <path d="M17 9v-4a2 2 0 0 0 -2 -2h-6a2 2 0 0 0 -2 2v4"></path>
+            <rect x="7" y="13" width="10" height="8" rx="2"></rect>
           </svg>
         </span>
       </Tooltip>
@@ -82,4 +76,4 @@ const AlertDialogQuestion = ({
   );
 };
 
-export default AlertDialogQuestion;
+export default AlertDialogPrintShippingLabel;

@@ -4,6 +4,7 @@ import {
   OrderDetail,
   OrderPallet,
   SkeletonLoading,
+  OrderLabel,
 } from "../../components";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -33,15 +34,6 @@ const ReDate = (txt) => {
   return `${d.getFullYear()}-${("0" + (d.getMonth() + 1)).slice(-2)}-${(
     "0" + d.getDate()
   ).slice(-2)}`;
-};
-
-const ReDateTime = (txt) => {
-  let d = new Date(txt);
-  return `${d.getFullYear()}-${("0" + (d.getMonth() + 1)).slice(-2)}-${(
-    "0" + d.getDate()
-  ).slice(-2)} ${("0" + d.getHours()).slice(-2)}:${("0" + d.getMinutes()).slice(
-    -2
-  )}`;
 };
 
 const ReInvoice = (i) => {
@@ -84,7 +76,7 @@ const OrderDetailPage = () => {
         redirect: "follow",
       };
 
-      // console.dir(`${process.env.API_HOST}/order/ent/${id}`);
+      console.dir(`${process.env.API_HOST}/order/ent/${id}`);
 
       const res = await fetch(
         `${process.env.API_HOST}/order/ent/${id}`,
@@ -318,6 +310,14 @@ const OrderDetailPage = () => {
     }
   };
 
+  const confirmDeleteShippingLabel = (id, status) => {
+    console.log(`Delete id: ${id} status: ${status}`);
+  };
+
+  const confirmPrintLabel = (id, status) => {
+    console.log(`PrintLabel id: ${id} status: ${status}`);
+  };
+
   useEffect(() => {
     if (id) {
       FetchOrder();
@@ -447,10 +447,10 @@ const OrderDetailPage = () => {
                     <span className="text-sm">รายการสินค้า</span>
                   </Tab>
                   <Tab>
-                    <span className="text-sm">ข้อมูลพาเลท</span>
+                    <span className="text-sm">รายการพาเลท</span>
                   </Tab>
                   <Tab>
-                    <span className="text-sm">ข้อมูล ลาเบล</span>
+                    <span className="text-sm">รายลาเบล</span>
                   </Tab>
                 </TabList>
                 <TabPanels>
@@ -472,7 +472,11 @@ const OrderDetailPage = () => {
                     />
                   </TabPanel>
                   <TabPanel>
-                    <p>label</p>
+                    <OrderLabel
+                      data={orderPallet}
+                      confirmDelete={confirmDeleteShippingLabel}
+                      confirmPrintLabel={confirmPrintLabel}
+                    />
                   </TabPanel>
                 </TabPanels>
               </Tabs>

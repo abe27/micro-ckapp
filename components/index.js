@@ -8,6 +8,7 @@ import ModalAddNewItem from "./elements/ModalAddNewItem";
 import ModalAddNewPallet from "./elements/ModalAddNewPallet";
 import AlertDialogQuestion from "./elements/AlertDialogQuestion";
 import OrderPallet from "./elements/OrderPallet";
+import OrderLabel from "./elements/OrderLabel";
 
 export {
   AlertDialogQuestion,
@@ -20,4 +21,5 @@ export {
   OrderInformation,
   OrderDetail,
   OrderPallet,
+  OrderLabel,
 };
