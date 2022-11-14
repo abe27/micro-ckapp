@@ -2,7 +2,7 @@ import { NavBar, ModalAddNewPallet, AlertDialogQuestion } from "../index";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { Spinner } from "@chakra-ui/react";
+import { Spinner, useToast } from "@chakra-ui/react";
 import {
   ArrowPathIcon,
   BriefcaseIcon,
@@ -39,6 +39,7 @@ const Summary = (i) => {
 };
 
 const OrderPallet = ({ data, reloadData }) => {
+  const toast = useToast();
   const router = useRouter();
   const { id } = router.query;
   const { data: session } = useSession();
@@ -72,6 +73,17 @@ const OrderPallet = ({ data, reloadData }) => {
       requestOptions
     );
 
+    if (!res.ok) {
+      const data = await res.json();
+      toast({
+        title: data.message,
+        duration: 3000,
+        status: "error",
+        position: "top",
+        is,
+      });
+    }
+
     if (res.ok) {
       reloadData();
     }
@@ -93,6 +105,17 @@ const OrderPallet = ({ data, reloadData }) => {
         `${process.env.API_HOST}/order/pallet/${pl_id}`,
         requestOptions
       );
+
+      if (!res.ok) {
+        const data = await res.json();
+        toast({
+          title: data.message,
+          duration: 3000,
+          status: "error",
+          position: "top",
+          is,
+        });
+      }
 
       if (res.ok) {
         reloadData();

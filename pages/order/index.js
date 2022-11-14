@@ -92,10 +92,11 @@ const OrderPlanPage = () => {
       // console.dir(
       //   `${process.env.API_HOST}/order/ent?etd=${filterDate}&factory=${session.user.Factory}`
       // );
-      let host = `${process.env.API_HOST}/order/ent?etd=${filterDate}`;
-      if (session.user.Factory === "-") {
-        host = `${process.env.API_HOST}/order/ent?factory=${session.user.Factory}`;
-      }
+      let host = `${process.env.API_HOST}/order/ent?etd=${filterDate}&factory=${session.user.Factory}`;
+      // if (session.user.Factory === "-") {
+      //   host = `${process.env.API_HOST}/order/ent?etd=${filterDate}&factory=${session.user.Factory}`;
+      // }
+      console.dir(host);
       const res = await fetch(host, requestOptions);
 
       if (!res.ok) {
