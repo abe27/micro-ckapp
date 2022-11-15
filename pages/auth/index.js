@@ -4,6 +4,8 @@ import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { clearAllSessionStorage } from "../../hooks/session";
 
 const AuthPage = () => {
   const router = useRouter();
@@ -43,6 +45,10 @@ const AuthPage = () => {
       onCloseComplete: () => router.push("/"),
     });
   };
+
+  useEffect(() => {
+    clearAllSessionStorage();
+  }, []);
   return (
     <>
       <Head>

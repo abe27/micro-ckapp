@@ -14,6 +14,7 @@ import {
   PopoverArrow,
   PopoverCloseButton,
   PopoverAnchor,
+  useToast,
 } from "@chakra-ui/react";
 import {
   CloudIcon,
@@ -29,48 +30,22 @@ import {
 import { Menu, Transition } from "@headlessui/react";
 import Link from "next/link";
 import { AddIcon } from "@chakra-ui/icons";
+import { useRouter } from "next/router";
+import {
+  GenerateInvoice,
+  SumCtn,
+  ReDate,
+  ReDateTime,
+} from "../../hooks/greeter";
+import { getSessionStorage, setSessionStorage } from "../../hooks/session";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const ReDate = (txt) => {
-  let d = new Date(txt);
-  return `${d.getFullYear()}-${("0" + (d.getMonth() + 1)).slice(-2)}-${(
-    "0" + d.getDate()
-  ).slice(-2)}`;
-};
-
-const ReDateTime = (txt) => {
-  let d = new Date(txt);
-  return `${d.getFullYear()}-${("0" + (d.getMonth() + 1)).slice(-2)}-${(
-    "0" + d.getDate()
-  ).slice(-2)} ${("0" + d.getHours()).slice(-2)}:${("0" + d.getMinutes()).slice(
-    -2
-  )}`;
-};
-
-const ReInvoice = (i) => {
-  // console.dir(i);
-  let prefix = "NO";
-  if (i.commercial.title != "N") {
-    prefix = i.consignee.prefix;
-  }
-  return `${i.consignee.factory.inv_prefix}${prefix}${i.etd_date.substring(
-    3,
-    4
-  )}${("0000" + i.running_seq).slice(-4)}${i.shipment.title}`;
-};
-
-const SumCtn = (obj) => {
-  let ctn = 0;
-  obj.map((i) => {
-    ctn += i.order_ctn;
-  });
-  return ctn.toLocaleString();
-};
-
 const OrderPlanPage = () => {
+  const router = useRouter();
+  const toast = useToast();
   const { data: session } = useSession();
   const [isLoading, setIsLoading] = useState(false);
   const [filterDate, setFilterDate] = useState(null);
@@ -89,18 +64,25 @@ const OrderPlanPage = () => {
         redirect: "follow",
       };
 
-      // console.dir(
-      //   `${process.env.API_HOST}/order/ent?etd=${filterDate}&factory=${session.user.Factory}`
-      // );
       let host = `${process.env.API_HOST}/order/ent?etd=${filterDate}&factory=${session.user.Factory}`;
-      // if (session.user.Factory === "-") {
-      //   host = `${process.env.API_HOST}/order/ent?etd=${filterDate}&factory=${session.user.Factory}`;
-      // }
       console.dir(host);
       const res = await fetch(host, requestOptions);
 
       if (!res.ok) {
-        console.log(res.status);
+        const data = await res.json();
+        toast({
+          title: data.message,
+          status: "error",
+          position: "top",
+          duration: 3000,
+          isClosable: true,
+          onCloseComplete: () => {
+            if (res.status === 401) {
+              router.push("/auth");
+            }
+          },
+        });
+        console.dir(res.status);
       }
 
       if (res.ok) {
@@ -109,14 +91,21 @@ const OrderPlanPage = () => {
       }
       setIsLoading(false);
       // console.dir(data);
-      return;
     }
+  };
+
+  const filterDateChange = (e) => {
+    let d = setSessionStorage("filterEdtDate", ReDate(e.target.value));
+    setFilterDate(d);
   };
 
   useEffect(() => {
     if (filterDate == null) {
-      let d = Date.now();
-      setFilterDate(ReDate(d));
+      let d = getSessionStorage("filterEdtDate");
+      if (d === null) {
+        d = setSessionStorage("filterEdtDate", ReDate(Date.now()));
+      }
+      setFilterDate(d);
     }
     FetchOrder();
   }, [filterDate, session]);
@@ -169,9 +158,7 @@ const OrderPlanPage = () => {
                           placeholder="Type here"
                           className="input input-bordered w-full"
                           defaultValue={filterDate}
-                          onChange={(e) =>
-                            setFilterDate(ReDate(e.target.value))
-                          }
+                          onChange={filterDateChange}
                         />
                       </PopoverBody>
                     </PopoverContent>
@@ -209,7 +196,7 @@ const OrderPlanPage = () => {
                         placeholder="Type here"
                         className="input input-bordered w-full"
                         defaultValue={filterDate}
-                        onChange={(e) => setFilterDate(ReDate(e.target.value))}
+                        onChange={filterDateChange}
                       />
                     </p>
                     <div className="modal-action">
@@ -382,7 +369,7 @@ const OrderPlanPage = () => {
                                   : `ยังไม่ได้ทำ Invoice`
                               }
                             >
-                              {ReInvoice(i)}
+                              {GenerateInvoice(i)}
                             </Tooltip>
                           </span>
                         </Link>
