@@ -9,10 +9,12 @@ import ModalAddNewPallet from "./elements/ModalAddNewPallet";
 import AlertDialogQuestion from "./elements/AlertDialogQuestion";
 import OrderPallet from "./elements/OrderPallet";
 import OrderLabel from "./elements/OrderLabel";
+import ConfirmSyncData from "./elements/ConfirmSyncData";
 
 export {
   AlertDialogQuestion,
   ConfirmDeleteItemDialog,
+  ConfirmSyncData,
   ModalAddNewItem,
   ModalAddNewPallet,
   ModalOrderPart,

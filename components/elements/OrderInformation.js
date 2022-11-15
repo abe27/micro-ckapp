@@ -1,32 +1,11 @@
 import { useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { FolderPlusIcon } from "@heroicons/react/20/solid";
+import { CheckBadgeIcon, FolderPlusIcon } from "@heroicons/react/20/solid";
+import ConfirmSyncData from "./ConfirmSyncData";
+import { GenerateInvoice, ReDate } from "../../hooks/greeter";
 
-const reDate = (txt) => {
-  var d = new Date(txt);
-  var dateStr =
-    d.getFullYear() +
-    "-" +
-    ("00" + (d.getMonth() + 1)).slice(-2) +
-    "-" +
-    ("00" + d.getDate()).slice(-2);
-  return dateStr;
-};
-
-const reInvoice = (i) => {
-  // console.dir(i);
-  let pref = i.consignee.factory.inv_prefix;
-  if (i.commercial.prefix != "-") {
-    pref = "NO";
-  }
-  return `${pref}${i.consignee.prefix}${i.etd_date.substring(3, 4)}${(
-    "0000" + i.running_seq
-  ).slice(-4)}${i.shipment.title}`;
-};
-
-const OrderInformation = ({ data, isEdit = true }) => {
-  const toast = useToast();
+const OrderInformation = ({ data, isEdit = true, confirmSync }) => {
   const { data: session } = useSession();
   const [etd, setEtd] = useState("");
   const [shipmentid, setShipmentId] = useState("");
@@ -67,9 +46,6 @@ const OrderInformation = ({ data, isEdit = true }) => {
       const obj = await res.json();
       setShipment(obj.data);
     }
-    //   .then((response) => response.json())
-    //   .then((result) => setShipment(result.data))
-    //   .catch((error) => console.log("error", error));
   };
 
   const fetchPc = async () => {
@@ -101,10 +77,6 @@ const OrderInformation = ({ data, isEdit = true }) => {
       const obj = await res.json();
       setCommercial(obj.data);
     }
-
-    //   .then((response) => response.json())
-    //   .then((result) => setCommercial(result.data))
-    //   .catch((error) => console.log("error", error));
   };
 
   const fetchOrderZone = async () => {
@@ -135,7 +107,7 @@ const OrderInformation = ({ data, isEdit = true }) => {
       if (data) {
         // Set Data to Variable
         // console.dir(data);
-        setEtd(reDate(data.etd_date));
+        setEtd(ReDate(data.etd_date));
         setShipmentId(data.shipment_id);
         setPcId(data.pc_id);
         setCommercialId(data.commercial_id);
@@ -143,7 +115,7 @@ const OrderInformation = ({ data, isEdit = true }) => {
         setAffCode(data.consignee.affcode.title);
         setCustCode(data.consignee.customer.title);
         setCountry(data.consignee.customer.description);
-        setInvoiceNo(reInvoice(data));
+        setInvoiceNo(GenerateInvoice(data));
         setZoneCode(data.zone_code);
         setBioat(data.bioat);
         setLoadingArea(data.loading_area);
@@ -467,7 +439,14 @@ const OrderInformation = ({ data, isEdit = true }) => {
               </div>
             </div>
           </div>
-          <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
+          <div className="bg-gray-50 px-4 py-3 text-right sm:px-6 space-x-4">
+            <ConfirmSyncData
+              id={data?.id}
+              labe={`ยืนยันรายการนี้`}
+              description={`คุณต้องการที่จะยืนยันรายการนี้ใช่หรือไม่!`}
+              isEdit={isEdit}
+              onCommitData={confirmSync}
+            />
             <button
               type="submit"
               disabled={isEdit}

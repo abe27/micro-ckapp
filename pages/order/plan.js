@@ -262,8 +262,6 @@ const OrderDetailPage = () => {
   };
 
   const confirmAddNewItem = async (obj) => {
-    // console.log("add new item");
-    // console.dir(obj);
     var myHeaders = new Headers();
     myHeaders.append("Authorization", session?.user.accessToken);
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
@@ -316,6 +314,51 @@ const OrderDetailPage = () => {
 
   const confirmPrintLabel = (id, status) => {
     console.log(`PrintLabel id: ${id} status: ${status}`);
+  };
+
+  const confirmSync = async (id, status) => {
+    console.log(`Confirm sync id: ${id} status: ${status}`);
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", session?.user.accessToken);
+
+    var urlencoded = new URLSearchParams();
+
+    var requestOptions = {
+      method: "PATCH",
+      headers: myHeaders,
+      body: urlencoded,
+      redirect: "follow",
+    };
+
+    const res = await fetch(
+      `${process.env.API_HOST}/order/detail/${id}`,
+      requestOptions
+    );
+    if (!res.ok) {
+      const data = await res.json();
+      toast({
+        title: `เกิดข้อผิดพลาด ${data.message}!`,
+        duration: 3000,
+        status: "error",
+        position: "top",
+        isClosable: true,
+      });
+    }
+
+    if (res.ok) {
+      const data = await res.json();
+      toast({
+        title: `${data.message}!`,
+        duration: 2500,
+        status: "success",
+        position: "top",
+        isClosable: true,
+        onCloseComplete: () => {
+          setIsEdit(!isEdit);
+          FetchOrder();
+        },
+      });
+    }
   };
 
   useEffect(() => {
@@ -455,7 +498,11 @@ const OrderDetailPage = () => {
                 </TabList>
                 <TabPanels>
                   <TabPanel>
-                    <OrderInformation data={data} isEdit={isEdit} />
+                    <OrderInformation
+                      data={data}
+                      isEdit={isEdit}
+                      confirmSync={confirmSync}
+                    />
                   </TabPanel>
                   <TabPanel>
                     <OrderDetail
