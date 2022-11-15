@@ -103,7 +103,25 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
                 </th>
                 <th>เลขที่ shipping no</th>
                 <th>
-                  <Popover>
+                  <section className="flex space-x-2 hover:cursor-pointer">
+                    <span>สินค้า</span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="icon icon-tabler icon-tabler-filter"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      stroke-width="2"
+                      stroke="currentColor"
+                      fill="none"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                      <path d="M5.5 5h13a1 1 0 0 1 .5 1.5l-5 5.5l0 7l-4 -3l0 -4l-5 -5.5a1 1 0 0 1 .5 -1.5"></path>
+                    </svg>
+                  </section>
+                  {/* <Popover>
                     <PopoverTrigger>
                       <section className="flex space-x-2 hover:cursor-pointer">
                         <span>สินค้า</span>
@@ -142,16 +160,13 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
                           />
                           <InputRightElement
                             children={
-                              <CheckIcon
-                                onClick={clearFilter}
-                                className="-ml-1 mr-2 h-5 w-5 text-green-600 hover:cursor-pointer"
-                              />
+                              <CheckIcon className="-ml-1 mr-2 h-5 w-5 text-green-600 hover:cursor-pointer" />
                             }
                           />
                         </InputGroup>
                       </PopoverBody>
                     </PopoverContent>
-                  </Popover>
+                  </Popover> */}
                 </th>
                 <th></th>
                 <th>เลขที่พาเลท</th>
