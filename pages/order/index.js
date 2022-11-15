@@ -86,11 +86,11 @@ const OrderPlanPage = () => {
       }
 
       if (res.ok) {
-        const data = await res.json();
-        setData(data.data);
+        const obj = await res.json();
+        setData(obj.data);
+        // console.dir(obj.data);
       }
       setIsLoading(false);
-      // console.dir(data);
     }
   };
 
@@ -314,16 +314,16 @@ const OrderPlanPage = () => {
                       <td>
                         <span
                           className={
-                            i.consignee.whs.title === "DOM"
+                            i.order_detail[0].orderplan.whs.title === "DOM"
                               ? `text-teal-600`
-                              : i.consignee.whs.title === "NESC"
+                              : i.order_detail[0].orderplan.whs.title === "NESC"
                               ? "text-rose-600"
-                              : i.consignee.whs.title === "ICAM"
+                              : i.order_detail[0].orderplan.whs.title === "ICAM"
                               ? "text-violet-600"
                               : "text-blue-600"
                           }
                         >
-                          {i.consignee.whs.title}
+                          {i.order_detail[0].orderplan.whs.title}
                         </span>
                       </td>
                       <td>{ReDate(i.etd_date)}</td>

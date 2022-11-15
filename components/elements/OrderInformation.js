@@ -134,11 +134,12 @@ const OrderInformation = ({ data, isEdit = true }) => {
       fetchOrderZone();
       if (data) {
         // Set Data to Variable
+        // console.dir(data);
         setEtd(reDate(data.etd_date));
         setShipmentId(data.shipment_id);
         setPcId(data.pc_id);
         setCommercialId(data.commercial_id);
-        setZone(data.consignee.whs.id);
+        setZone(data.order_detail[0].orderplan.whs.id);
         setAffCode(data.consignee.affcode.title);
         setCustCode(data.consignee.customer.title);
         setCountry(data.consignee.customer.description);
