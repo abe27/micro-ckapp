@@ -10,8 +10,10 @@ import AlertDialogQuestion from "./elements/AlertDialogQuestion";
 import OrderPallet from "./elements/OrderPallet";
 import OrderLabel from "./elements/OrderLabel";
 import ConfirmSyncData from "./elements/ConfirmSyncData";
+import AddPartToPallet from "./elements/AddPartToPallet";
 
 export {
+  AddPartToPallet,
   AlertDialogQuestion,
   ConfirmDeleteItemDialog,
   ConfirmSyncData,

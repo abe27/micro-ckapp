@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import ModalOrderPart from "./ModalOrderPart";
 import ConfirmDialog from "./ConfirmDeleteItemDialog";
 import ModalAddNewItem from "./ModalAddNewItem";
+import AddPartToPallet from "./AddPartToPallet";
 import { Tooltip } from "@chakra-ui/react";
 import Link from "next/link";
 
@@ -104,22 +105,23 @@ const OrderDetail = ({ data, delData, updateData, addNewItem }) => {
                   </div>
                 </td>
                 <td>
-                  <div className={`flex justify-end`}>
-                    <span
-                      className={
+                  {i.orderplan.balqty > 0 ? (
+                    <AddPartToPallet
+                      isMatched={
                         i.total_on_pallet !==
                         i.orderplan.balqty / i.orderplan.bistdp
-                          ? `text-rose-600`
-                          : `text-gray-600`
                       }
-                    >
-                      {i.orderplan.balqty > 0
-                        ? (
-                            i.orderplan.balqty / i.orderplan.bistdp
-                          ).toLocaleString()
-                        : `0`}
-                    </span>
-                  </div>
+                      ctn={i.orderplan.balqty / i.orderplan.bistdp}
+                    />
+                  ) : (
+                    <AddPartToPallet
+                      isMatched={
+                        i.total_on_pallet !==
+                        i.orderplan.balqty / i.orderplan.bistdp
+                      }
+                      ctn={0}
+                    />
+                  )}
                 </td>
                 <td>
                   <div className="flex justify-end">
