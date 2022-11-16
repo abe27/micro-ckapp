@@ -19,11 +19,47 @@ import {
   NumberDecrementStepper,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
-const AddPartToPallet = ({ isMatched = false, ctn }) => {
+const AddPartToPallet = ({
+  data = [],
+  isMatched = false,
+  ctn = 0,
+  pallet = 0,
+  confirmAddData,
+}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
+  const [isValidate, setIsValidate] = useState(null);
+  const [total, setTotal] = useState(null);
+  const [isDisabled, setDisabled] = useState(false);
+
+  const CheckPalletTotal = (e) => {
+    setDisabled(true);
+    let a = ctn - pallet;
+    if (parseInt(e.target.value) > a) {
+      setIsValidate("input-error");
+      setDisabled(false);
+    } else {
+      setIsValidate(null);
+      setTotal(e.target.value);
+    }
+  };
+
+  const saveData = () => {
+    confirmAddData();
+    onClose();
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      if (ctn - pallet === 0) {
+        setDisabled(true);
+      }
+      setIsValidate("");
+      setTotal(ctn - pallet);
+    }
+  }, [isOpen]);
 
   return (
     <>
@@ -51,30 +87,36 @@ const AddPartToPallet = ({ isMatched = false, ctn }) => {
           <AlertDialogHeader>เพิ่มข้อมูลไปที่พาเลท</AlertDialogHeader>
           <AlertDialogCloseButton />
           <AlertDialogBody>
-            <div className="grid">
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">ระบุจำนวน</span>
-                </label>
-                <label className="input-group">
-                  <input
-                    type="text"
-                    placeholder="0.01"
-                    className="input input-bordered"
-                  />
-                </label>
+            <div className="flex space-x-2">
+              <div className="w-2/5">
+                <span>ระบุจำนวน:</span>
               </div>
-              <div className="form-control">
-                <div className="input-group">
-                  <select className="select select-bordered">
-                    <option disabled selected>
-                      Pick category
-                    </option>
-                    <option>T-shirts</option>
-                    <option>Mugs</option>
-                  </select>
-                  <button className="btn">Go</button>
-                </div>
+              <div>
+                <input
+                  type="number"
+                  placeholder="Type here"
+                  className={`input ${isValidate} input-bordered input-sm w-52`}
+                  defaultValue={total}
+                  onChange={CheckPalletTotal}
+                  disabled={isDisabled}
+                />
+              </div>
+            </div>
+            <div className="mt-4 flex space-x-2">
+              <div className="w-2/5">เลือกพาเลท/กล่อง:</div>
+              <div>
+                <select
+                  className="select select-bordered select-sm w-52"
+                  disabled={isDisabled}
+                >
+                  {data?.map((i, x) => (
+                    <option key={i.id} value={i.id}>{`${i.pallet_prefix}${(
+                      "000" + i.pallet_no
+                    ).slice(-3)}(${i.pallet_type.pallet_size_width}x${
+                      i.pallet_type.pallet_size_length
+                    }x${i.pallet_type.pallet_size_hight})`}</option>
+                  ))}
+                </select>
               </div>
             </div>
           </AlertDialogBody>
@@ -82,7 +124,7 @@ const AddPartToPallet = ({ isMatched = false, ctn }) => {
             <Button ref={cancelRef} onClick={onClose}>
               ยกเลิก
             </Button>
-            <Button colorScheme="red" ml={3}>
+            <Button colorScheme="red" ml={3} onClick={saveData}>
               บันทึก
             </Button>
           </AlertDialogFooter>

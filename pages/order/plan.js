@@ -361,6 +361,10 @@ const OrderDetailPage = () => {
     }
   };
 
+  const confirmAddPartToPallet = async () => {
+    // FetchOrderDetail();
+  };
+
   useEffect(() => {
     if (id) {
       FetchOrder();
@@ -507,9 +511,11 @@ const OrderDetailPage = () => {
                   <TabPanel>
                     <OrderDetail
                       data={orderDetail}
+                      palletData={orderPallet}
                       delData={confirmDeleteDetail}
                       updateData={confirmUpdateDetail}
                       addNewItem={confirmAddNewItem}
+                      addPartToPallet={confirmAddPartToPallet}
                     />
                   </TabPanel>
                   <TabPanel>

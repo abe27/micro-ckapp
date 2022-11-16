@@ -47,7 +47,14 @@ const SumQty = (obj) => {
   return ctn.toLocaleString();
 };
 
-const OrderDetail = ({ data, delData, updateData, addNewItem }) => {
+const OrderDetail = ({
+  data,
+  palletData = [],
+  delData,
+  updateData,
+  addNewItem,
+  addPartToPallet,
+}) => {
   return (
     <table className="table table-compact w-full">
       <thead>
@@ -107,20 +114,17 @@ const OrderDetail = ({ data, delData, updateData, addNewItem }) => {
                 <td>
                   {i.orderplan.balqty > 0 ? (
                     <AddPartToPallet
+                      data={palletData}
                       isMatched={
                         i.total_on_pallet !==
                         i.orderplan.balqty / i.orderplan.bistdp
                       }
                       ctn={i.orderplan.balqty / i.orderplan.bistdp}
+                      pallet={i.total_on_pallet}
+                      confirmAddData={addPartToPallet}
                     />
                   ) : (
-                    <AddPartToPallet
-                      isMatched={
-                        i.total_on_pallet !==
-                        i.orderplan.balqty / i.orderplan.bistdp
-                      }
-                      ctn={0}
-                    />
+                    "0"
                   )}
                 </td>
                 <td>

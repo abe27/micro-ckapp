@@ -4,20 +4,6 @@ import { useRouter } from "next/router";
 import { useToast } from "@chakra-ui/react";
 import Link from "next/link";
 
-const ReInvoice = (i) => {
-  if (i) {
-    let prefix = "NO";
-    if (i.commercial.title != "N") {
-      prefix = i.consignee.prefix;
-    }
-    return `${i.consignee.factory.inv_prefix}${prefix}${i.etd_date.substring(
-      3,
-      4
-    )}${("0000" + i.running_seq).slice(-4)}${i.shipment.title}`;
-  }
-  return "-";
-};
-
 const Summary = (i) => {
   let x = 0;
   i?.map((j) => {

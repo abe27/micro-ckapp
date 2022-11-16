@@ -361,7 +361,11 @@ const OrderPlanPage = () => {
                       </td>
                       <td>
                         <Link href={`/order/plan?id=${i.id}`}>
-                          <span className="text-fuchsia-600">
+                          <span
+                            className={
+                              i.is_invoice ? `text-rose-600` : `text-gray-600`
+                            }
+                          >
                             <Tooltip
                               label={
                                 i.is_invoice
