@@ -114,6 +114,7 @@ const OrderDetail = ({
                 <td>
                   {i.orderplan.balqty > 0 ? (
                     <AddPartToPallet
+                      id={i.id}
                       data={palletData}
                       isMatched={
                         i.total_on_pallet !==

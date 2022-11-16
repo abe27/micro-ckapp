@@ -361,7 +361,8 @@ const OrderDetailPage = () => {
     }
   };
 
-  const confirmAddPartToPallet = async () => {
+  const confirmAddPartToPallet = async (obj) => {
+    console.dir(obj);
     // FetchOrderDetail();
   };
 

@@ -18,47 +18,51 @@ import {
   NumberIncrementStepper,
   NumberDecrementStepper,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 
 const AddPartToPallet = ({
+  id,
   data = [],
   isMatched = false,
   ctn = 0,
   pallet = 0,
   confirmAddData,
 }) => {
+  const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
   const [isValidate, setIsValidate] = useState(null);
   const [total, setTotal] = useState(null);
+  const [palletId, setPalletId] = useState(null);
   const [isDisabled, setDisabled] = useState(false);
 
-  const CheckPalletTotal = (e) => {
-    setDisabled(true);
-    let a = ctn - pallet;
-    if (parseInt(e.target.value) > a) {
-      setIsValidate("input-error");
-      setDisabled(false);
-    } else {
-      setIsValidate(null);
-      setTotal(e.target.value);
-    }
-  };
-
   const saveData = () => {
-    confirmAddData();
+    if (palletId === null) {
+      toast({
+        title: "กรุณาระบุเลขที่ พาเลข/กล่องด้วย",
+        status: "error",
+        position: "top",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+    confirmAddData({
+      partId: id,
+      palletId: palletId,
+      total: parseInt(total),
+    });
     onClose();
   };
 
   useEffect(() => {
-    if (isOpen) {
-      if (ctn - pallet === 0) {
-        setDisabled(true);
-      }
-      setIsValidate("");
-      setTotal(ctn - pallet);
+    if (ctn - pallet === 0) {
+      setDisabled(true);
     }
+    setIsValidate("");
+    setTotal(ctn - pallet);
   }, [isOpen]);
 
   return (
@@ -97,7 +101,7 @@ const AddPartToPallet = ({
                   placeholder="Type here"
                   className={`input ${isValidate} input-bordered input-sm w-52`}
                   defaultValue={total}
-                  onChange={CheckPalletTotal}
+                  onChange={(e) => setTotal(e.target.value)}
                   disabled={isDisabled}
                 />
               </div>
@@ -108,7 +112,10 @@ const AddPartToPallet = ({
                 <select
                   className="select select-bordered select-sm w-52"
                   disabled={isDisabled}
+                  defaultValue={setPalletId}
+                  onChange={(e) => setPalletId(e.target.value)}
                 >
+                  <option key="0" value="0">{`-`}</option>
                   {data?.map((i, x) => (
                     <option key={i.id} value={i.id}>{`${i.pallet_prefix}${(
                       "000" + i.pallet_no
