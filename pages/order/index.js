@@ -369,7 +369,7 @@ const OrderPlanPage = () => {
                                   : `ยังไม่ได้ทำ Invoice`
                               }
                             >
-                              {GenerateInvoice(i)}
+                              {i.is_invoice ? GenerateInvoice(i) : "-"}
                             </Tooltip>
                           </span>
                         </Link>
