@@ -1,24 +1,9 @@
-import {
-  Tooltip,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverFooter,
-  PopoverArrow,
-  PopoverCloseButton,
-  PopoverAnchor,
-  InputGroup,
-  InputRightElement,
-  Input,
-} from "@chakra-ui/react";
+import { PrinterIcon } from "@heroicons/react/20/solid";
 import { useEffect, useState } from "react";
-import SkeletonLoading from "./SkeletonLoading";
-import AlertDialogQuestion from "./AlertDialogQuestion";
 import AlertDialogPrintShippingLabel from "./AlertDialogPrintShippingLabel";
-import { CheckIcon, PrinterIcon } from "@heroicons/react/20/solid";
+import AlertDialogQuestion from "./AlertDialogQuestion";
 import SelectPrintShipping from "./SelectPrintShipping";
+import SkeletonLoading from "./SkeletonLoading";
 
 const ReDateTime = (txt) => {
   let d = new Date(txt);

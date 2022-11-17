@@ -1,33 +1,32 @@
 import {
-  NavBar,
-  OrderInformation,
-  OrderDetail,
-  OrderPallet,
-  SkeletonLoading,
-  OrderLabel,
-} from "../../components";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+  Spinner,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  useToast,
+} from "@chakra-ui/react";
 import {
   ArrowPathIcon,
   BriefcaseIcon,
   CalendarIcon,
   CloudIcon,
-  CogIcon,
   PencilIcon,
   PrinterIcon,
 } from "@heroicons/react/20/solid";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import {
-  Spinner,
-  useToast,
-  Tabs,
-  TabList,
-  TabPanels,
-  Tab,
-  TabPanel,
-} from "@chakra-ui/react";
+  NavBar,
+  OrderDetail,
+  OrderInformation,
+  OrderLabel,
+  OrderPallet,
+  SkeletonLoading,
+} from "../../components";
 
 const ReDate = (txt) => {
   let d = new Date(txt);

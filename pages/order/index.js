@@ -1,41 +1,26 @@
-import { NavBar, ShowOrderDetail } from "../../components";
-import { useSession } from "next-auth/react";
-import { Fragment, useEffect, useState } from "react";
 import {
-  Spinner,
-  Input,
-  Tooltip,
   Popover,
-  PopoverTrigger,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
   PopoverContent,
   PopoverHeader,
-  PopoverBody,
-  PopoverFooter,
-  PopoverArrow,
-  PopoverCloseButton,
-  PopoverAnchor,
+  PopoverTrigger,
+  Spinner,
   useToast,
 } from "@chakra-ui/react";
 import {
-  CloudIcon,
-  CalendarIcon,
-  CheckIcon,
-  ChevronDownIcon,
-  CurrencyDollarIcon,
-  LinkIcon,
-  BriefcaseIcon,
-  PencilIcon,
   ArrowPathIcon,
+  BriefcaseIcon,
+  CalendarIcon,
+  CloudIcon,
 } from "@heroicons/react/20/solid";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { AddIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/router";
-import {
-  GenerateInvoice,
-  SumCtn,
-  ReDate,
-  ReDateTime,
-} from "../../hooks/greeter";
+import { useEffect, useState } from "react";
+import { NavBar, ShowOrderDetail } from "../../components";
+import { ReDate } from "../../hooks/greeter";
 import { getSessionStorage, setSessionStorage } from "../../hooks/session";
 
 function classNames(...classes) {
