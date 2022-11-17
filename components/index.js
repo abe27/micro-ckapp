@@ -12,6 +12,7 @@ import OrderLabel from "./elements/OrderLabel";
 import ConfirmSyncData from "./elements/ConfirmSyncData";
 import AddPartToPallet from "./elements/AddPartToPallet";
 import SelectPrintShipping from "./elements/SelectPrintShipping";
+import ShowOrderDetail from "./elements/ShowOrderDetail";
 
 export {
   AddPartToPallet,
@@ -23,6 +24,7 @@ export {
   ModalOrderPart,
   SkeletonLoading,
   SelectPrintShipping,
+  ShowOrderDetail,
   NavBar,
   OrderInformation,
   OrderDetail,
