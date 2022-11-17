@@ -293,7 +293,7 @@ const OrderPlanPage = () => {
                 </thead>
                 <tbody>
                   {data.map((i, x) => (
-                    <ShowOrderDetail i={i} x={x} showAll={showAll} />
+                    <ShowOrderDetail key={i.id} i={i} x={x} showAll={showAll} />
                   ))}
                 </tbody>
               </table>
