@@ -12,7 +12,8 @@ import {
 import { useRef } from "react";
 
 const AlertDialogPrintShippingLabel = ({
-  id,
+  seq = 0,
+  data,
   title = "ลบข้อมูลนี้",
   description = `คุณต้องการที่จะลบ...ใช่หรือไม่!`,
   SvgIcon,
@@ -22,7 +23,8 @@ const AlertDialogPrintShippingLabel = ({
   const cancelRef = useRef();
 
   const Confirm = (status) => {
-    onCommit(id, status);
+    data.seq = seq;
+    onCommit(data, status);
     onClose();
   };
 

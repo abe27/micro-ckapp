@@ -312,8 +312,57 @@ const OrderDetailPage = () => {
     console.log(`Delete id: ${id} status: ${status}`);
   };
 
-  const confirmPrintLabel = (id, status) => {
-    console.log(`PrintLabel id: ${id} status: ${status}`);
+  const confirmPrintLabel = async (obj, status) => {
+    if (status) {
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", session?.user.accessToken);
+      myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+      var urlencoded = new URLSearchParams();
+      urlencoded.append("invoice_no", `${ReInvoice(data)}/${obj.seq}`);
+      urlencoded.append("order_no", obj.doc.order_detail.pono);
+      urlencoded.append("part_no", obj.part_no);
+      urlencoded.append("qty", obj.doc.order_detail.orderplan.bistdp);
+      urlencoded.append("cust_code", obj.doc.order_detail.orderplan.bishpc);
+      urlencoded.append("cust_name", obj.doc.order_detail.orderplan.bisafn);
+      urlencoded.append("pallet_no", obj.pallet_no);
+      urlencoded.append("print_date", ReDate(obj.last_updated));
+      urlencoded.append("bar_code", obj.seq_no);
+      urlencoded.append("is_print", "0");
+      // console.dir(urlencoded);
+      var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: urlencoded,
+        redirect: "follow",
+      };
+      const res = await fetch(
+        `${process.env.API_HOST}/order/label`,
+        requestOptions
+      );
+
+      if (!res.ok) {
+        const data = await res.json();
+        toast({
+          title: data.message,
+          duration: 3000,
+          status: "error",
+          position: "top",
+          isClosable: true,
+        });
+      }
+
+      if (res.ok) {
+        const data = await res.json();
+        toast({
+          title: data.message,
+          duration: 3000,
+          status: "success",
+          position: "top",
+          isClosable: true,
+        });
+        // FetchPalletList();
+      }
+    }
   };
 
   const confirmSync = async (id, status) => {

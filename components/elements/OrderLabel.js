@@ -34,26 +34,26 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
   const [filterPart, setFilterPart] = useState(null);
   const [sortList, setSortList] = useState(fticketData);
 
-  const sortData = (txt) => {
-    return sortList.filter((x) => x.part_no.includes(txt));
-  };
+  // const sortData = (txt) => {
+  //   return sortList.filter((x) => x.part_no.includes(txt));
+  // };
 
-  const filterData = (e) => {
-    let doc = fticketData;
-    if (e.target.value) {
-      doc = sortData(e.target.value);
-      // console.dir(doc);
-      setSortList(doc);
-      setFilterPart(e.target.value);
-    }
-    setSortList(doc);
-  };
+  // const filterData = (e) => {
+  //   let doc = fticketData;
+  //   if (e.target.value) {
+  //     doc = sortData(e.target.value);
+  //     // console.dir(doc);
+  //     setSortList(doc);
+  //     setFilterPart(e.target.value);
+  //   }
+  //   setSortList(doc);
+  // };
 
-  const clearFilter = () => {
-    let doc = fticketData;
-    setFilterPart(null);
-    setSortList(doc);
-  };
+  // const clearFilter = () => {
+  //   let doc = fticketData;
+  //   setFilterPart(null);
+  //   setSortList(doc);
+  // };
 
   useEffect(() => {
     if (data) {
@@ -207,7 +207,8 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
                       <div className="flex space-x-4 justify-end">
                         <Tooltip label={`ลบ ${i.seq_no} นี้`}>
                           <AlertDialogPrintShippingLabel
-                            id={i.shipping_id}
+                            seq={x + 1}
+                            data={i}
                             title={`ปริ้นลาเบล ${i.seq_no}`}
                             description={`คุณต้องการที่จะปริ้นลาเบล ${i.seq_no} นี้ใช่หรือไม่?`}
                             onCommit={confirmPrintLabel}
