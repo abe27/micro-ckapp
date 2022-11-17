@@ -365,6 +365,10 @@ const OrderDetailPage = () => {
     }
   };
 
+  const confirmPrintLabelAll = () => {
+    console.dir("select all");
+  };
+
   const confirmSync = async (id, status) => {
     console.log(`Confirm sync id: ${id} status: ${status}`);
     var myHeaders = new Headers();
@@ -551,6 +555,7 @@ const OrderDetailPage = () => {
                   </Tab>
                 </TabList>
                 <TabPanels>
+                  confirmPrintLabelAll
                   <TabPanel>
                     <OrderInformation
                       data={data}
@@ -579,6 +584,7 @@ const OrderDetailPage = () => {
                       data={orderPallet}
                       confirmDelete={confirmDeleteShippingLabel}
                       confirmPrintLabel={confirmPrintLabel}
+                      PrintLabelAll={confirmPrintLabelAll}
                     />
                   </TabPanel>
                 </TabPanels>
