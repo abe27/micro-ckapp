@@ -6,6 +6,7 @@ import { useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { clearAllSessionStorage } from "../../hooks/session";
+import Image from "next/image";
 
 const AuthPage = () => {
   const router = useRouter();
@@ -63,11 +64,14 @@ const AuthPage = () => {
         <div className="w-full max-w-md space-y-8">
           <div>
             <Link href="/member/register">
-              <img
-                className="mx-auto h-12 w-auto"
-                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                alt="Your Company"
-              />
+              <div className="flex justify-center">
+                <Image
+                  src="/mark.svg"
+                  alt={`${process.env.APP_NAME}`}
+                  width={150}
+                  height={150}
+                />
+              </div>
             </Link>
             <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
               {`เข้าใช้งานระบบ ${process.env.APP_NAME}`}
