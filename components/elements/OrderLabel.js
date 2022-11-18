@@ -44,6 +44,7 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
     if (data) {
       setIsLoading(true);
       let doc = [];
+      let x = 1;
       data.map((i) => {
         let pl_no = `${i.pallet_prefix}${("000" + i.pallet_no).slice(-3)}`;
         i.pallet_detail.map((j) => {
@@ -51,6 +52,7 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
           let d = new Date(j.created_at);
           let y = d.getFullYear().toString().substring(3, 4);
           let obj = {
+            seq: x,
             shipping_id: j.id,
             pallet_no: pl_no,
             seq_no: `${j.order_detail.ledger.factory.label_prefix}${y}${(
@@ -64,6 +66,7 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
           };
           //   console.dir(j);
           doc.push(obj);
+          x++;
         });
       });
 
