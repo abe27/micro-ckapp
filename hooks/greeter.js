@@ -3,15 +3,17 @@ const classNames = (...classes) => {
 };
 
 const GenerateInvoice = (i) => {
-  // console.dir(i);
-  let prefix = "NO";
-  if (i.commercial.title != "N") {
-    prefix = i.consignee.prefix;
+  if (i) {
+    let prefix = "NO";
+    if (i.commercial.title != "N") {
+      prefix = i.consignee.prefix;
+    }
+    return `${i.consignee.factory.inv_prefix}${prefix}${i.etd_date.substring(
+      3,
+      4
+    )}${("0000" + i.running_seq).slice(-4)}${i.shipment.title}`;
   }
-  return `${i.consignee.factory.inv_prefix}${prefix}${i.etd_date.substring(
-    3,
-    4
-  )}${("0000" + i.running_seq).slice(-4)}${i.shipment.title}`;
+  return "-";
 };
 
 const SumCtn = (obj) => {

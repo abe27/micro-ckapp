@@ -27,27 +27,7 @@ import {
   OrderPallet,
   SkeletonLoading,
 } from "../../components";
-
-const ReDate = (txt) => {
-  let d = new Date(txt);
-  return `${d.getFullYear()}-${("0" + (d.getMonth() + 1)).slice(-2)}-${(
-    "0" + d.getDate()
-  ).slice(-2)}`;
-};
-
-const ReInvoice = (i) => {
-  if (i) {
-    let prefix = "NO";
-    if (i.commercial.title != "N") {
-      prefix = i.consignee.prefix;
-    }
-    return `${i.consignee.factory.inv_prefix}${prefix}${i.etd_date.substring(
-      3,
-      4
-    )}${("0000" + i.running_seq).slice(-4)}${i.shipment.title}`;
-  }
-  return "-";
-};
+import { GenerateInvoice, ReDate } from "../../hooks/greeter";
 
 const OrderDetailPage = () => {
   const toast = useToast();
@@ -320,7 +300,7 @@ const OrderDetailPage = () => {
       let body = [];
       obj.map((i) => {
         body.push({
-          invoice_no: `${ReInvoice(data)}/${i.seq}`,
+          invoice_no: `${GenerateInvoice(data)}/${i.seq}`,
           order_no: i.doc.order_detail.pono,
           part_no: i.part_no,
           qty: i.doc.order_detail.orderplan.bistdp,
@@ -417,8 +397,52 @@ const OrderDetailPage = () => {
   };
 
   const confirmAddPartToPallet = async (obj) => {
-    console.dir(obj);
-    // FetchOrderDetail();
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", session?.user.accessToken);
+    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+    var urlencoded = new URLSearchParams();
+    urlencoded.append("pallet_id", obj.palletId);
+    urlencoded.append("part_id", obj.partId);
+    urlencoded.append("seq", obj.total);
+
+    console.dir(urlencoded);
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: urlencoded,
+      redirect: "follow",
+    };
+
+    const res = await fetch(
+      `${process.env.API_HOST}/invoice/shipping_label`,
+      requestOptions
+    );
+
+    if (!res.ok) {
+      const data = await res.json();
+      toast({
+        title: `เกิดข้อผิดพลาด ${data.message}!`,
+        duration: 3000,
+        status: "error",
+        position: "top",
+        isClosable: true,
+      });
+    }
+
+    if (res.ok) {
+      const data = await res.json();
+      toast({
+        title: `${data.message}!`,
+        duration: 2500,
+        status: "success",
+        position: "top",
+        isClosable: true,
+      });
+      FetchOrderDetail();
+      FetchPalletList();
+    }
   };
 
   useEffect(() => {
@@ -440,7 +464,7 @@ const OrderDetailPage = () => {
           <div className="lg:flex lg:items-center lg:justify-between">
             <div className="min-w-0 flex-1">
               <strong className="tfont-bold text-gray-900">
-                เลขที่เอกสาร: {ReInvoice(data)}
+                เลขที่เอกสาร: {GenerateInvoice(data)}
               </strong>
               <div className="mt-1 flex flex-col sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6">
                 <div className="mt-2 flex items-center text-sm text-gray-500">
