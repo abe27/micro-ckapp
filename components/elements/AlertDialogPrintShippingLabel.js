@@ -14,9 +14,8 @@ import { useRef } from "react";
 const AlertDialogPrintShippingLabel = ({
   seq = 0,
   data,
-  title = "ลบข้อมูลนี้",
+  title = "ระบบแจ้งเตือน!",
   description = `คุณต้องการที่จะลบ...ใช่หรือไม่!`,
-  SvgIcon,
   onCommit,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -24,7 +23,7 @@ const AlertDialogPrintShippingLabel = ({
 
   const Confirm = (status) => {
     data.seq = seq;
-    onCommit(data, status);
+    onCommit([data], status);
     onClose();
   };
 
@@ -58,7 +57,7 @@ const AlertDialogPrintShippingLabel = ({
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              ระบบแจ้งเตือน!
+              {title}
             </AlertDialogHeader>
             <AlertDialogBody>{description}</AlertDialogBody>
             <AlertDialogFooter>

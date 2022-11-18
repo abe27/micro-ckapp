@@ -315,23 +315,29 @@ const OrderDetailPage = () => {
     if (status) {
       var myHeaders = new Headers();
       myHeaders.append("Authorization", session?.user.accessToken);
-      myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-      var urlencoded = new URLSearchParams();
-      urlencoded.append("invoice_no", `${ReInvoice(data)}/${obj.seq}`);
-      urlencoded.append("order_no", obj.doc.order_detail.pono);
-      urlencoded.append("part_no", obj.part_no);
-      urlencoded.append("qty", obj.doc.order_detail.orderplan.bistdp);
-      urlencoded.append("cust_code", obj.doc.order_detail.orderplan.bishpc);
-      urlencoded.append("cust_name", obj.doc.order_detail.orderplan.bisafn);
-      urlencoded.append("pallet_no", obj.pallet_no);
-      urlencoded.append("print_date", ReDate(obj.last_updated));
-      urlencoded.append("bar_code", obj.seq_no);
-      urlencoded.append("is_print", "0");
-      // console.dir(urlencoded);
+      myHeaders.append("Content-Type", "application/json");
+
+      let body = [];
+      obj.map((i) => {
+        body.push({
+          invoice_no: `${ReInvoice(data)}/${i.seq}`,
+          order_no: i.doc.order_detail.pono,
+          part_no: i.part_no,
+          qty: i.doc.order_detail.orderplan.bistdp,
+          cust_code: i.doc.order_detail.orderplan.bishpc,
+          cust_name: i.doc.order_detail.orderplan.bisafn,
+          pallet_no: i.pallet_no,
+          print_date: ReDate(i.last_updated),
+          bar_code: i.seq_no,
+          is_print: 0,
+        });
+      });
+
+      // console.dir(body);
       var requestOptions = {
         method: "POST",
         headers: myHeaders,
-        body: urlencoded,
+        body: JSON.stringify(body),
         redirect: "follow",
       };
       const res = await fetch(
@@ -352,6 +358,7 @@ const OrderDetailPage = () => {
 
       if (res.ok) {
         const data = await res.json();
+
         toast({
           title: data.message,
           duration: 3000,
@@ -362,10 +369,6 @@ const OrderDetailPage = () => {
         // FetchPalletList();
       }
     }
-  };
-
-  const confirmPrintLabelAll = () => {
-    console.dir("select all");
   };
 
   const confirmSync = async (id, status) => {
@@ -583,7 +586,6 @@ const OrderDetailPage = () => {
                       data={orderPallet}
                       confirmDelete={confirmDeleteShippingLabel}
                       confirmPrintLabel={confirmPrintLabel}
-                      PrintLabelAll={confirmPrintLabelAll}
                     />
                   </TabPanel>
                 </TabPanels>

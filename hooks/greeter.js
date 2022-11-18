@@ -1,3 +1,7 @@
+const classNames = (...classes) => {
+  return classes.filter(Boolean).join(" ");
+};
+
 const GenerateInvoice = (i) => {
   // console.dir(i);
   let prefix = "NO";
@@ -34,4 +38,4 @@ const ReDateTime = (txt) => {
   )}`;
 };
 
-export { GenerateInvoice, SumCtn, ReDate, ReDateTime };
+export { classNames, GenerateInvoice, SumCtn, ReDate, ReDateTime };

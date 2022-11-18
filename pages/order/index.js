@@ -23,10 +23,6 @@ import { NavBar, ShowOrderDetail } from "../../components";
 import { ReDate } from "../../hooks/greeter";
 import { getSessionStorage, setSessionStorage } from "../../hooks/session";
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
-
 const OrderPlanPage = () => {
   const router = useRouter();
   const toast = useToast();
@@ -270,14 +266,7 @@ const OrderPlanPage = () => {
               <table className="table table-compact w-full">
                 <thead>
                   <tr>
-                    <th>
-                      <input
-                        type="checkbox"
-                        className="checkbox checkbox-xs checkbox-warning"
-                        defaultChecked={showAll}
-                        onChange={() => setShowAll(!showAll)}
-                      />
-                    </th>
+                    <th></th>
                     <th>Whs</th>
                     <th>ETD Date.</th>
                     <th>A/B/T</th>
@@ -288,7 +277,16 @@ const OrderPlanPage = () => {
                     <th>item</th>
                     <th>ctn</th>
                     <th>last update</th>
-                    <th></th>
+                    <th>
+                      <div className="flex">
+                        <input
+                          type="checkbox"
+                          className="checkbox checkbox-xs checkbox-warning"
+                          defaultChecked={showAll}
+                          onChange={() => setShowAll(!showAll)}
+                        />
+                      </div>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>

@@ -1,39 +1,33 @@
 import { PrinterIcon } from "@heroicons/react/20/solid";
 import { useEffect, useState } from "react";
+import { ReDateTime } from "../../hooks/greeter";
 import AlertDialogPrintShippingLabel from "./AlertDialogPrintShippingLabel";
 import AlertDialogQuestion from "./AlertDialogQuestion";
 import SelectPrintShipping from "./SelectPrintShipping";
 import SkeletonLoading from "./SkeletonLoading";
 
-const ReDateTime = (txt) => {
-  let d = new Date(txt);
-  return `${d.getFullYear()}-${("0" + (d.getMonth() + 1)).slice(-2)}-${(
-    "0" + d.getDate()
-  ).slice(-2)} ${("0" + d.getHours()).slice(-2)}:${("0" + d.getMinutes()).slice(
-    -2
-  )}`;
-};
-
-const OrderLabel = ({
-  data,
-  confirmDelete,
-  confirmPrintLabel,
-  PrintLabelAll,
-}) => {
+const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [fticketData, setFTicketData] = useState(null);
-  const [filterPart, setFilterPart] = useState(null);
   const [sortList, setSortList] = useState(fticketData);
   const [slAll, setSlAll] = useState(false);
   const [selectLabelId, setSelectLabelId] = useState(null);
 
   const selectShipping = (e) => {
-    // console.dir(`id: ${e.target.id} is checked: ${e.target.checked}`);
     setSortList((prevState) => {
       const newItems = [...prevState];
       newItems[e.target.id].is_checked = e.target.checked;
       return newItems;
     });
+  };
+
+  const confirmPrintLabelAll = () => {
+    setSortList((prevState) => {
+      const newItems = [...prevState];
+      newItems.map((i) => (i.is_checked = true));
+      return newItems;
+    });
+    confirmPrintLabel(sortList, true);
   };
 
   const selectAllLabel = (e) => {
@@ -123,7 +117,7 @@ const OrderLabel = ({
                     <button
                       type="button"
                       className="inline-flex items-center rounded-md border border-transparent bg-violet-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2"
-                      onClick={PrintLabelAll}
+                      onClick={confirmPrintLabelAll}
                     >
                       <PrinterIcon
                         className="-ml-1 mr-2 h-5 w-5"

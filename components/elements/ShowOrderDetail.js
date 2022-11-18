@@ -10,7 +10,7 @@ import {
 const ShowOrderDetail = ({ i, x, showAll = false }) => {
   return (
     <>
-      {showAll ? (
+      {!showAll ? (
         <tr className="hover hover:cursor-pointer" key={i.id}>
           <th>
             <Link
