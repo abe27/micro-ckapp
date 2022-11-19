@@ -17,6 +17,7 @@ function classNames(...classes) {
 
 const AlertDialogQuestion = ({
   id,
+  data=[],
   title = "ลบข้อมูลนี้",
   description = `คุณต้องการที่จะลบ...ใช่หรือไม่!`,
   onCommit,
@@ -26,7 +27,7 @@ const AlertDialogQuestion = ({
   const cancelRef = useRef();
 
   const Confirm = (status) => {
-    onCommit(id, status);
+    onCommit(data, status);
     onClose();
   };
 

@@ -13,7 +13,7 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
   const [slAll, setSlAll] = useState(false);
   const [selectLabelId, setSelectLabelId] = useState(null);
   const [partList, setPartList] = useState(null);
-  const [partId, setPartId] = useState(null)
+  const [partId, setPartId] = useState(null);
 
   const selectShipping = (e) => {
     setSortList((prevState) => {
@@ -46,13 +46,12 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
   useEffect(() => {
     if (data) {
       setIsLoading(true);
-      let parts = ["-"]
+      let parts = ["-"];
       let doc = [];
       let x = 1;
       data.map((i) => {
         let pl_no = `${i.pallet_prefix}${("000" + i.pallet_no).slice(-3)}`;
         i.pallet_detail.map((j) => {
-          // console.dir(j);
           let d = new Date(j.created_at);
           let y = d.getFullYear().toString().substring(3, 4);
           let obj = {
@@ -69,15 +68,15 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
             doc: j,
           };
           if (parts.indexOf(j.order_detail.ledger.part.title) < 0) {
-            parts.push(j.order_detail.ledger.part.title)
+            parts.push(j.order_detail.ledger.part.title);
           }
           //   console.dir(j);
           doc.push(obj);
           x++;
         });
       });
-      parts.sort()
-      setPartList(parts)
+      parts.sort();
+      setPartList(parts);
       setFTicketData(doc);
       setSortList(doc);
       setIsLoading(false);
@@ -87,7 +86,7 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
     <>
       {!isLoading ? (
         <>
-          <table className="table table-compact w-full">
+          <table className="table w-full table-compact">
             <thead>
               <tr>
                 <th>{selectLabelId}</th>
@@ -108,11 +107,11 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
                   <span className="flex justify-end">
                     <button
                       type="button"
-                      className="inline-flex items-center rounded-md border border-transparent bg-violet-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2"
+                      className="inline-flex items-center px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-sm bg-violet-600 hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2"
                       onClick={confirmPrintLabelAll}
                     >
                       <PrinterIcon
-                        className="-ml-1 mr-2 h-5 w-5"
+                        className="w-5 h-5 mr-2 -ml-1"
                         aria-hidden="true"
                       />
                       ปริ้นลาเบล
@@ -139,7 +138,7 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
                     <td>{i.pallet_no}</td>
                     <td>{ReDateTime(i.last_updated)}</td>
                     <td>
-                      <div className="flex space-x-4 justify-end">
+                      <div className="flex justify-end space-x-4">
                         <AlertDialogPrintShippingLabel
                           seq={x + 1}
                           data={i}
@@ -149,6 +148,7 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
                         />
                         <AlertDialogQuestion
                           id={i.shipping_id}
+                          data={i}
                           title={`ลบ ${i.seq_no} นี้`}
                           description={`คุณต้องการที่จะลบ ${i.seq_no} นี้ใช่หรือไม่?`}
                           onCommit={confirmDelete}

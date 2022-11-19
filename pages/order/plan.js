@@ -287,8 +287,50 @@ const OrderDetailPage = () => {
     }
   };
 
-  const confirmDeleteShippingLabel = (id, status) => {
-    console.log(`Delete id: ${id} status: ${status}`);
+  const confirmDeleteShippingLabel = async (obj, status) => {
+    if (status) {
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", session?.user.accessToken);
+      myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+  
+      var urlencoded = new URLSearchParams();
+      urlencoded.append("order_detail_id", obj.doc.order_detail.id);
+      urlencoded.append("order_plan_id", obj.doc.order_detail.orderplan.id);
+      urlencoded.append("ctn", 1);
+  
+      // console.dir(urlencoded)
+  
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: urlencoded,
+        redirect: 'follow'
+      };
+  
+      const res = await fetch(`${process.env.API_HOST}/order/short`, requestOptions)
+      if (!res.ok) {
+        const data = await res.json();
+        toast({
+          title: data.message,
+          duration: 3000,
+          status: "error",
+          position: "top",
+          isClosable: true,
+        });
+      }
+  
+      if (res.ok) {
+        const data = await res.json();
+        toast({
+          title: data.message,
+          duration: 3000,
+          status: "success",
+          position: "top",
+          isClosable: true,
+        });
+        FetchPalletList();
+      }
+    }
   };
 
   const confirmPrintLabel = async (obj, status) => {
@@ -459,29 +501,29 @@ const OrderDetailPage = () => {
         description={`แสดงข้อมูล Order Details`}
       />
       <main>
-        <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+        <div className="py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
           {/* Replace with your content */}
           <div className="lg:flex lg:items-center lg:justify-between">
-            <div className="min-w-0 flex-1">
-              <strong className="tfont-bold text-gray-900">
+            <div className="flex-1 min-w-0">
+              <strong className="text-gray-900 tfont-bold">
                 เลขที่เอกสาร: {GenerateInvoice(data)}
               </strong>
-              <div className="mt-1 flex flex-col sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6">
-                <div className="mt-2 flex items-center text-sm text-gray-500">
+              <div className="flex flex-col mt-1 sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6">
+                <div className="flex items-center mt-2 text-sm text-gray-500">
                   <BriefcaseIcon
                     className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
                     aria-hidden="true"
                   />
                   <Link href={`/order/archive`}>Archive</Link>
                 </div>
-                <div className="mt-2 flex items-center text-sm text-gray-500">
+                <div className="flex items-center mt-2 text-sm text-gray-500">
                   <CloudIcon
                     className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
                     aria-hidden="true"
                   />
                   <Link href={`/order/edi`}>Remote EDI</Link>
                 </div>
-                <div className="mt-2 flex items-center text-sm text-gray-500">
+                <div className="flex items-center mt-2 text-sm text-gray-500">
                   <CalendarIcon
                     className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400 hover:cursor-pointer"
                     aria-hidden="true"
@@ -490,21 +532,21 @@ const OrderDetailPage = () => {
                 </div>
               </div>
             </div>
-            <div className="mt-5 flex lg:mt-0 lg:ml-4">
-              <span className="ml-3 hidden sm:block">
+            <div className="flex mt-5 lg:mt-0 lg:ml-4">
+              <span className="hidden ml-3 sm:block">
                 <button
                   type="button"
-                  className="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                   onClick={() => setIsEdit(!isEdit)}
                 >
                   <PencilIcon
-                    className="-ml-1 mr-2 h-5 w-5 text-gray-500"
+                    className="w-5 h-5 mr-2 -ml-1 text-gray-500"
                     aria-hidden="true"
                   />
                   {isEdit ? `ปิดแก้ไข` : `เปิดแก้ไข`}
                 </button>
               </span>
-              <span className="ml-3 hidden sm:block">
+              <span className="hidden ml-3 sm:block">
                 <Link
                   href={`/order/joblist?id=${id}`}
                   rel="noopener noreferrer"
@@ -512,17 +554,17 @@ const OrderDetailPage = () => {
                 >
                   <button
                     type="button"
-                    className="inline-flex items-center rounded-md border border-transparent bg-violet-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    className="inline-flex items-center px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-sm bg-violet-600 hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                   >
                     <PrinterIcon
-                      className="-ml-1 mr-2 h-5 w-5"
+                      className="w-5 h-5 mr-2 -ml-1"
                       aria-hidden="true"
                     />
                     JobList
                   </button>
                 </Link>
               </span>
-              <span className="ml-3 hidden sm:block">
+              <span className="hidden ml-3 sm:block">
                 <Link
                   href={`/order/pallet?id=${id}`}
                   rel="noopener noreferrer"
@@ -530,10 +572,10 @@ const OrderDetailPage = () => {
                 >
                   <button
                     type="button"
-                    className="inline-flex items-center rounded-md border border-transparent bg-orange-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+                    className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-orange-600 border border-transparent rounded-md shadow-sm hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
                   >
                     <PrinterIcon
-                      className="-ml-1 mr-2 h-5 w-5"
+                      className="w-5 h-5 mr-2 -ml-1"
                       aria-hidden="true"
                     />
                     Dimension
@@ -544,14 +586,14 @@ const OrderDetailPage = () => {
               <span className="sm:ml-3">
                 <button
                   type="button"
-                  className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                   onClick={() => FetchOrder()}
                 >
                   {isLoading ? (
                     <Spinner size={`sm`} />
                   ) : (
                     <ArrowPathIcon
-                      className="-ml-1 mr-2 h-5 w-5"
+                      className="w-5 h-5 mr-2 -ml-1"
                       aria-hidden="true"
                     />
                   )}
