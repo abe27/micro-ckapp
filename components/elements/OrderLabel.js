@@ -12,6 +12,8 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
   const [sortList, setSortList] = useState(fticketData);
   const [slAll, setSlAll] = useState(false);
   const [selectLabelId, setSelectLabelId] = useState(null);
+  const [partList, setPartList] = useState(null);
+  const [partId, setPartId] = useState(null)
 
   const selectShipping = (e) => {
     setSortList((prevState) => {
@@ -22,12 +24,12 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
   };
 
   const confirmPrintLabelAll = () => {
-    let slData = []
-    sortList.map(i => {
+    let slData = [];
+    sortList.map((i) => {
       if (i.is_checked) {
-        slData.push(i)
+        slData.push(i);
       }
-    })
+    });
     confirmPrintLabel(slData, true);
   };
 
@@ -44,6 +46,7 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
   useEffect(() => {
     if (data) {
       setIsLoading(true);
+      let parts = ["-"]
       let doc = [];
       let x = 1;
       data.map((i) => {
@@ -65,12 +68,16 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
             last_updated: j.updated_at,
             doc: j,
           };
+          if (parts.indexOf(j.order_detail.ledger.part.title) < 0) {
+            parts.push(j.order_detail.ledger.part.title)
+          }
           //   console.dir(j);
           doc.push(obj);
           x++;
         });
       });
-
+      parts.sort()
+      setPartList(parts)
       setFTicketData(doc);
       setSortList(doc);
       setIsLoading(false);
@@ -93,26 +100,7 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
                   />
                 </th>
                 <th>เลขที่ shipping no</th>
-                <th>
-                  <section className="flex space-x-2 hover:cursor-pointer">
-                    <span>สินค้า</span>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="icon icon-tabler icon-tabler-filter"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      strokeWidth="2"
-                      stroke="currentColor"
-                      fill="none"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                      <path d="M5.5 5h13a1 1 0 0 1 .5 1.5l-5 5.5l0 7l-4 -3l0 -4l-5 -5.5a1 1 0 0 1 .5 -1.5"></path>
-                    </svg>
-                  </section>
-                </th>
+                <th>สินค้า</th>
                 <th></th>
                 <th>เลขที่พาเลท</th>
                 <th></th>
