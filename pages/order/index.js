@@ -14,9 +14,10 @@ import {
   BriefcaseIcon,
   CalendarIcon,
   CloudIcon,
+  FunnelIcon,
+  UsersIcon,
 } from "@heroicons/react/20/solid";
 import { useSession } from "next-auth/react";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { NavBar, ShowOrderDetail } from "../../components";
@@ -28,7 +29,11 @@ const OrderPlanPage = () => {
   const toast = useToast();
   const { data: session } = useSession();
   const [isLoading, setIsLoading] = useState(false);
+  const [filterCustomer, setFilterCustomer] = useState("-");
+  const [filterWhs, setFilterWhs] = useState("-");
   const [filterDate, setFilterDate] = useState(null);
+  const [whsData, setWhsData] = useState(null);
+  const [customerData, setCustomerData] = useState(null);
   const [data, setData] = useState(null);
   const [showAll, setShowAll] = useState(false);
 
@@ -68,10 +73,72 @@ const OrderPlanPage = () => {
 
       if (res.ok) {
         const obj = await res.json();
-        setData(obj.data);
-        // console.dir(obj.data);
+        let doc = []
+        if (filterCustomer !== "-") {
+          obj.data.map((i, x) => {
+            if (i.consignee.customer.description === filterCustomer){
+              doc.push(i);
+            }
+          })
+          setData(doc);
+        } else {
+          setData(obj.data)
+        }
+
+        let customer = ["-"]
+        obj.data.map((i) => {
+          if (customer.indexOf(i.consignee.customer.description) < 0) {
+            customer.push(i.consignee.customer.description)
+          }
+        })
+        customer.sort()
+        setCustomerData(customer)
       }
       setIsLoading(false);
+    }
+  };
+
+  const ReloadData = () => {
+    let d = getSessionStorage("filterEdtDate");
+      if (d === null) {
+        d = setSessionStorage("filterEdtDate", ReDate(Date.now()));
+      }
+      setFilterDate(d);
+      setFilterCustomer("-")
+      setFilterWhs("-")
+  }
+
+  const FetchWhs = async () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization",session?.user.accessToken);
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    const res = await fetch(`${process.env.API_HOST}/whs`, requestOptions);
+    if (!res.ok) {
+      const data = await res.json();
+      toast({
+        title: data.message,
+        status: "error",
+        position: "top",
+        duration: 3000,
+        isClosable: true,
+        onCloseComplete: () => {
+          if (res.status === 401) {
+            router.push("/auth");
+          }
+        },
+      });
+      console.dir(res.status);
+    }
+
+    if (res.ok) {
+      const obj = await res.json();
+      setWhsData(obj.data);
     }
   };
 
@@ -89,7 +156,13 @@ const OrderPlanPage = () => {
       setFilterDate(d);
     }
     FetchOrder();
+    FetchWhs()
   }, [filterDate, session]);
+
+  useEffect(() => {
+    FetchOrder();
+  }, [filterCustomer, filterWhs])
+  
   return (
     <>
       <NavBar
@@ -108,18 +181,46 @@ const OrderPlanPage = () => {
               </strong>
               <div className="mt-1 flex flex-col sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6">
                 <div className="mt-2 flex items-center text-sm text-gray-500">
-                  <BriefcaseIcon
-                    className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
-                    aria-hidden="true"
-                  />
-                  <Link href={`/order/archive`}>Archive</Link>
+                  <Popover>
+                    <PopoverTrigger>
+                      <FunnelIcon
+                        className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400 hover:cursor-pointer"
+                        aria-hidden="true"
+                      />
+                    </PopoverTrigger>
+                    <PopoverContent>
+                      <PopoverArrow />
+                      <PopoverCloseButton />
+                      <PopoverHeader>เลือกข้อมูล</PopoverHeader>
+                      <PopoverBody>
+                        <select className="select select-ghost w-full max-w-xs" defaultValue={filterWhs} onChange={e => setFilterWhs(e.target.value)}>
+                          {whsData?.map((i, x) => (<option key={i.id} value={i.title}>{i.title}</option>))}
+                        </select>
+                      </PopoverBody>
+                    </PopoverContent>
+                  </Popover>
+                  <span>เลือกคลังจัดส่ง {filterWhs}</span>
                 </div>
                 <div className="mt-2 flex items-center text-sm text-gray-500">
-                  <CloudIcon
-                    className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
-                    aria-hidden="true"
-                  />
-                  <Link href={`/order/edi`}>Remote EDI</Link>
+                  <Popover>
+                    <PopoverTrigger>
+                      <UsersIcon
+                        className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400 hover:cursor-pointer"
+                        aria-hidden="true"
+                      />
+                    </PopoverTrigger>
+                    <PopoverContent>
+                      <PopoverArrow />
+                      <PopoverCloseButton />
+                      <PopoverHeader>เลือกลูกค้า</PopoverHeader>
+                      <PopoverBody>
+                        <select className="select select-ghost w-full max-w-xs" defaultValue={filterCustomer} onChange={e => setFilterCustomer(e.target.value)}>
+                          {customerData?.map((i, x) => (<option key={i} value={i}>{i}</option>))}
+                        </select>
+                      </PopoverBody>
+                    </PopoverContent>
+                  </Popover>
+                  {filterCustomer !== "-" ? <span>เลือกลูกค้า {filterCustomer}</span> : <span>ค้าหาลูกค้า -</span>}
                 </div>
                 <div className="mt-2 flex items-center text-sm text-gray-500">
                   <Popover>
@@ -144,7 +245,7 @@ const OrderPlanPage = () => {
                       </PopoverBody>
                     </PopoverContent>
                   </Popover>
-                  <span>Filter on {filterDate}</span>
+                  <span>เลือกวันที่ {filterDate}</span>
                 </div>
               </div>
             </div>
@@ -194,7 +295,7 @@ const OrderPlanPage = () => {
                 <button
                   type="button"
                   className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                  onClick={() => FetchOrder()}
+                  onClick={() => ReloadData()}
                 >
                   {isLoading ? (
                     <Spinner size={`sm`} />
@@ -261,9 +362,9 @@ const OrderPlanPage = () => {
           </div>
           {/* /End replace */}
           {/* start table */}
-          <div className="overflow-x-auto mt-6">
+          <div className="overflow-x-auto mt-6 z-0">
             {data != null && (
-              <table className="table table-compact w-full">
+              <table className="table table-compact w-full z-0">
                 <thead>
                   <tr>
                     <th></th>
@@ -291,7 +392,7 @@ const OrderPlanPage = () => {
                 </thead>
                 <tbody>
                   {data.map((i, x) => (
-                    <ShowOrderDetail key={i.id} i={i} x={x} showAll={showAll} />
+                    <ShowOrderDetail key={i.id} data={i} x={x} showAll={showAll} filterCustomer={filterCustomer} filterWhs={filterWhs} />
                   ))}
                 </tbody>
               </table>
