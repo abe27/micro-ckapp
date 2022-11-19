@@ -445,6 +445,8 @@ const OrderDetailPage = () => {
     }
   };
 
+  const confirmPrintLabelAll = obj => {}
+
   useEffect(() => {
     if (id) {
       FetchOrder();
@@ -610,6 +612,7 @@ const OrderDetailPage = () => {
                       data={orderPallet}
                       confirmDelete={confirmDeleteShippingLabel}
                       confirmPrintLabel={confirmPrintLabel}
+                      printLabelData={confirmPrintLabelAll}
                     />
                   </TabPanel>
                 </TabPanels>
