@@ -35,9 +35,9 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
     // console.dir(e.target.checked);
     setSlAll(e.target.checked);
     setSortList((prevState) => {
-      const newItems = [...prevState];
-      newItems.map((i) => (i.is_checked = e.target.checked));
-      return newItems;
+      const items = [...prevState];
+      items.map((i) => (i.is_checked = e.target.checked));
+      return items;
     });
   };
 
