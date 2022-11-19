@@ -6,7 +6,7 @@ import AlertDialogQuestion from "./AlertDialogQuestion";
 import SelectPrintShipping from "./SelectPrintShipping";
 import SkeletonLoading from "./SkeletonLoading";
 
-const OrderLabel = ({ data, confirmDelete, confirmPrintLabel, printLabelData }) => {
+const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [fticketData, setFTicketData] = useState(null);
   const [sortList, setSortList] = useState(fticketData);
@@ -19,7 +19,6 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel, printLabelData }) 
       newItems[e.target.id].is_checked = e.target.checked;
       return newItems;
     });
-    printLabelData(sortList)
   };
 
   const confirmPrintLabelAll = () => {
