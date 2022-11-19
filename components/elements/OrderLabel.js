@@ -23,11 +23,6 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
 
   const confirmPrintLabelAll = () => {
     let slData = []
-    // setSortList((prevState) => {
-    //   const newItems = [...prevState];
-    //   newItems.map((i) => i.is_checked = slAll);
-    //   return newItems;
-    // });
     sortList.map(i => {
       if (i.is_checked) {
         slData.push(i)
