@@ -29,9 +29,9 @@ const IndexPage = () => {
       redirect: "follow",
     };
 
-    console.dir(
-      `${process.env.API_HOST}/order/plan?vendor=${vendor}&tagrp=${tagrp}&pono=${pono}&part_no=${part_no}&bishpc=${bishpc}&biac=${biac}`
-    );
+    // console.dir(
+    //   `${process.env.API_HOST}/order/plan?vendor=${vendor}&tagrp=${tagrp}&pono=${pono}&part_no=${part_no}&bishpc=${bishpc}&biac=${biac}`
+    // );
     const res = await fetch(
       `${process.env.API_HOST}/order/plan?vendor=${vendor}&tagrp=${tagrp}&pono=${pono}&part_no=${part_no}&bishpc=${bishpc}&biac=${biac}`,
       requestOptions
@@ -55,11 +55,13 @@ const IndexPage = () => {
   };
 
   useEffect(() => {
-    FetchData();
-  }, [session?.user]);
+    if (vendor !== undefined && session?.user) {
+      FetchData();
+    }
+  }, [session?.user, vendor]);
   return (
     <>
-      <NavBar title={``} description={``} user={session?.user} />
+      <NavBar title={`แสดงข้อมูล History`} description={`แสดงรายละเอียดข้อมูลประวัติการซิงค์ Plan`} user={session?.user} />
       <main>
         <div className="py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
           {/* Replace with your content */}
