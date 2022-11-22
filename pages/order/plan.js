@@ -63,8 +63,9 @@ const OrderDetailPage = () => {
       );
 
       if (!res.ok) {
+        const data = await res.json()
         toast({
-          title: `เกิดข้อผิดพลาด ${res.status}!`,
+          title: `${data.message}!`,
           duration: 3000,
           status: "error",
           position: "top",
