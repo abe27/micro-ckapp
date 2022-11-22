@@ -6,7 +6,7 @@ import ModalOrderPart from "./elements/ModalOrderPart";
 import ConfirmDeleteItemDialog from "./elements/ConfirmDeleteItemDialog";
 import ModalAddNewItem from "./elements/ModalAddNewItem";
 import ModalAddNewPallet from "./elements/ModalAddNewPallet";
-import AlertDialogQuestion from "./elements/AlertDialogQuestion";
+import AlertDialogQuestion from "./elements/AlertConfirmShort";
 import OrderPallet from "./elements/OrderPallet";
 import OrderLabel from "./elements/OrderLabel";
 import ConfirmSyncData from "./elements/ConfirmSyncData";

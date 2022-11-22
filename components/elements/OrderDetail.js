@@ -56,7 +56,7 @@ const OrderDetail = ({
   addPartToPallet,
 }) => {
   return (
-    <table className="table table-compact w-full">
+    <table className="table w-full table-compact">
       <thead>
         <tr>
           <th></th>
@@ -108,31 +108,34 @@ const OrderDetail = ({
                 <td>{i.ledger.part.description}</td>
                 <td>
                   <div className="flex justify-end text-orange-600">
-                    {i.orderplan.balqty.toLocaleString()}
+                    {(i.order_ctn * i.orderplan.bistdp).toLocaleString()}
                   </div>
                 </td>
                 <td>
-                  {i.orderplan.balqty > 0 ? (
+                  {i.order_ctn > 0 ? (
                     <AddPartToPallet
                       id={i.id}
                       data={palletData}
-                      isMatched={
-                        i.total_on_pallet !==
-                        i.orderplan.balqty / i.orderplan.bistdp
-                      }
-                      ctn={i.orderplan.balqty / i.orderplan.bistdp}
+                      isMatched={i.total_on_pallet !== i.order_ctn}
+                      ctn={i.order_ctn}
                       pallet={i.total_on_pallet}
                       confirmAddData={addPartToPallet}
                     />
                   ) : (
-                    "0"
+                    <div className={`flex justify-end hover:cursor-pointer`}>
+                      0
+                    </div>
                   )}
                 </td>
                 <td>
                   <div className="flex justify-end">
-                    {i.total_on_pallet > 0
-                      ? i.total_on_pallet.toLocaleString()
-                      : `0`}
+                    {i.total_on_pallet > 0 ? (
+                      i.total_on_pallet.toLocaleString()
+                    ) : (
+                      <span>
+                        0
+                      </span>
+                    )}
                   </div>
                 </td>
                 <td>

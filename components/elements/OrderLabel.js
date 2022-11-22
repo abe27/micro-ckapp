@@ -2,7 +2,7 @@ import { PrinterIcon } from "@heroicons/react/20/solid";
 import { useEffect, useState } from "react";
 import { ReDateTime } from "../../hooks/greeter";
 import AlertDialogPrintShippingLabel from "./AlertDialogPrintShippingLabel";
-import AlertDialogQuestion from "./AlertDialogQuestion";
+import AlertConfirmShort from "./AlertConfirmShort";
 import SelectPrintShipping from "./SelectPrintShipping";
 import SkeletonLoading from "./SkeletonLoading";
 
@@ -54,6 +54,7 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
         i.pallet_detail.map((j) => {
           let d = new Date(j.created_at);
           let y = d.getFullYear().toString().substring(3, 4);
+          console.dir(j)
           let obj = {
             seq: x,
             shipping_id: j.id,
@@ -101,8 +102,9 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
                 <th>เลขที่ shipping no</th>
                 <th>สินค้า</th>
                 <th></th>
+                <th>เลขที่ PO</th>
                 <th>เลขที่พาเลท</th>
-                <th></th>
+                {/* <th></th> */}
                 <th>
                   <span className="flex justify-end">
                     <button
@@ -135,8 +137,9 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
                     <td>{i.seq_no}</td>
                     <td>{i.part_no}</td>
                     <td>{i.part_name}</td>
+                    <td>{i.doc.order_detail.pono}</td>
                     <td>{i.pallet_no}</td>
-                    <td>{ReDateTime(i.last_updated)}</td>
+                    {/* <td>{ReDateTime(i.last_updated)}</td> */}
                     <td>
                       <div className="flex justify-end space-x-4">
                         <AlertDialogPrintShippingLabel
@@ -146,11 +149,8 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
                           description={`คุณต้องการที่จะปริ้นลาเบล ${i.seq_no} นี้ใช่หรือไม่?`}
                           onCommit={confirmPrintLabel}
                         />
-                        <AlertDialogQuestion
-                          id={i.shipping_id}
+                        <AlertConfirmShort
                           data={i}
-                          title={`ลบ ${i.seq_no} นี้`}
-                          description={`คุณต้องการที่จะลบ ${i.seq_no} นี้ใช่หรือไม่?`}
                           onCommit={confirmDelete}
                         />
                       </div>

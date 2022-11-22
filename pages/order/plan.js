@@ -217,9 +217,10 @@ const OrderDetailPage = () => {
       requestOptions
     );
 
-    if (res.status === 404) {
+    if (!res.ok) {
+      const data = await res.json();
       toast({
-        title: `ไม่พบข้อมูลที่ต้องการลบ!`,
+        title: data.message,
         duration: 3000,
         status: "error",
         position: "top",
@@ -289,16 +290,20 @@ const OrderDetailPage = () => {
 
   const confirmDeleteShippingLabel = async (obj, status) => {
     if (status) {
+      console.dir(obj)
       var myHeaders = new Headers();
       myHeaders.append("Authorization", session?.user.accessToken);
       myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
   
       var urlencoded = new URLSearchParams();
+      urlencoded.append("order_shipping_id", obj.shipping_id)
       urlencoded.append("order_detail_id", obj.doc.order_detail.id);
       urlencoded.append("order_plan_id", obj.doc.order_detail.orderplan.id);
+      urlencoded.append("order_etd", `${obj.etd_tap}T00:00:00.000Z`);
+      urlencoded.append("order_ctn", obj.doc.order_detail.order_ctn - 1)
       urlencoded.append("ctn", 1);
   
-      // console.dir(urlencoded)
+      console.dir(urlencoded)
   
       var requestOptions = {
         method: 'POST',
@@ -328,6 +333,7 @@ const OrderDetailPage = () => {
           position: "top",
           isClosable: true,
         });
+        FetchOrderDetail()
         FetchPalletList();
       }
     }
