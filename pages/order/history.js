@@ -61,14 +61,18 @@ const IndexPage = () => {
   }, [session?.user, vendor]);
   return (
     <>
-      <NavBar title={`แสดงข้อมูล History`} description={`แสดงรายละเอียดข้อมูลประวัติการซิงค์ Plan`} user={session?.user} />
+      <NavBar
+        title={`แสดงข้อมูล History`}
+        description={`แสดงรายละเอียดข้อมูลประวัติการซิงค์ Plan`}
+        user={session?.user}
+      />
       <main>
         <div className="py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
           {/* Replace with your content */}
           <div className="lg:flex lg:items-center lg:justify-between">
             <div className="flex-1 min-w-0">
               <strong className="text-gray-900 tfont-bold">
-                เลขที่เอกสาร:
+                แสดงประวัติการแก้ไขข้อมูล
               </strong>
               <div className="flex flex-col mt-1 sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6">
                 <div className="flex items-center mt-2 text-sm text-gray-500">
@@ -114,8 +118,41 @@ const IndexPage = () => {
               </span>
             </div>
           </div>
+          <section className="mt-4">
+          <div className="overflow-x-auto">
+            <table className="table w-full table-compact">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Name</th>
+                  <th>Job</th>
+                  <th>Favorite Color</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>1</th>
+                  <td>Cy Ganderton</td>
+                  <td>Quality Control Specialist</td>
+                  <td>Blue</td>
+                </tr>
+                <tr>
+                  <th>2</th>
+                  <td>Hart Hagerty</td>
+                  <td>Desktop Support Technician</td>
+                  <td>Purple</td>
+                </tr>
+                <tr>
+                  <th>3</th>
+                  <td>Brice Swyre</td>
+                  <td>Tax Accountant</td>
+                  <td>Red</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
         </div>
-        <section className="mt-4"></section>
         {/* /End replace */}
       </main>
     </>
