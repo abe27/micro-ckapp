@@ -28,16 +28,16 @@ const ShowOrderDetail = ({ data, x, showAll = false ,filterCustomer='-',filterWh
           <td>
             <span
               className={
-                data.order_detail[0].orderplan.whs.title === "DOM"
+                data?.order_detail[0].orderplan.whs.title === "DOM"
                   ? `text-teal-600`
-                  : data.order_detail[0].orderplan.whs.title === "NESC"
+                  : data?.order_detail[0].orderplan.whs.title === "NESC"
                   ? "text-rose-600"
-                  : data.order_detail[0].orderplan.whs.title === "ICAM"
+                  : data?.order_detail[0].orderplan.whs.title === "ICAM"
                   ? "text-violet-600"
                   : "text-blue-600"
               }
             >
-              {data.order_detail[0].orderplan.whs.title}
+              {data?.order_detail[0].orderplan.whs.title}
             </span>
           </td>
           <td>{ReDate(data.etd_date)}</td>
@@ -91,7 +91,7 @@ const ShowOrderDetail = ({ data, x, showAll = false ,filterCustomer='-',filterWh
             {data.is_invoice ? (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="icon icon-tabler icon-tabler-check text-green-600"
+                className="text-green-600 icon icon-tabler icon-tabler-check"
                 width="16"
                 height="16"
                 viewBox="0 0 24 24"
@@ -139,16 +139,16 @@ const ShowOrderDetail = ({ data, x, showAll = false ,filterCustomer='-',filterWh
             <td>
               <span
                 className={
-                  data.order_detail[0].orderplan.whs.title === "DOM"
+                  data?.order_detail[0].orderplan.whs.title === "DOM"
                     ? `text-teal-600`
-                    : data.order_detail[0].orderplan.whs.title === "NESC"
+                    : data?.order_detail[0].orderplan.whs.title === "NESC"
                     ? "text-rose-600"
-                    : data.order_detail[0].orderplan.whs.title === "ICAM"
+                    : data?.order_detail[0].orderplan.whs.title === "ICAM"
                     ? "text-violet-600"
                     : "text-blue-600"
                 }
               >
-                {data.order_detail[0].orderplan.whs.title}
+                {data?.order_detail[0].orderplan.whs.title}
               </span>
             </td>
             <td>{ReDate(data.etd_date)}</td>
@@ -202,7 +202,7 @@ const ShowOrderDetail = ({ data, x, showAll = false ,filterCustomer='-',filterWh
               {data.is_invoice ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="icon icon-tabler icon-tabler-check text-green-600"
+                  className="text-green-600 icon icon-tabler icon-tabler-check"
                   width="16"
                   height="16"
                   viewBox="0 0 24 24"
