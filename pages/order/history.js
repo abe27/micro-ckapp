@@ -29,9 +29,9 @@ const IndexPage = () => {
       redirect: "follow",
     };
 
-    // console.dir(
-    //   `${process.env.API_HOST}/order/plan?vendor=${vendor}&tagrp=${tagrp}&pono=${pono}&part_no=${part_no}&bishpc=${bishpc}&biac=${biac}`
-    // );
+    console.dir(
+      `${process.env.API_HOST}/order/plan?vendor=${vendor}&tagrp=${tagrp}&pono=${pono}&part_no=${part_no}&bishpc=${bishpc}&biac=${biac}`
+    );
     const res = await fetch(
       `${process.env.API_HOST}/order/plan?vendor=${vendor}&tagrp=${tagrp}&pono=${pono}&part_no=${part_no}&bishpc=${bishpc}&biac=${biac}`,
       requestOptions

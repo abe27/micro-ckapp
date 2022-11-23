@@ -63,7 +63,7 @@ const OrderDetailPage = () => {
       );
 
       if (!res.ok) {
-        const data = await res.json()
+        const data = await res.json();
         toast({
           title: `${data.message}!`,
           duration: 3000,
@@ -291,29 +291,32 @@ const OrderDetailPage = () => {
 
   const confirmDeleteShippingLabel = async (obj, status) => {
     if (status) {
-      console.dir(obj)
+      console.dir(obj);
       var myHeaders = new Headers();
       myHeaders.append("Authorization", session?.user.accessToken);
       myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-  
+
       var urlencoded = new URLSearchParams();
-      urlencoded.append("order_shipping_id", obj.shipping_id)
+      urlencoded.append("order_shipping_id", obj.shipping_id);
       urlencoded.append("order_detail_id", obj.doc.order_detail.id);
       urlencoded.append("order_plan_id", obj.doc.order_detail.orderplan.id);
       urlencoded.append("order_etd", `${obj.etd_tap}T00:00:00.000Z`);
-      urlencoded.append("order_ctn", obj.doc.order_detail.order_ctn - 1)
+      urlencoded.append("order_ctn", obj.doc.order_detail.order_ctn - 1);
       urlencoded.append("ctn", 1);
-  
-      console.dir(urlencoded)
-  
+
+      console.dir(urlencoded);
+
       var requestOptions = {
-        method: 'POST',
+        method: "POST",
         headers: myHeaders,
         body: urlencoded,
-        redirect: 'follow'
+        redirect: "follow",
       };
-  
-      const res = await fetch(`${process.env.API_HOST}/order/short`, requestOptions)
+
+      const res = await fetch(
+        `${process.env.API_HOST}/order/short`,
+        requestOptions
+      );
       if (!res.ok) {
         const data = await res.json();
         toast({
@@ -324,7 +327,7 @@ const OrderDetailPage = () => {
           isClosable: true,
         });
       }
-  
+
       if (res.ok) {
         const data = await res.json();
         toast({
@@ -334,7 +337,7 @@ const OrderDetailPage = () => {
           position: "top",
           isClosable: true,
         });
-        FetchOrderDetail()
+        FetchOrderDetail();
         FetchPalletList();
       }
     }
@@ -540,19 +543,23 @@ const OrderDetailPage = () => {
               </div>
             </div>
             <div className="flex mt-5 lg:mt-0 lg:ml-4">
-              <span className="hidden ml-3 sm:block">
-                <button
-                  type="button"
-                  className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                  onClick={() => setIsEdit(!isEdit)}
-                >
-                  <PencilIcon
-                    className="w-5 h-5 mr-2 -ml-1 text-gray-500"
-                    aria-hidden="true"
-                  />
-                  {isEdit ? `ปิดแก้ไข` : `เปิดแก้ไข`}
-                </button>
-              </span>
+              {session?.user.isAdmin ? (
+                <span className="hidden ml-3 sm:block">
+                  <button
+                    type="button"
+                    className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    onClick={() => setIsEdit(!isEdit)}
+                  >
+                    <PencilIcon
+                      className="w-5 h-5 mr-2 -ml-1 text-gray-500"
+                      aria-hidden="true"
+                    />
+                    {isEdit ? `ปิดแก้ไข` : `เปิดแก้ไข`}
+                  </button>
+                </span>
+              ) : (
+                <></>
+              )}
               <span className="hidden ml-3 sm:block">
                 <Link
                   href={`/order/joblist?id=${id}`}
