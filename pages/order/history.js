@@ -9,17 +9,21 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { NavBar } from "../../components";
+import { NavBar, SkeletonLoading } from "../../components";
+import { ReDate, ReDateTime, ReplaceHashtag } from "../../hooks/greeter";
 
 const IndexPage = () => {
   const toast = useToast();
   const router = useRouter();
+  const { asPath } = useRouter();
   const { data: session } = useSession();
   const [isLoading, setIsLoading] = useState(false);
+  const [historyData, setHistoryData] = useState(null);
   // Get Variable
-  const { vendor, tagrp, pono, part_no, bishpc, biac } = router.query;
+  const { vendor } = router.query;
 
   const FetchData = async () => {
+    setIsLoading(true);
     var myHeaders = new Headers();
     myHeaders.append("Authorization", session?.user.accessToken);
 
@@ -29,9 +33,18 @@ const IndexPage = () => {
       redirect: "follow",
     };
 
-    console.dir(
-      `${process.env.API_HOST}/order/plan?vendor=${vendor}&tagrp=${tagrp}&pono=${pono}&part_no=${part_no}&bishpc=${bishpc}&biac=${biac}`
-    );
+    const hash = asPath.split("?")[1]; // error=unauthorized_client&error_code=401error_description=Something+went+wrong
+    const parsedHash = new URLSearchParams(hash);
+    const vendor = parsedHash.get("vendor");
+    const tagrp = parsedHash.get("tagrp");
+    const pono = ReplaceHashtag(parsedHash.get("pono"));
+    const part_no = parsedHash.get("part_no");
+    const bishpc = parsedHash.get("bishpc");
+    const biac = parsedHash.get("biac");
+
+    // console.dir(
+    //   `${process.env.API_HOST}/order/plan?vendor=${vendor}&tagrp=${tagrp}&pono=${pono}&part_no=${part_no}&bishpc=${bishpc}&biac=${biac}`
+    // );
     const res = await fetch(
       `${process.env.API_HOST}/order/plan?vendor=${vendor}&tagrp=${tagrp}&pono=${pono}&part_no=${part_no}&bishpc=${bishpc}&biac=${biac}`,
       requestOptions
@@ -45,12 +58,15 @@ const IndexPage = () => {
         status: "error",
         position: "top",
         isClosable: true,
+        onCloseComplete: () => setIsLoading(false),
       });
     }
 
     if (res.ok) {
       const data = await res.json();
-      console.dir(data);
+      setHistoryData(data.data);
+      console.dir(data.data);
+      setIsLoading(false);
     }
   };
 
@@ -119,39 +135,61 @@ const IndexPage = () => {
             </div>
           </div>
           <section className="mt-4">
-          <div className="overflow-x-auto">
-            <table className="table w-full table-compact">
-              <thead>
-                <tr>
-                  <th></th>
-                  <th>Name</th>
-                  <th>Job</th>
-                  <th>Favorite Color</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th>1</th>
-                  <td>Cy Ganderton</td>
-                  <td>Quality Control Specialist</td>
-                  <td>Blue</td>
-                </tr>
-                <tr>
-                  <th>2</th>
-                  <td>Hart Hagerty</td>
-                  <td>Desktop Support Technician</td>
-                  <td>Purple</td>
-                </tr>
-                <tr>
-                  <th>3</th>
-                  <td>Brice Swyre</td>
-                  <td>Tax Accountant</td>
-                  <td>Red</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
+            {isLoading ? (
+              <SkeletonLoading />
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="table w-full table-compact">
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>วดป.</th>
+                      <th>ขนส่ง</th>
+                      <th>เลขที่ PO</th>
+                      <th>สินค้า</th>
+                      <th></th>
+                      <th>
+                        <div className="flex justify-end">จำนวน</div>
+                      </th>
+                      <th>
+                        <div className="flex justify-end">ชิ้น/กล่อง</div>
+                      </th>
+                      <th>แก้ไข</th>
+                      <th>นำเข้าระบบเมื่อ</th>
+                      <th>อัพเดทล่าสุด</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {historyData?.map((i, x) => (
+                      <tr key={i.id}>
+                        <th>{x + 1}</th>
+                        <td>{ReDate(i.etd_tap)}</td>
+                        <td>{i.shipment.description}</td>
+                        <td>{i.pono}</td>
+                        <td>{i.part_no}</td>
+                        <td>{i.part_name}</td>
+                        <th>
+                          <div className="flex justify-end text-orange-700 text-bold">
+                            {i.balqty.toLocaleString()}
+                          </div>
+                        </th>
+                        <td>
+                          <div className="flex justify-end text-green-700 text-bold">
+                            {(i.balqty / i.bistdp).toLocaleString()}
+                          </div>
+                        </td>
+                        <td>
+                          <span className="text-rose-800">{i.reasoncd}</span>
+                        </td>
+                        <td>{ReDateTime(i.updtime)}</td>
+                        <td>{ReDateTime(i.updated_at)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </section>
         </div>
         {/* /End replace */}
       </main>

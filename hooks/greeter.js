@@ -40,4 +40,8 @@ const ReDateTime = (txt) => {
   )}`;
 };
 
-export { classNames, GenerateInvoice, SumCtn, ReDate, ReDateTime };
+const ReplaceHashtag = txt => {
+  return txt.replace("#", "%23");
+}
+
+export { classNames, GenerateInvoice, SumCtn, ReDate, ReDateTime,ReplaceHashtag };
