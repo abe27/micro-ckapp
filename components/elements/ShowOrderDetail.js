@@ -125,7 +125,7 @@ const ShowOrderDetail = ({ data, x, showAll = false ,filterCustomer='-',filterWh
           </td>
         </tr>
       ) : (
-        data.is_invoice && (
+        data.is_checked && (
           <tr className="hover hover:cursor-pointer" key={data.id}>
             <th>
               <Link
@@ -199,7 +199,7 @@ const ShowOrderDetail = ({ data, x, showAll = false ,filterCustomer='-',filterWh
             <td>{SumCtn(data.order_detail)}</td>
             <td>{ReDateTime(data.updated_at)}</td>
             <td>
-              {data.is_invoice ? (
+              {data.is_checked ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="text-green-600 icon icon-tabler icon-tabler-check"
