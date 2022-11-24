@@ -74,12 +74,12 @@ const ShowOrderDetail = ({ data, x, showAll = false ,filterCustomer='-',filterWh
           <td>
             <Link href={`/order/plan?id=${data.id}`}>
               <span
-                className={data.is_invoice ? `text-rose-600` : `text-gray-600`}
+                className={data.is_checked ? `text-rose-600` : `text-gray-600`}
               >
                 <Tooltip
-                  label={data.is_invoice ? `ยืนยันแล้ว` : `ยังไม่ได้ทำ Invoice`}
+                  label={data.is_checked ? `ยืนยันแล้ว` : `ยังไม่ได้ทำ Invoice`}
                 >
-                  {data.is_invoice ? GenerateInvoice(data) : "-"}
+                  {data.is_checked ? GenerateInvoice(data) : "-"}
                 </Tooltip>
               </span>
             </Link>
@@ -88,7 +88,7 @@ const ShowOrderDetail = ({ data, x, showAll = false ,filterCustomer='-',filterWh
           <td>{SumCtn(data.order_detail)}</td>
           <td>{ReDateTime(data.updated_at)}</td>
           <td>
-            {data.is_invoice ? (
+            {data.is_checked ? (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="text-green-600 icon icon-tabler icon-tabler-check"
@@ -185,12 +185,12 @@ const ShowOrderDetail = ({ data, x, showAll = false ,filterCustomer='-',filterWh
             <td>
               <Link href={`/order/plan?id=${data.id}`}>
                 <span
-                  className={data.is_invoice ? `text-rose-600` : `text-gray-600`}
+                  className={data.is_checked ? `text-rose-600` : `text-gray-600`}
                 >
                   <Tooltip
-                    label={data.is_invoice ? `ยืนยันแล้ว` : `ยังไม่ได้ทำ Invoice`}
+                    label={data.is_checked ? `ยืนยันแล้ว` : `ยังไม่ได้ทำ Invoice`}
                   >
-                    {data.is_invoice ? GenerateInvoice(data) : "-"}
+                    {data.is_checked ? GenerateInvoice(data) : "-"}
                   </Tooltip>
                 </span>
               </Link>
