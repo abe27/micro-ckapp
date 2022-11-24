@@ -50,7 +50,7 @@ const OrderPlanPage = () => {
         redirect: "follow",
       };
 
-      let host = `${process.env.API_HOST}/order/ent?etd=${filterDate}&factory=${session.user.Factory}`;
+      let host = `${process.env.API_HOST}/order/ent?etd=${filterDate}&factory=${session.user.Factory}&is_checked=${showAll}`;
       console.dir(host);
       const res = await fetch(host, requestOptions);
 
@@ -98,6 +98,10 @@ const OrderPlanPage = () => {
     }
   };
 
+  const ShowAll = e => {
+    setShowAll(e.target.checked)
+  }
+
   const ReloadData = () => {
     let d = getSessionStorage("filterEdtDate");
       if (d === null) {
@@ -106,6 +110,7 @@ const OrderPlanPage = () => {
       setFilterDate(d);
       setFilterCustomer("-")
       setFilterWhs("-")
+      FetchOrder()
   }
 
   const FetchWhs = async () => {
@@ -161,7 +166,7 @@ const OrderPlanPage = () => {
 
   useEffect(() => {
     FetchOrder();
-  }, [filterCustomer, filterWhs])
+  }, [filterCustomer, filterWhs, showAll])
   
   return (
     <>
@@ -172,15 +177,15 @@ const OrderPlanPage = () => {
       />
       {/* start body */}
       <main>
-        <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+        <div className="py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
           {/* Replace with your content */}
           <div className="lg:flex lg:items-center lg:justify-between">
-            <div className="min-w-0 flex-1">
-              <strong className="tfont-bold text-gray-900">
+            <div className="flex-1 min-w-0">
+              <strong className="text-gray-900 tfont-bold">
                 จัดการข้อมูล Order {session?.user.Factory}
               </strong>
-              <div className="mt-1 flex flex-col sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6">
-                <div className="mt-2 flex items-center text-sm text-gray-500">
+              <div className="flex flex-col mt-1 sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6">
+                <div className="flex items-center mt-2 text-sm text-gray-500">
                   <Popover>
                     <PopoverTrigger>
                       <FunnelIcon
@@ -193,7 +198,7 @@ const OrderPlanPage = () => {
                       <PopoverCloseButton />
                       <PopoverHeader>เลือกข้อมูล</PopoverHeader>
                       <PopoverBody>
-                        <select className="select select-ghost w-full max-w-xs" defaultValue={filterWhs} onChange={e => setFilterWhs(e.target.value)}>
+                        <select className="w-full max-w-xs select select-ghost" defaultValue={filterWhs} onChange={e => setFilterWhs(e.target.value)}>
                           {whsData?.map((i, x) => (<option key={i.id} value={i.title}>{i.title}</option>))}
                         </select>
                       </PopoverBody>
@@ -201,7 +206,7 @@ const OrderPlanPage = () => {
                   </Popover>
                   <span>เลือกคลังจัดส่ง {filterWhs}</span>
                 </div>
-                <div className="mt-2 flex items-center text-sm text-gray-500">
+                <div className="flex items-center mt-2 text-sm text-gray-500">
                   <Popover>
                     <PopoverTrigger>
                       <UsersIcon
@@ -214,7 +219,7 @@ const OrderPlanPage = () => {
                       <PopoverCloseButton />
                       <PopoverHeader>เลือกลูกค้า</PopoverHeader>
                       <PopoverBody>
-                        <select className="select select-ghost w-full max-w-xs" defaultValue={filterCustomer} onChange={e => setFilterCustomer(e.target.value)}>
+                        <select className="w-full max-w-xs select select-ghost" defaultValue={filterCustomer} onChange={e => setFilterCustomer(e.target.value)}>
                           {customerData?.map((i, x) => (<option key={i} value={i}>{i}</option>))}
                         </select>
                       </PopoverBody>
@@ -222,7 +227,7 @@ const OrderPlanPage = () => {
                   </Popover>
                   {filterCustomer !== "-" ? <span>เลือกลูกค้า {filterCustomer}</span> : <span>ค้าหาลูกค้า -</span>}
                 </div>
-                <div className="mt-2 flex items-center text-sm text-gray-500">
+                <div className="flex items-center mt-2 text-sm text-gray-500">
                   <Popover>
                     <PopoverTrigger>
                       <CalendarIcon
@@ -238,7 +243,7 @@ const OrderPlanPage = () => {
                         <input
                           type="date"
                           placeholder="Type here"
-                          className="input input-bordered w-full"
+                          className="w-full input input-bordered"
                           defaultValue={filterDate}
                           onChange={filterDateChange}
                         />
@@ -249,14 +254,14 @@ const OrderPlanPage = () => {
                 </div>
               </div>
             </div>
-            <div className="mt-5 flex lg:mt-0 lg:ml-4">
-              <span className="ml-3 hidden sm:block">
+            <div className="flex mt-5 lg:mt-0 lg:ml-4">
+              <span className="hidden ml-3 sm:block">
                 <label
                   htmlFor="my-modal-etd-date"
-                  className="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
                   <CalendarIcon
-                    className="-ml-1 mr-2 h-5 w-5 text-gray-500"
+                    className="w-5 h-5 mr-2 -ml-1 text-gray-500"
                     aria-hidden="true"
                   />
                   Etd Date
@@ -268,15 +273,15 @@ const OrderPlanPage = () => {
                 />
                 <label
                   htmlFor="my-modal-etd-date"
-                  className="modal cursor-pointer"
+                  className="cursor-pointer modal"
                 >
-                  <label className="modal-box relative" htmlFor="">
+                  <label className="relative modal-box" htmlFor="">
                     <h3 className="text-lg font-bold">เลือกวันที่</h3>
                     <p className="py-4">
                       <input
                         type="date"
                         placeholder="Type here"
-                        className="input input-bordered w-full"
+                        className="w-full input input-bordered"
                         defaultValue={filterDate}
                         onChange={filterDateChange}
                       />
@@ -294,14 +299,14 @@ const OrderPlanPage = () => {
               <span className="sm:ml-3">
                 <button
                   type="button"
-                  className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                   onClick={() => ReloadData()}
                 >
                   {isLoading ? (
                     <Spinner size={`sm`} />
                   ) : (
                     <ArrowPathIcon
-                      className="-ml-1 mr-2 h-5 w-5"
+                      className="w-5 h-5 mr-2 -ml-1"
                       aria-hidden="true"
                     />
                   )}
@@ -311,10 +316,10 @@ const OrderPlanPage = () => {
 
               {/* Dropdown */}
               {/* <Menu as="div" className="relative ml-3 sm:hidden">
-                <Menu.Button className="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                <Menu.Button className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                   More
                   <ChevronDownIcon
-                    className="-mr-1 ml-2 h-5 w-5 text-gray-500"
+                    className="w-5 h-5 ml-2 -mr-1 text-gray-500"
                     aria-hidden="true"
                   />
                 </Menu.Button>
@@ -328,7 +333,7 @@ const OrderPlanPage = () => {
                   leaveFrom="transform opacity-100 scale-100"
                   leaveTo="transform opacity-0 scale-95"
                 >
-                  <Menu.Items className="absolute right-0 z-10 mt-2 -mr-1 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  <Menu.Items className="absolute right-0 z-10 w-48 py-1 mt-2 -mr-1 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <Menu.Item>
                       {({ active }) => (
                         <a
@@ -362,9 +367,9 @@ const OrderPlanPage = () => {
           </div>
           {/* /End replace */}
           {/* start table */}
-          <div className="overflow-x-auto mt-6 z-0">
+          <div className="z-0 mt-6 overflow-x-auto">
             {data != null && (
-              <table className="table table-compact w-full z-0">
+              <table className="z-0 table w-full table-compact">
                 <thead>
                   <tr>
                     <th></th>
@@ -384,7 +389,7 @@ const OrderPlanPage = () => {
                           type="checkbox"
                           className="checkbox checkbox-xs checkbox-warning"
                           defaultChecked={showAll}
-                          onChange={() => setShowAll(!showAll)}
+                          onChange={e => setShowAll(!showAll)}
                         />
                       </div>
                     </th>
