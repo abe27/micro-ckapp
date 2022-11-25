@@ -35,7 +35,7 @@ const OrderPlanPage = () => {
   const [whsData, setWhsData] = useState(null);
   const [customerData, setCustomerData] = useState(null);
   const [data, setData] = useState(null);
-  const [showAll, setShowAll] = useState(false);
+  const [showAll, setShowAll] = useState(true);
 
   const FetchOrder = async () => {
     if (filterDate != null && session != undefined) {
