@@ -76,8 +76,12 @@ const OrderDetailPage = () => {
       if (res.ok) {
         const obj = await res.json();
         setData(obj.data);
-        setOrderDetail(obj.data.order_detail);
-        setOrderPallet(obj.data.pallet);
+        if (obj.data?.order_detail) {
+          setOrderDetail(obj.data.order_detail);
+        }
+        if (obj.data?.pallet) {
+          setOrderPallet(obj.data?.pallet);
+        }
       }
       setIsLoading(false);
     }
@@ -501,6 +505,7 @@ const OrderDetailPage = () => {
     if (id) {
       FetchOrder();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   return (

@@ -50,31 +50,34 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
       let doc = [];
       let x = 1;
       data.map((i) => {
-        let pl_no = `${i.pallet_prefix}${("000" + i.pallet_no).slice(-3)}`;
-        i.pallet_detail.map((j) => {
-          let d = new Date(j.created_at);
-          let y = d.getFullYear().toString().substring(3, 4);
-          console.dir(j)
-          let obj = {
-            seq: x,
-            shipping_id: j.id,
-            pallet_no: pl_no,
-            seq_no: `${j.order_detail.ledger.factory.label_prefix}${y}${(
-              "00000000" + j.seq_no
-            ).slice(-8)}`,
-            part_no: j.order_detail.ledger.part.title,
-            part_name: j.order_detail.ledger.part.description,
-            is_checked: false,
-            last_updated: j.updated_at,
-            doc: j,
-          };
-          if (parts.indexOf(j.order_detail.ledger.part.title) < 0) {
-            parts.push(j.order_detail.ledger.part.title);
-          }
-          //   console.dir(j);
-          doc.push(obj);
-          x++;
-        });
+        console.dir(i)
+        if (i.pallet_detail) {
+          let pl_no = `${i.pallet_prefix}${("000" + i.pallet_no).slice(-3)}`;
+          i.pallet_detail.map((j) => {
+            let d = new Date(j.created_at);
+            let y = d.getFullYear().toString().substring(3, 4);
+            // console.dir(j)
+            let obj = {
+              seq: x,
+              shipping_id: j.id,
+              pallet_no: pl_no,
+              seq_no: `${j.order_detail.ledger.factory.label_prefix}${y}${(
+                "00000000" + j.seq_no
+              ).slice(-8)}`,
+              part_no: j.order_detail.ledger.part.title,
+              part_name: j.order_detail.ledger.part.description,
+              is_checked: false,
+              last_updated: j.updated_at,
+              doc: j,
+            };
+            if (parts.indexOf(j.order_detail.ledger.part.title) < 0) {
+              parts.push(j.order_detail.ledger.part.title);
+            }
+            //   console.dir(j);
+            doc.push(obj);
+            x++;
+          });
+        }
       });
       parts.sort();
       setPartList(parts);
