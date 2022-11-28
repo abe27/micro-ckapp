@@ -8,37 +8,51 @@ import {
   SumCtn,
 } from "../../hooks/greeter";
 
-const ShowOrderDetail = ({ data, x, showAll = false ,filterCustomer='-',filterWhs='-'}) => {
+const ShowOrderDetail = ({
+  data,
+  x,
+  showAll = false,
+  filterCustomer = "-",
+  filterWhs = "-",
+}) => {
   useEffect(() => {
-    console.log(`Customer: ${filterCustomer} Whs: ${filterWhs}`)
-  }, [filterCustomer,filterWhs])
+    console.log(`Customer: ${filterCustomer} Whs: ${filterWhs}`);
+  }, [filterCustomer, filterWhs]);
   return (
     <>
       {!showAll ? (
         <tr className="hover hover:cursor-pointer" key={data.id}>
           <th>
-            <Link
-              href={`/order/plan?id=${data.id}`}
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              {x + 1}
-            </Link>
+            {data?.order_detail.length > 0 ? (
+              <Link
+                href={`/order/plan?id=${data.id}`}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                {x + 1}
+              </Link>
+            ) : (
+              x + 1
+            )}
           </th>
           <td>
-            <span
-              className={
-                data?.order_detail[0].orderplan.whs.title === "DOM"
-                  ? `text-teal-600`
-                  : data?.order_detail[0].orderplan.whs.title === "NESC"
-                  ? "text-rose-600"
-                  : data?.order_detail[0].orderplan.whs.title === "ICAM"
-                  ? "text-violet-600"
-                  : "text-blue-600"
-              }
-            >
-              {data?.order_detail[0].orderplan.whs.title}
-            </span>
+            {data?.order_detail.length > 0 ? (
+              <span
+                className={
+                  data?.order_detail[0].orderplan.whs.title === "DOM"
+                    ? `text-teal-600`
+                    : data?.order_detail[0].orderplan.whs.title === "NESC"
+                    ? "text-rose-600"
+                    : data?.order_detail[0].orderplan.whs.title === "ICAM"
+                    ? "text-violet-600"
+                    : "text-blue-600"
+                }
+              >
+                {data?.order_detail[0].orderplan.whs.title}
+              </span>
+            ) : (
+              "NON"
+            )}
           </td>
           <td>{ReDate(data.etd_date)}</td>
           <td>
@@ -65,24 +79,34 @@ const ShowOrderDetail = ({ data, x, showAll = false ,filterCustomer='-',filterWh
           <td>
             <span
               className={
-                data.commercial.title === "N" ? `text-rose-700` : `text-gray-600`
+                data.commercial.title === "N"
+                  ? `text-rose-700`
+                  : `text-gray-600`
               }
             >
               {data.commercial.title}
             </span>
           </td>
           <td>
-            <Link href={`/order/plan?id=${data.id}`}>
-              <span
-                className={data.is_checked ? `text-rose-600` : `text-gray-600`}
-              >
-                <Tooltip
-                  label={data.is_checked ? `ยืนยันแล้ว` : `ยังไม่ได้ทำ Invoice`}
+            {data?.order_detail.length > 0 ? (
+              <Link href={`/order/plan?id=${data.id}`}>
+                <span
+                  className={
+                    data.is_checked ? `text-rose-600` : `text-gray-600`
+                  }
                 >
-                  {data.is_checked ? GenerateInvoice(data) : "-"}
-                </Tooltip>
-              </span>
-            </Link>
+                  <Tooltip
+                    label={
+                      data.is_checked ? `ยืนยันแล้ว` : `ยังไม่ได้ทำ Invoice`
+                    }
+                  >
+                    {data.is_checked ? GenerateInvoice(data) : "-"}
+                  </Tooltip>
+                </span>
+              </Link>
+            ) : (
+              "N"
+            )}
           </td>
           <td>{data.order_detail.length}</td>
           <td>{SumCtn(data.order_detail)}</td>
@@ -176,7 +200,9 @@ const ShowOrderDetail = ({ data, x, showAll = false ,filterCustomer='-',filterWh
             <td>
               <span
                 className={
-                  data.commercial.title === "N" ? `text-rose-700` : `text-gray-600`
+                  data.commercial.title === "N"
+                    ? `text-rose-700`
+                    : `text-gray-600`
                 }
               >
                 {data.commercial.title}
@@ -185,10 +211,14 @@ const ShowOrderDetail = ({ data, x, showAll = false ,filterCustomer='-',filterWh
             <td>
               <Link href={`/order/plan?id=${data.id}`}>
                 <span
-                  className={data.is_checked ? `text-rose-600` : `text-gray-600`}
+                  className={
+                    data.is_checked ? `text-rose-600` : `text-gray-600`
+                  }
                 >
                   <Tooltip
-                    label={data.is_checked ? `ยืนยันแล้ว` : `ยังไม่ได้ทำ Invoice`}
+                    label={
+                      data.is_checked ? `ยืนยันแล้ว` : `ยังไม่ได้ทำ Invoice`
+                    }
                   >
                     {data.is_checked ? GenerateInvoice(data) : "-"}
                   </Tooltip>
