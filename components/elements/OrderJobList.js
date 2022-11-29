@@ -1,44 +1,9 @@
-import Head from "next/head";
 import QRCode from "react-qr-code";
-import { useEffect, useState } from "react";
-import {
-  GenerateInvoice,
-  ReEtdDate,
-  SumOrderDetailCtn,
-  SumOrderDetailBalQty,
-} from "../../hooks/greeter";
 
-const OrderJobList = ({ data }) => {
-  const [invNo, setInvNo] = useState(null);
-  const [shipmentType, setShipmentType] = useState(null);
-  const [shipFrom, setShipFrom] = useState(null);
-  const [shipTo, setShipTo] = useState(null);
-  const [etd, setEtd] = useState(null);
-  const [factory, setFactory] = useState(null);
-  const [orderGroup, setOrderGroup] = useState(null);
-  const [refNo, setRefNo] = useState(null);
-  const [orderDetail, setOrderDetail] = useState(null);
-
-  useEffect(() => {
-    if (data) {
-      setOrderDetail(data);
-      let obj = data[0];
-      let inv = GenerateInvoice(obj.order);
-      setInvNo(inv);
-      setRefNo(inv);
-      setShipmentType(obj.order.shipment.description);
-      setShipFrom(obj.order.consignee.affcode.title);
-      setShipTo(obj.order.consignee.customer.description);
-      setEtd(ReEtdDate(obj.order.etd_date));
-      setFactory(obj.order.consignee.factory.title);
-      setOrderGroup(obj.orderplan.order_groups);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+const OrderJobList = ({data}) => {
   return (
     <>
-      <main>
+      <section>
         <div className="py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <section>
             <div className="grid grid-cols-3 gap-4">
@@ -50,42 +15,42 @@ const OrderJobList = ({ data }) => {
                   <div className="flex justify-start space-x-10">
                     <p className="">
                       Invoice No.:{` `}
-                      <span className="text-lg uppercase">{invNo}</span>
+                      <span className="text-lg uppercase">{data.invNo}</span>
                     </p>
                     <p className="">
                       Shipment:{` `}
-                      <span className="uppercase">{shipmentType}</span>
+                      <span className="uppercase">{data.shipmentType}</span>
                     </p>
                   </div>
                   <div className="flex justify-start mt-4 space-x-10">
                     <p className="">
                       ShipFrom:{` `}
-                      <span className="uppercase">{shipFrom}</span>
+                      <span className="uppercase">{data.shipFrom}</span>
                     </p>
                     <p className="">
                       ShipTo:{` `}
-                      <span className="uppercase">{shipTo}</span>
+                      <span className="uppercase">{data.shipTo}</span>
                     </p>
                     <p className="">
-                      Etd Date:{` `}
-                      <span className="uppercase">{etd}</span>
+                      Etd Date:{` `}QRCode
+                      <span className="uppercase">{data.etd}</span>
                     </p>
                   </div>
                   <div className="flex justify-start mt-4 space-x-10">
                     <p className="">
                       Factory:{` `}
-                      <span className="uppercase">{factory}</span>
+                      <span className="uppercase">{data.factory}</span>
                     </p>
                     <p className="">
                       GroupBy:{` `}
-                      <span className="uppercase">{orderGroup}</span>
+                      <span className="uppercase">{data.orderGroup}</span>
                     </p>
                   </div>
                 </div>
               </div>
               <div className="">
                 <div className="flex justify-center">
-                  {refNo && (
+                  {data.refNo && (
                     <QRCode
                       size={256}
                       style={{
@@ -94,14 +59,14 @@ const OrderJobList = ({ data }) => {
                         width: "100%",
                       }}
                       viewBox={`0 0 256 256`}
-                      value={refNo}
-                      title={refNo}
+                      value={data.refNo}
+                      title={data.refNo}
                     />
                   )}
                 </div>
                 <div className="flex justify-center">
                   Ref:{` `}
-                  <span className="indent-2">{refNo}</span>
+                  <span className="indent-2">{data.refNo}</span>
                 </div>
               </div>
             </div>
@@ -177,14 +142,20 @@ const OrderJobList = ({ data }) => {
                         {SumOrderDetailCtn(orderDetail)}
                       </div>
                     </th>
-                    <th colSpan={5}></th>
+                    <th colSpan={5}>
+                      <div className="flex justify-end">
+                        <button className="btn btn-sm" onClick={generatePDF}>
+                          ปริ้นเอกสาร
+                        </button>
+                      </div>
+                    </th>
                   </tr>
                 </tfoot>
               </table>
             </div>
           </section>
         </div>
-      </main>
+      </section>
     </>
   );
 };

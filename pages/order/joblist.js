@@ -71,10 +71,29 @@ const JobListPage = () => {
   };
 
   const generatePDF = () => {
-    const string = renderToString(<h1>test</h1>);
-    const pdf = new jsPDF("p", "mm", "a4");
-    pdf.html(string);
-    pdf.save("demo.pdf");
+    let doc = {
+      invNo: "Test",
+      shipmentType: "Test",
+      shipFrom: "Test",
+      shipTo: "Test",
+      etd: "Test",
+      factory: "Test",
+      orderGroup: "Test",
+      refNo: "Test",
+    };
+
+    console.dir(doc)
+    let stringElement = renderToString(<OrderJobList data={doc} />);
+    const pdf = new jsPDF("a4");
+    pdf.html(stringElement, {
+      callback: (pdf) => {
+        pdf.save(`${invNo}.pdf`);
+      },
+      x: 0.5,
+      y: 0.5,
+      width: 170, //target width in the PDF document
+      windowWidth: 650, //window width in CSS pixels
+    });
   };
 
   useEffect(() => {
@@ -92,7 +111,7 @@ const JobListPage = () => {
         <meta name="description" content={id} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="pdfPage">
+      <main id="pdfPage">
         <div className="py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <section>
             <div className="grid grid-cols-3 gap-4">
