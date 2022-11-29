@@ -13,6 +13,7 @@ import ConfirmSyncData from "./elements/ConfirmSyncData";
 import AddPartToPallet from "./elements/AddPartToPallet";
 import SelectPrintShipping from "./elements/SelectPrintShipping";
 import ShowOrderDetail from "./elements/ShowOrderDetail";
+import OrderJobList from "./elements/OrderJobList";
 
 export {
   AddPartToPallet,
@@ -30,4 +31,5 @@ export {
   OrderDetail,
   OrderPallet,
   OrderLabel,
+  OrderJobList,
 };

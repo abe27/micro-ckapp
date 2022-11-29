@@ -1,12 +1,6 @@
 import Head from "next/head";
 import QRCode from "react-qr-code";
-import { jsPDF } from "jspdf";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
-import { renderToString } from "react-dom/server";
-import { useToast } from "@chakra-ui/react";
-import { OrderJobList } from "../../components";
 import {
   GenerateInvoice,
   ReEtdDate,
@@ -14,11 +8,7 @@ import {
   SumOrderDetailBalQty,
 } from "../../hooks/greeter";
 
-const JobListPage = () => {
-  const toast = useToast();
-  const { data: session } = useSession();
-  const router = useRouter();
-  const { id } = router.query;
+const OrderJobList = ({ data }) => {
   const [invNo, setInvNo] = useState(null);
   const [shipmentType, setShipmentType] = useState(null);
   const [shipFrom, setShipFrom] = useState(null);
@@ -29,35 +19,10 @@ const JobListPage = () => {
   const [refNo, setRefNo] = useState(null);
   const [orderDetail, setOrderDetail] = useState(null);
 
-  const FetchData = async () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", session?.user.accessToken);
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    const res = await fetch(
-      `${process.env.API_HOST}/order/detail?order_id=${id}`,
-      requestOptions
-    );
-    if (!res.ok) {
-      const data = await res.json();
-      toast({
-        title: `เกิดข้อผิดพลาด ${data.message}!`,
-        duration: 3000,
-        status: "error",
-        position: "top",
-        isClosable: true,
-      });
-    }
-
-    if (res.ok) {
-      const data = await res.json();
-      setOrderDetail(data.data);
-      let obj = data.data[0];
+  useEffect(() => {
+    if (data) {
+      setOrderDetail(data);
+      let obj = data[0];
       let inv = GenerateInvoice(obj.order);
       setInvNo(inv);
       setRefNo(inv);
@@ -68,31 +33,12 @@ const JobListPage = () => {
       setFactory(obj.order.consignee.factory.title);
       setOrderGroup(obj.orderplan.order_groups);
     }
-  };
-
-  const generatePDF = () => {
-    const string = renderToString(<h1>test</h1>);
-    const pdf = new jsPDF("p", "mm", "a4");
-    pdf.html(string);
-    pdf.save("demo.pdf");
-  };
-
-  useEffect(() => {
-    if (id) {
-      //// FetchData
-      FetchData();
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, []);
 
   return (
     <>
-      <Head>
-        <title>Print JobOrder {id}</title>
-        <meta name="description" content={id} />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <main className="pdfPage">
+      <main>
         <div className="py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <section>
             <div className="grid grid-cols-3 gap-4">
@@ -231,13 +177,7 @@ const JobListPage = () => {
                         {SumOrderDetailCtn(orderDetail)}
                       </div>
                     </th>
-                    <th colSpan={5}>
-                      <div className="flex justify-end">
-                        <button className="btn btn-sm" onClick={generatePDF}>
-                          ปริ้นเอกสาร
-                        </button>
-                      </div>
-                    </th>
+                    <th colSpan={5}></th>
                   </tr>
                 </tfoot>
               </table>
@@ -249,4 +189,4 @@ const JobListPage = () => {
   );
 };
 
-export default JobListPage;
+export default OrderJobList;

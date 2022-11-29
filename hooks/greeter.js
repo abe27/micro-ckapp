@@ -24,6 +24,26 @@ const SumCtn = (obj) => {
   return ctn.toLocaleString();
 };
 
+const SumOrderDetailCtn = (obj) => {
+  let ctn = 0;
+  if (obj) {
+    obj.map(i => {
+      ctn += i.order_ctn
+    })
+  }
+  return ctn
+}
+
+const SumOrderDetailBalQty = (obj) => {
+  let ctn = 0;
+  if (obj) {
+    obj.map(i => {
+      ctn += i.orderplan.balqty;
+    });
+  }
+  return ctn.toLocaleString();
+};
+
 const ReDate = (txt) => {
   let d = new Date(txt);
   return `${d.getFullYear()}-${("0" + (d.getMonth() + 1)).slice(-2)}-${(
@@ -40,8 +60,25 @@ const ReDateTime = (txt) => {
   )}`;
 };
 
-const ReplaceHashtag = txt => {
-  return txt.replace("#", "%23");
-}
+const ReEtdDate = (txt) => {
+  let d = new Date(txt);
+  return `${(
+    "0" + d.getDate()
+  ).slice(-2)}/${("0" + (d.getMonth() + 1)).slice(-2)}/${d.getFullYear()}`;
+};
 
-export { classNames, GenerateInvoice, SumCtn, ReDate, ReDateTime,ReplaceHashtag };
+const ReplaceHashtag = (txt) => {
+  return txt.replace("#", "%23");
+};
+
+export {
+  classNames,
+  GenerateInvoice,
+  SumCtn,
+  SumOrderDetailCtn,
+  SumOrderDetailBalQty,
+  ReDate,
+  ReEtdDate,
+  ReDateTime,
+  ReplaceHashtag,
+};
