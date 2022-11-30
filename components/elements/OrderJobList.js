@@ -1,4 +1,7 @@
 import QRCode from "react-qr-code";
+import {
+  SumOrderDetailBalQty, SumOrderDetailCtn
+} from "../../hooks/greeter";
 
 const OrderJobList = ({data}) => {
   return (
@@ -103,8 +106,8 @@ const OrderJobList = ({data}) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {orderDetail &&
-                    orderDetail.map((i, x) => (
+                  {data?.doc &&
+                    data?.doc.map((i, x) => (
                       <tr key={i.id}>
                         <th>{x + 1}</th>
                         <td>{i.orderplan.part_no}</td>
@@ -134,21 +137,15 @@ const OrderJobList = ({data}) => {
                     </th>
                     <th>
                       <div className="flex justify-end">
-                        {SumOrderDetailBalQty(orderDetail)}
+                        {SumOrderDetailBalQty(data.doc)}
                       </div>
                     </th>
                     <th>
                       <div className="flex justify-end">
-                        {SumOrderDetailCtn(orderDetail)}
+                        {SumOrderDetailCtn(data.doc)}
                       </div>
                     </th>
-                    <th colSpan={5}>
-                      <div className="flex justify-end">
-                        <button className="btn btn-sm" onClick={generatePDF}>
-                          ปริ้นเอกสาร
-                        </button>
-                      </div>
-                    </th>
+                    <th colSpan={5}></th>
                   </tr>
                 </tfoot>
               </table>

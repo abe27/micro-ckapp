@@ -1,17 +1,17 @@
+import { Spinner, useToast } from "@chakra-ui/react";
+import JsPDF from "jspdf";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
-import QRCode from "react-qr-code";
-import { jsPDF } from "jspdf";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
-import { renderToString } from "react-dom/server";
-import { useToast } from "@chakra-ui/react";
+import { renderToStaticMarkup, renderToString } from "react-dom/server";
+import QRCode from "react-qr-code";
 import { OrderJobList } from "../../components";
 import {
   GenerateInvoice,
   ReEtdDate,
-  SumOrderDetailCtn,
   SumOrderDetailBalQty,
+  SumOrderDetailCtn,
 } from "../../hooks/greeter";
 
 const JobListPage = () => {
@@ -28,6 +28,7 @@ const JobListPage = () => {
   const [orderGroup, setOrderGroup] = useState(null);
   const [refNo, setRefNo] = useState(null);
   const [orderDetail, setOrderDetail] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const FetchData = async () => {
     var myHeaders = new Headers();
@@ -70,35 +71,12 @@ const JobListPage = () => {
     }
   };
 
-  const generatePDF = () => {
-    let doc = {
-      invNo: "Test",
-      shipmentType: "Test",
-      shipFrom: "Test",
-      shipTo: "Test",
-      etd: "Test",
-      factory: "Test",
-      orderGroup: "Test",
-      refNo: "Test",
-    };
-
-    console.dir(doc)
-    let stringElement = renderToString(<OrderJobList data={doc} />);
-    const pdf = new jsPDF("a4");
-    pdf.html(stringElement, {
-      callback: (pdf) => {
-        pdf.save(`${invNo}.pdf`);
-      },
-      x: 0.5,
-      y: 0.5,
-      width: 170, //target width in the PDF document
-      windowWidth: 650, //window width in CSS pixels
-    });
-  };
+  // const generatePDF = () => {
+  //   window.print()
+  // };
 
   useEffect(() => {
     if (id) {
-      //// FetchData
       FetchData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -252,9 +230,13 @@ const JobListPage = () => {
                     </th>
                     <th colSpan={5}>
                       <div className="flex justify-end">
-                        <button className="btn btn-sm" onClick={generatePDF}>
-                          ปริ้นเอกสาร
-                        </button>
+                        {isLoading ? (
+                          <Spinner color="red.500" />
+                        ) : (
+                          <button className="btn btn-sm" onClick={() => window.print()}>
+                            ปริ้นเอกสาร
+                          </button>
+                        )}
                       </div>
                     </th>
                   </tr>
