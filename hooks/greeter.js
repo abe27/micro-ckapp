@@ -28,7 +28,7 @@ const SumOrderDetailCtn = (obj) => {
   let ctn = 0;
   if (obj) {
     obj.map(i => {
-      ctn += i.order_ctn
+      ctn += i.total_on_pallet
     })
   }
   return ctn
@@ -38,7 +38,9 @@ const SumOrderDetailBalQty = (obj) => {
   let ctn = 0;
   if (obj) {
     obj.map(i => {
-      ctn += i.orderplan.balqty;
+      if (i.total_on_pallet > 0) {
+        ctn += i.orderplan.balqty;
+      }
     });
   }
   return ctn.toLocaleString();

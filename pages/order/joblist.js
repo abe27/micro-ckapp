@@ -47,7 +47,7 @@ const JobListPage = () => {
     if (!res.ok) {
       const data = await res.json();
       toast({
-        title: `เกิดข้อผิดพลาด ${data.message}!`,
+        title: `เกิดข้อผิดพลาด!`,
         duration: 3000,
         status: "error",
         position: "top",
@@ -57,6 +57,7 @@ const JobListPage = () => {
 
     if (res.ok) {
       const data = await res.json();
+      console.dir(data.data);
       setOrderDetail(data.data);
       let obj = data.data[0];
       let inv = GenerateInvoice(obj.order);
@@ -76,11 +77,11 @@ const JobListPage = () => {
   // };
 
   useEffect(() => {
-    if (id) {
+    if (id !== undefined) {
       FetchData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, [id, session?.user]);
 
   return (
     <>
@@ -190,28 +191,31 @@ const JobListPage = () => {
                 </thead>
                 <tbody>
                   {orderDetail &&
-                    orderDetail.map((i, x) => (
-                      <tr key={i.id}>
-                        <th>{x + 1}</th>
-                        <td>{i.orderplan.part_no}</td>
-                        <td>{i.pono}</td>
-                        <td>
-                          <div className="flex justify-end">
-                            {i.orderplan.balqty.toLocaleString()}
-                          </div>
-                        </td>
-                        <td>
-                          <div className="flex justify-end">
-                            {i.order_ctn.toLocaleString()}
-                          </div>
-                        </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                    ))}
+                    orderDetail.map(
+                      (i, x) =>
+                        i.total_on_pallet > 0 && (
+                          <tr key={i.id}>
+                            <th>{x + 1}</th>
+                            <td>{i.orderplan.part_no}</td>
+                            <td>{i.pono}</td>
+                            <td>
+                              <div className="flex justify-end">
+                                {i.orderplan.balqty.toLocaleString()}
+                              </div>
+                            </td>
+                            <td>
+                              <div className="flex justify-end">
+                                {i.order_ctn.toLocaleString()}
+                              </div>
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                        )
+                    )}
                 </tbody>
                 <tfoot>
                   <tr>
@@ -233,7 +237,10 @@ const JobListPage = () => {
                         {isLoading ? (
                           <Spinner color="red.500" />
                         ) : (
-                          <button className="btn btn-sm" onClick={() => window.print()}>
+                          <button
+                            className="btn btn-sm"
+                            onClick={() => window.print()}
+                          >
                             ปริ้นเอกสาร
                           </button>
                         )}
