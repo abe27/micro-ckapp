@@ -153,22 +153,19 @@ const OrderPlanPage = () => {
   };
 
   useEffect(() => {
-    if (filterDate == null) {
-      let d = getSessionStorage("filterEdtDate");
-      if (d === null) {
-        d = setSessionStorage("filterEdtDate", ReDate(Date.now()));
+    if (session?.user !== undefined) {
+      if (filterDate == null) {
+        let d = getSessionStorage("filterEdtDate");
+        if (d === null) {
+          d = setSessionStorage("filterEdtDate", ReDate(Date.now()));
+        }
+        setFilterDate(d);
       }
-      setFilterDate(d);
+      FetchOrder();
+      FetchWhs()
     }
-    FetchOrder();
-    FetchWhs()
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterDate, session]);
-
-  useEffect(() => {
-    FetchOrder();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterCustomer, filterWhs, showAll])
+  }, [filterDate, filterCustomer, filterWhs, showAll, session?.user])
   
   return (
     <>
