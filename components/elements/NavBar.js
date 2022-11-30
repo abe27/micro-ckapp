@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import Head from "next/head";
 import { Fragment, useEffect, useState } from "react";
 import { Popover, Transition } from "@headlessui/react";
@@ -10,6 +11,7 @@ import {
   CircleStackIcon,
   ChevronDownIcon,
   CursorArrowRaysIcon,
+  TruckIcon,
 } from "@heroicons/react/20/solid";
 import Link from "next/link";
 
@@ -19,6 +21,21 @@ const solutions = [
     description: "Test",
     href: "/order",
     icon: CircleStackIcon,
+  },
+];
+
+const receiveMenu = [
+  {
+    name: "Receive Control",
+    description: "จัดการข้อมูลการรับสินค้ารายวัน",
+    href: "/receive",
+    icon: TruckIcon,
+  },
+  {
+    name: "Receive Supplier",
+    description: "จัดการข้อมูลการรับสินค้าจาก Supplier",
+    href: "/receive/supplier",
+    icon: PencilSquareIcon,
   },
 ];
 
@@ -57,6 +74,7 @@ const resources = [
     icon: BellAlertIcon,
   },
 ];
+
 const recentPosts = [
   { id: 1, name: "Boost your conversion rate", href: "#" },
   {
@@ -143,7 +161,7 @@ const NavBar = ({
                       <Popover.Panel className="absolute z-10 w-screen max-w-md px-2 mt-3 -ml-4 transform sm:px-0 lg:left-1/2 lg:ml-0 lg:-translate-x-1/2">
                         <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
                           <div className="relative grid gap-6 px-5 py-6 bg-white sm:gap-8 sm:p-8">
-                            {solutions.map((item) => (
+                            {receiveMenu.map((item) => (
                               <Link key={item.name} href={item.href}>
                                 <span className="flex items-start p-3 -m-3 rounded-lg hover:bg-gray-50">
                                   <item.icon
