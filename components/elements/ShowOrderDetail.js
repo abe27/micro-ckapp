@@ -88,7 +88,7 @@ const ShowOrderDetail = ({
             </span>
           </td>
           <td>
-            {data?.order_detail.length > 0 ? (
+            {data?.order_detail?.length > 0 ? (
               <Link href={`/order/plan?id=${data.id}`}>
                 <span
                   className={
@@ -152,28 +152,36 @@ const ShowOrderDetail = ({
         data.is_checked && (
           <tr className="hover hover:cursor-pointer" key={data.id}>
             <th>
-              <Link
-                href={`/order/plan?id=${data.id}`}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                {x + 1}
-              </Link>
+              {data?.order_detail?.length > 0 ? (
+                <Link
+                  href={`/order/plan?id=${data.id}`}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  {x + 1}
+                </Link>
+              ) : (
+                "-"
+              )}
             </th>
             <td>
-              <span
-                className={
-                  data?.order_detail[0].orderplan.whs.title === "DOM"
-                    ? `text-teal-600`
-                    : data?.order_detail[0].orderplan.whs.title === "NESC"
-                    ? "text-rose-600"
-                    : data?.order_detail[0].orderplan.whs.title === "ICAM"
-                    ? "text-violet-600"
-                    : "text-blue-600"
-                }
-              >
-                {data?.order_detail[0].orderplan.whs.title}
-              </span>
+              {data?.order_detail?.length > 0 ? (
+                <span
+                  className={
+                    data?.order_detail[0].orderplan.whs.title === "DOM"
+                      ? `text-teal-600`
+                      : data?.order_detail[0].orderplan.whs.title === "NESC"
+                      ? "text-rose-600"
+                      : data?.order_detail[0].orderplan.whs.title === "ICAM"
+                      ? "text-violet-600"
+                      : "text-blue-600"
+                  }
+                >
+                  {data?.order_detail[0].orderplan.whs.title}
+                </span>
+              ) : (
+                <span className="text-gray-600">-</span>
+              )}
             </td>
             <td>{ReDate(data.etd_date)}</td>
             <td>
@@ -209,19 +217,37 @@ const ShowOrderDetail = ({
               </span>
             </td>
             <td>
-              <Link href={`/order/plan?id=${data.id}`}>
+              <Link
+                href={
+                  data?.order_detail?.length > 0
+                    ? `/order/plan?id=${data.id}`
+                    : `#`
+                }
+              >
                 <span
                   className={
                     data.is_checked ? `text-rose-600` : `text-gray-600`
                   }
                 >
-                  <Tooltip
-                    label={
-                      data.is_checked ? `ยืนยันแล้ว` : `ยังไม่ได้ทำ Invoice`
-                    }
-                  >
-                    {data.is_checked ? GenerateInvoice(data) : "-"}
-                  </Tooltip>
+                  {data?.order_detail?.length > 0 ? (
+                    <Tooltip
+                      label={
+                        data.is_checked ? `ยืนยันแล้ว` : `ยังไม่ได้ทำ Invoice`
+                      }
+                    >
+                      {data.is_checked ? GenerateInvoice(data) : "-"}
+                    </Tooltip>
+                  ) : (
+                    <Tooltip
+                      label={
+                        data.is_checked
+                          ? `ยืนยันแล้วและมีการ Revise`
+                          : `ยังไม่ได้ทำ Invoice`
+                      }
+                    >
+                      {data.is_checked ? GenerateInvoice(data) : "-"}
+                    </Tooltip>
+                  )}
                 </span>
               </Link>
             </td>
