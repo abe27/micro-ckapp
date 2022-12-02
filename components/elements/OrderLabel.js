@@ -50,7 +50,6 @@ const OrderLabel = ({ data, confirmDelete, confirmPrintLabel }) => {
       let doc = [];
       let x = 1;
       data.map((i) => {
-        console.dir(i)
         if (i.pallet_detail) {
           let pl_no = `${i.pallet_prefix}${("000" + i.pallet_no).slice(-3)}`;
           i.pallet_detail.map((j) => {

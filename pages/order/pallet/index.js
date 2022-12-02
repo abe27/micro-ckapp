@@ -147,6 +147,7 @@ const PalletPage = () => {
     if (id) {
       FetchOrderDetail();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   return (
@@ -157,29 +158,29 @@ const PalletPage = () => {
         description={`จัดการข้อมูลการ Set Pallet`}
       />
       <main>
-        <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+        <div className="py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
           {/* Replace with your content */}
           <div className="lg:flex lg:items-center lg:justify-between">
-            <div className="min-w-0 flex-1">
-              <strong className="tfont-bold text-gray-900">
+            <div className="flex-1 min-w-0">
+              <strong className="text-gray-900 tfont-bold">
                 เลขที่เอกสาร: {ReInvoice(data?.order)}
               </strong>
-              <div className="mt-1 flex flex-col sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6">
-                <div className="mt-2 flex items-center text-sm text-gray-500">
+              <div className="flex flex-col mt-1 sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6">
+                <div className="flex items-center mt-2 text-sm text-gray-500">
                   <BriefcaseIcon
                     className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
                     aria-hidden="true"
                   />
                   <Link href={`/order/archive`}>Archive</Link>
                 </div>
-                <div className="mt-2 flex items-center text-sm text-gray-500">
+                <div className="flex items-center mt-2 text-sm text-gray-500">
                   <CloudIcon
                     className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
                     aria-hidden="true"
                   />
                   <Link href={`/order/edi`}>Remote EDI</Link>
                 </div>
-                <div className="mt-2 flex items-center text-sm text-gray-500">
+                <div className="flex items-center mt-2 text-sm text-gray-500">
                   <CalendarIcon
                     className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400 hover:cursor-pointer"
                     aria-hidden="true"
@@ -188,25 +189,25 @@ const PalletPage = () => {
                 </div>
               </div>
             </div>
-            <div className="mt-5 flex lg:mt-0 lg:ml-4">
-              <span className="ml-3 hidden sm:block">
+            <div className="flex mt-5 lg:mt-0 lg:ml-4">
+              <span className="hidden ml-3 sm:block">
                 <ModalAddNewPallet
                   lastPalletNo={data?.length}
                   onCommitData={AddNewPallet}
                 />
               </span>
-              <span className="ml-3 hidden sm:block">
+              <span className="hidden ml-3 sm:block">
                 <Link
-                  href={`/order/joblist?id=${id}`}
+                  href={`/order/dimension?id=${id}`}
                   rel="noopener noreferrer"
                   target="_blank"
                 >
                   <button
                     type="button"
-                    className="inline-flex items-center rounded-md border border-transparent bg-violet-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    className="inline-flex items-center px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-sm bg-violet-600 hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                   >
                     <PrinterIcon
-                      className="-ml-1 mr-2 h-5 w-5"
+                      className="w-5 h-5 mr-2 -ml-1"
                       aria-hidden="true"
                     />
                     Dimension
@@ -216,14 +217,14 @@ const PalletPage = () => {
               <span className="sm:ml-3">
                 <button
                   type="button"
-                  className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                   onClick={FetchOrderDetail}
                 >
                   {isLoading ? (
                     <Spinner size={`sm`} />
                   ) : (
                     <ArrowPathIcon
-                      className="-ml-1 mr-2 h-5 w-5"
+                      className="w-5 h-5 mr-2 -ml-1"
                       aria-hidden="true"
                     />
                   )}
@@ -234,7 +235,7 @@ const PalletPage = () => {
           </div>
           {/* /End replace */}
           <div className="mt-6 overflow-x-auto">
-            <table className="table table-compact w-full">
+            <table className="table w-full table-compact">
               <thead>
                 <tr>
                   <th></th>
@@ -281,7 +282,7 @@ const PalletPage = () => {
                           <span className="hover:cursor-pointer">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
-                              className="icon icon-tabler icon-tabler-pencil text-orange-600"
+                              className="text-orange-600 icon icon-tabler icon-tabler-pencil"
                               width="16"
                               height="16"
                               viewBox="0 0 24 24"

@@ -10,6 +10,7 @@ import ReactDOMServer from "react-dom/server";
 import QRCode from "react-qr-code";
 import { OrderJobList } from "../../components";
 import TestGeneratePDF from "../../components/elements/TestGeneratePDF";
+import ReactToPrint from "react-to-print";
 import {
   GenerateInvoice,
   ReEtdDate,
@@ -60,7 +61,7 @@ const JobListPage = () => {
 
     if (res.ok) {
       const data = await res.json();
-      console.dir(data.data);
+      // console.dir(data.data);
       setOrderDetail(data.data);
       let obj = data.data[0];
       let inv = GenerateInvoice(obj.order);
@@ -245,7 +246,7 @@ const JobListPage = () => {
                   <tr>
                     <th colSpan={3}>
                       <div className="flex justify-end">Total:</div>
-                      <a href="javascript:genPDF()">Download PDF</a>  
+                      <a href="javascript:genPDF()">Download PDF</a>
                     </th>
                     <th>
                       <div className="flex justify-end">
@@ -282,6 +283,14 @@ const JobListPage = () => {
               </table>
             </div>
           </section>
+          <ReactToPrint
+            trigger={() => {
+              // NOTE: could just as easily return <SomeComponent />. Do NOT pass an `onClick` prop
+              // to the root node of the returned component as it will be overwritten.
+              return <a href="#">Print this out!</a>;
+            }}
+            content={() => <TestGeneratePDF />}
+          />
         </div>
       </main>
     </>
