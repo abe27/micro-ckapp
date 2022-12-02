@@ -40,7 +40,7 @@ const AuthPage = () => {
       title: `สวัสดี ${data.get("username")}`,
       description: `ยินดีต้อนรับเข้าสู่ระบบ ${process.env.APP_NAME}.`,
       status: "success",
-      duration: 9000,
+      duration: 3000,
       isClosable: true,
       position: "top",
       onCloseComplete: () => router.push("/"),
@@ -60,7 +60,7 @@ const AuthPage = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="flex h-screen items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="flex items-center justify-center h-screen px-4 py-12 sm:px-6 lg:px-8">
         <div className="w-full max-w-md space-y-8">
           <div>
             <Link href="/member/register">
@@ -73,10 +73,10 @@ const AuthPage = () => {
                 />
               </div>
             </Link>
-            <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
+            <h2 className="mt-6 text-3xl font-bold tracking-tight text-center text-gray-900">
               {`เข้าใช้งานระบบ ${process.env.APP_NAME}`}
             </h2>
-            <p className="mt-2 text-center text-sm text-gray-600">
+            <p className="mt-2 text-sm text-center text-gray-600">
               หรือ{" "}
               <Link href="/">
                 <span className="font-medium text-indigo-600 hover:text-indigo-500">
@@ -92,7 +92,7 @@ const AuthPage = () => {
           >
             <input type="hidden" name="remember" defaultValue="true" />
             <div className="-space-y-px rounded-md shadow-sm">
-              <div className="form-control w-full">
+              <div className="w-full form-control">
                 <label className="label">
                   <span className="label-text">ชื่อผู้ใช้งาน</span>
                 </label>
@@ -101,11 +101,11 @@ const AuthPage = () => {
                   name="username"
                   type="text"
                   placeholder="Emp Code"
-                  className="input input-bordered w-full block"
+                  className="block w-full input input-bordered"
                   required
                 />
               </div>
-              <div className="form-control w-full">
+              <div className="w-full form-control">
                 <label className="label">
                   <span className="label-text">รหัสผ่าน</span>
                 </label>
@@ -115,7 +115,7 @@ const AuthPage = () => {
                   type="password"
                   autoComplete="current-password"
                   placeholder="Type here"
-                  className="input input-bordered w-full block"
+                  className="block w-full input input-bordered"
                   required
                 />
                 <label className="label">
@@ -131,11 +131,11 @@ const AuthPage = () => {
                   id="remember-me"
                   name="remember-me"
                   type="checkbox"
-                  className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                  className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
                 />
                 <label
                   htmlFor="remember-me"
-                  className="ml-2 block text-sm text-gray-900"
+                  className="block ml-2 text-sm text-gray-900"
                 >
                   จดจำข้อมูลนี้ไว้
                 </label>
@@ -153,11 +153,11 @@ const AuthPage = () => {
             <div>
               <button
                 type="submit"
-                className="group relative btn w-full bg-indigo-600 gap-2 hover:bg-indigo-300"
+                className="relative w-full gap-2 bg-indigo-600 group btn hover:bg-indigo-300"
               >
                 <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                   <LockClosedIcon
-                    className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
+                    className="w-5 h-5 text-indigo-500 group-hover:text-indigo-400"
                     aria-hidden="true"
                   />
                 </span>

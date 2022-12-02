@@ -1,12 +1,15 @@
 import { Spinner, useToast } from "@chakra-ui/react";
-import JsPDF from "jspdf";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { renderToStaticMarkup, renderToString } from "react-dom/server";
+import ReactDOMServer from "react-dom/server";
 import QRCode from "react-qr-code";
 import { OrderJobList } from "../../components";
+import TestGeneratePDF from "../../components/elements/TestGeneratePDF";
 import {
   GenerateInvoice,
   ReEtdDate,
@@ -44,16 +47,16 @@ const JobListPage = () => {
       `${process.env.API_HOST}/order/detail?order_id=${id}`,
       requestOptions
     );
-    if (!res.ok) {
-      const data = await res.json();
-      toast({
-        title: `เกิดข้อผิดพลาด!`,
-        duration: 3000,
-        status: "error",
-        position: "top",
-        isClosable: true,
-      });
-    }
+    // if (!res.ok) {
+    //   const data = await res.json();
+    //   toast({
+    //     title: `เกิดข้อผิดพลาด!`,
+    //     duration: 3000,
+    //     status: "error",
+    //     position: "top",
+    //     isClosable: true,
+    //   });
+    // }
 
     if (res.ok) {
       const data = await res.json();
@@ -72,9 +75,29 @@ const JobListPage = () => {
     }
   };
 
-  // const generatePDF = () => {
-  //   window.print()
-  // };
+  const GeneratePDF = () => {
+    // const doc = new jsPDF({
+    //   orientation: "p",
+    //   unit: "mm",
+    //   format: "a4",
+    //   putOnlyUsedFonts: true,
+    // });
+    // // autoTable(doc, {
+    // //   theme: "striped",
+    // //   StyleDef: { halign: "center" },
+    // //   html: "#data",
+    // // });
+    // doc.html(<span>TestGeneratePDF</span>);
+    // doc.save("table.pdf");
+
+    let element = <TestGeneratePDF />;
+    const doc = new jsPDF("p", "pt", "letter");
+    doc.html(ReactDOMServer.renderToString(element), {
+      callback: function (doc) {
+        doc.save('sample.pdf');
+      }
+    });
+  };
 
   useEffect(() => {
     if (id !== undefined) {
@@ -160,7 +183,7 @@ const JobListPage = () => {
           </section>
           <section className="mt-2">
             <div className="overflow-x-auto">
-              <table className="table w-full table-compact border-amber-800">
+              <table id="data" className="table w-full table-compact">
                 <thead>
                   <tr>
                     <th colSpan={6}>
@@ -221,6 +244,7 @@ const JobListPage = () => {
                   <tr>
                     <th colSpan={3}>
                       <div className="flex justify-end">Total:</div>
+                      <a href="javascript:genPDF()">Download PDF</a>  
                     </th>
                     <th>
                       <div className="flex justify-end">
@@ -237,9 +261,15 @@ const JobListPage = () => {
                         {isLoading ? (
                           <Spinner color="red.500" />
                         ) : (
+                          // <button
+                          //   className="btn btn-sm"
+                          //   onClick={() => window.print()}
+                          // >
+                          //   ปริ้นเอกสาร
+                          // </button>
                           <button
                             className="btn btn-sm"
-                            onClick={() => window.print()}
+                            onClick={() => GeneratePDF()}
                           >
                             ปริ้นเอกสาร
                           </button>
