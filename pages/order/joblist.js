@@ -76,27 +76,28 @@ const JobListPage = () => {
   };
 
   const GeneratePDF = () => {
-    // const doc = new jsPDF({
-    //   orientation: "p",
-    //   unit: "mm",
-    //   format: "a4",
-    //   putOnlyUsedFonts: true,
-    // });
-    // // autoTable(doc, {
-    // //   theme: "striped",
-    // //   StyleDef: { halign: "center" },
-    // //   html: "#data",
+    // // const doc = new jsPDF({
+    // //   orientation: "p",
+    // //   unit: "mm",
+    // //   format: "a4",
+    // //   putOnlyUsedFonts: true,
     // // });
-    // doc.html(<span>TestGeneratePDF</span>);
-    // doc.save("table.pdf");
+    // // // autoTable(doc, {
+    // // //   theme: "striped",
+    // // //   StyleDef: { halign: "center" },
+    // // //   html: "#data",
+    // // // });
+    // // doc.html(<span>TestGeneratePDF</span>);
+    // // doc.save("table.pdf");
 
-    let element = <TestGeneratePDF />;
-    const doc = new jsPDF("p", "pt", "letter");
-    doc.html(ReactDOMServer.renderToString(element), {
-      callback: function (doc) {
-        doc.save('sample.pdf');
-      }
-    });
+    // let element = <TestGeneratePDF />;
+    // const doc = new jsPDF("p", "pt", "letter");
+    // doc.html(ReactDOMServer.renderToString(element), {
+    //   callback: function (doc) {
+    //     doc.save('sample.pdf');
+    //   }
+    // });
+    window.print()
   };
 
   useEffect(() => {
