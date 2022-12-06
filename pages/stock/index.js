@@ -12,7 +12,7 @@ import {
 import Link from "next/link";
 import { Spinner } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { ReDateTime } from "../../hooks/greeter";
+import { ReDateTime, SummaryCtn } from "../../hooks/greeter";
 
 const StockPage = () => {
   const { data: session } = useSession();
@@ -222,18 +222,11 @@ const StockPage = () => {
             </tbody>
             <tfoot>
               <tr>
-                <th></th>
-                <th>คลัง</th>
-                <th>สินค้า</th>
-                <th></th>
-                <th>เลขที่ LotNo.</th>
+                <th colSpan={8}>ผลรวม</th>
+                <th>{stocks && SummaryCtn(stocks)}</th>
                 <th></th>
                 <th></th>
-                <th>จำนวน</th>
-                <th>กล่อง</th>
-                <th>ชั้น</th>
-                <th>พาเลท</th>
-                <th>อัพเดทล่าสุด</th>
+                <th></th>
               </tr>
             </tfoot>
           </table>

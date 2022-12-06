@@ -73,6 +73,14 @@ const ReplaceHashtag = (txt) => {
   return txt.replace("#", "%23");
 };
 
+const SummaryCtn = (obj) => {
+  let x = 0
+  obj.map(i => {
+    x += i.ctn
+  })
+  return x.toLocaleString()
+}
+
 export {
   classNames,
   GenerateInvoice,
@@ -83,4 +91,5 @@ export {
   ReEtdDate,
   ReDateTime,
   ReplaceHashtag,
+  SummaryCtn,
 };

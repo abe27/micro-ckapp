@@ -2,15 +2,18 @@ import { NavBar } from "../../components";
 import { useSession } from "next-auth/react";
 import {
   ArrowPathIcon,
+  ArrowUturnLeftIcon,
+  ArrowUturnUpIcon,
   BriefcaseIcon,
   CalendarIcon,
   CloudIcon,
   FunnelIcon,
   PencilIcon,
   PrinterIcon,
+  XCircleIcon,
 } from "@heroicons/react/20/solid";
 import Link from "next/link";
-import { Spinner } from "@chakra-ui/react";
+import { Spinner, Tooltip } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { ReDateTime } from "../../hooks/greeter";
 
@@ -185,15 +188,7 @@ const StockPage = () => {
                         <span className="text-blue-500">COM</span>
                       )}
                     </td>
-                    <td>
-                      <Link
-                        href={`/stock/detail?part_no=${i.part_no}&tag=${i.tagrp}`}
-                        rel="noopener noreferrer"
-                        target="_blank"
-                      >
-                        {i.part_no}
-                      </Link>
-                    </td>
+                    <td>{i.part_no}</td>
                     <td>{i.part_name}</td>
                     <td>{i.serial_no}</td>
                     <td>{i.lot_no}</td>
@@ -205,12 +200,34 @@ const StockPage = () => {
                     </td>
                     <td>
                       <span className="text-orange-600">
-                        {(i.qty).toLocaleString()}
+                        {i.qty.toLocaleString()}
                       </span>
                     </td>
                     <td>{i.shelve}</td>
                     <td>{i.pallet_no}</td>
-                    <td>{ReDateTime(i.updated_at)}</td>
+                    <td>
+                      <div className="flex justify-end space-x-4">
+                        <div>{ReDateTime(i.updated_at)}</div>
+                        <div className="flex justify-end space-x-2">
+                          <span className="hover:cursor-pointer">
+                            <Tooltip label={`ดึงยอดรายการ ${i.serial_no} นี้!`}>
+                              <ArrowUturnLeftIcon
+                                className="w-5 h-5 mr-2 -ml-1 text-green-500"
+                                aria-hidden="true"
+                              />
+                            </Tooltip>
+                          </span>
+                          <span className="hover:cursor-pointer">
+                            <Tooltip label={`ตัดยอดรายการ ${i.serial_no} นี้!`}>
+                              <XCircleIcon
+                                className="w-5 h-5 mr-2 -ml-1 text-rose-500"
+                                aria-hidden="true"
+                              />
+                            </Tooltip>
+                          </span>
+                        </div>
+                      </div>
+                    </td>
                   </tr>
                 ))}
             </tbody>
