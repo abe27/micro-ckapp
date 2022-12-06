@@ -1,26 +1,19 @@
-import { NavBar } from "../../components";
-import { useSession } from "next-auth/react";
-import {
-  ArrowPathIcon,
-  BriefcaseIcon,
-  CalendarIcon,
-  CloudIcon,
-  FunnelIcon,
-  PencilIcon,
-  PrinterIcon,
-} from "@heroicons/react/20/solid";
-import Link from "next/link";
 import { Spinner } from "@chakra-ui/react";
+import { ArrowPathIcon, FunnelIcon } from "@heroicons/react/20/solid";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { NavBar } from "../../components";
 import { ReDateTime } from "../../hooks/greeter";
 
 const StockPage = () => {
+  const router = useRouter();
+  const { part_no, tag } = router.query;
   const { data: session } = useSession();
   const [isLoading, setIsLoading] = useState(false);
   const [stocks, setStocks] = useState([]);
-  const [txtPartFilter, setTxtPartFilter] = useState("");
-  const [txtWhs, setTxtWhs] = useState("กรองข้อมูล CK-1");
-  const [filterWhs, setFilterWhs] = useState("C");
+  const [txtLotNo, setTxtLotNo] = useState("");
 
   const FetchData = async () => {
     setIsLoading(true);
@@ -31,10 +24,7 @@ const StockPage = () => {
       headers: myHeaders,
       redirect: "follow",
     };
-    let host = `${process.env.API_HOST}/stock?tag=${filterWhs}`;
-    if (txtPartFilter !== "") {
-      host = `${process.env.API_HOST}/stock?part_no=${txtPartFilter}&tag=${filterWhs}`;
-    }
+    let host = `${process.env.API_HOST}/stock/${part_no}?tag=${tag}`;
     console.log(host);
     const res = await fetch(host, requestOptions);
 
@@ -42,27 +32,13 @@ const StockPage = () => {
       const data = await res.json();
       console.dir(data.data);
       setStocks(data.data);
-      setTxtPartFilter("");
+      setTxtLotNo("");
       setIsLoading(false);
     }
   };
 
-  const selectWhs = (e) => {
-    console.dir(e.target.value);
-    setFilterWhs(e.target.value);
-  };
-
   useEffect(() => {
-    setTxtWhs("กรองข้อมูล CK-1");
-    if (filterWhs !== "D") {
-      setTxtWhs("กรองข้อมูล CK-2");
-    }
-    FetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterWhs]);
-
-  useEffect(() => {
-    if (session?.user) {
+    if (session?.user && part_no !== undefined) {
       FetchData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -82,10 +58,10 @@ const StockPage = () => {
                 <div className="input-group input-group-sm">
                   <input
                     type="text"
-                    placeholder="ระบุเลขที่สินค้า"
+                    placeholder="ระบุเลขที่ LotNo"
                     className="input input-bordered input-sm"
-                    value={txtPartFilter}
-                    onChange={(e) => setTxtPartFilter(e.target.value)}
+                    value={txtLotNo}
+                    onChange={(e) => setTxtLotNo(e.target.value)}
                   />
                   <button className="btn btn-square btn-sm" onClick={FetchData}>
                     <svg
@@ -108,11 +84,12 @@ const StockPage = () => {
             </section>
           </nav>
           <nav className="flex mt-5 lg:mt-0 lg:ml-4">
-            <div className="dropdown dropdown-bottom dropdown-end dropdown-hover">
+            {/* <div className="dropdown dropdown-bottom dropdown-end dropdown-hover">
               <span className="sm:ml-3">
                 <button
                   type="button"
                   className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-800 bg-white border border-transparent rounded-md shadow-sm hover:bg-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:ring-offset-2"
+                  onClick={() => FetchData()}
                 >
                   <FunnelIcon
                     className="w-4 h-4 mr-2 -ml-1"
@@ -136,7 +113,7 @@ const StockPage = () => {
                   <option value={`C`}>CK-2</option>
                 </select>
               </div>
-            </div>
+            </div> */}
             <span className="sm:ml-3">
               <button
                 type="button"
@@ -165,11 +142,11 @@ const StockPage = () => {
                 <th>คลัง</th>
                 <th>สินค้า</th>
                 <th></th>
+                <th>Serial No.</th>
                 <th>เลขที่ LotNo.</th>
                 <th></th>
                 <th></th>
                 <th>จำนวน</th>
-                <th>กล่อง</th>
                 <th>ชั้น</th>
                 <th>พาเลท</th>
                 <th>อัพเดทล่าสุด</th>
@@ -187,17 +164,10 @@ const StockPage = () => {
                         <span className="text-blue-500">COM</span>
                       )}
                     </td>
-                    <td>
-                      <Link
-                        href={`/stock/detail?part_no=${i.part_no}&tag=${i.tagrp}`}
-                        rel="noopener noreferrer"
-                        target="_blank"
-                      >
-                        {i.part_no}
-                      </Link>
-                    </td>
+                    <td>{i.part_no}</td>
                     <td>{i.part_name}</td>
                     <td>{i.lot_no}</td>
+                    <td>{i.serial_no}</td>
                     <td>
                       <span className="text-blue-600">{i.line_no}</span>
                     </td>
@@ -206,12 +176,7 @@ const StockPage = () => {
                     </td>
                     <td>
                       <span className="text-orange-600">
-                        {(i.qty * i.ctn).toLocaleString()}
-                      </span>
-                    </td>
-                    <td>
-                      <span className="text-green-600">
-                        {i.ctn.toLocaleString()}
+                        {i.qty.toLocaleString()}
                       </span>
                     </td>
                     <td>{i.shelve}</td>
@@ -226,11 +191,11 @@ const StockPage = () => {
                 <th>คลัง</th>
                 <th>สินค้า</th>
                 <th></th>
+                <th>Serial No.</th>
                 <th>เลขที่ LotNo.</th>
                 <th></th>
                 <th></th>
                 <th>จำนวน</th>
-                <th>กล่อง</th>
                 <th>ชั้น</th>
                 <th>พาเลท</th>
                 <th>อัพเดทล่าสุด</th>
