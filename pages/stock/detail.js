@@ -38,11 +38,9 @@ const StockPage = () => {
   };
 
   useEffect(() => {
-    if (session?.user && part_no !== undefined) {
-      FetchData();
-    }
+    FetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session?.user]);
+  }, [session?.user, part_no]);
   return (
     <>
       <NavBar
