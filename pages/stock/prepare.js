@@ -1,23 +1,15 @@
-import { NavBar } from "../../components";
-import { useSession } from "next-auth/react";
+import { Spinner, Tooltip, useToast } from "@chakra-ui/react";
 import {
   ArrowPathIcon,
-  ArrowUturnLeftIcon,
-  ArrowUturnUpIcon,
-  BriefcaseIcon,
-  CalendarIcon,
-  CloudIcon,
-  FunnelIcon,
-  PencilIcon,
-  PrinterIcon,
-  XCircleIcon,
+  ArrowUturnLeftIcon, FunnelIcon, XCircleIcon
 } from "@heroicons/react/20/solid";
-import Link from "next/link";
-import { Spinner, Tooltip } from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import { NavBar } from "../../components";
 import { ReDateTime } from "../../hooks/greeter";
 
 const StockPage = () => {
+  const toast = useToast()
   const { data: session } = useSession();
   const [isLoading, setIsLoading] = useState(false);
   const [stocks, setStocks] = useState([]);
@@ -36,12 +28,16 @@ const StockPage = () => {
     };
 
     let host = `${process.env.API_HOST}/stock/shelve/S-XXX?tag=${filterWhs}`;
-    console.log(host);
+    if (txtPartFilter !== "") {
+      host = `${process.env.API_HOST}/stock/serial_no/${txtPartFilter}`;
+    }
+    // console.log(txtPartFilter)
+    // console.log(host);
     const res = await fetch(host, requestOptions);
 
     if (res.ok) {
       const data = await res.json();
-      console.dir(data.data);
+      // console.dir(data.data);
       setStocks(data.data);
       setTxtPartFilter("");
       setIsLoading(false);
@@ -49,9 +45,22 @@ const StockPage = () => {
   };
 
   const selectWhs = (e) => {
-    console.dir(e.target.value);
     setFilterWhs(e.target.value);
   };
+
+  const SearchSerialNo = () => {
+    if (txtPartFilter.length > 6) {
+      FetchData()
+    } else {
+      toast({
+        title: `กรุณาระบุ Serial No ใหม่ครับ!`,
+        duration: 3000,
+        status: "error",
+        position: "top",
+        isClosable: true,
+      });
+    }
+  }
 
   useEffect(() => {
     setTxtWhs("กรองข้อมูล CK-1");
@@ -83,12 +92,12 @@ const StockPage = () => {
                 <div className="input-group input-group-sm">
                   <input
                     type="text"
-                    placeholder="ระบุเลขที่สินค้า"
+                    placeholder="ระบุเลขที่ Serial No"
                     className="input input-bordered input-sm"
                     value={txtPartFilter}
                     onChange={(e) => setTxtPartFilter(e.target.value)}
                   />
-                  <button className="btn btn-square btn-sm" onClick={FetchData}>
+                  <button className="btn btn-square btn-sm" onClick={SearchSerialNo}>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="w-6 h-6"
