@@ -31,10 +31,8 @@ const StockPage = () => {
       headers: myHeaders,
       redirect: "follow",
     };
-    let host = `${process.env.API_HOST}/stock/data?tag=${filterWhs}`;
-    if (txtPartFilter !== "") {
-      host = `${process.env.API_HOST}/stock/data?part_no=${txtPartFilter}&tag=${filterWhs}`;
-    }
+
+    let host = `${process.env.API_HOST}/stock/shelve/S-XXX?tag=${filterWhs}`;
     console.log(host);
     const res = await fetch(host, requestOptions);
 
@@ -71,8 +69,8 @@ const StockPage = () => {
     <>
       <NavBar
         user={session?.user}
-        title="คลังสินค้า"
-        description="จัดการข้อมูลคลังสินค้า"
+        title="ข้อมูลการจัดเตรียม"
+        description="จัดการข้อมูลการจัดเตรียม"
       />
       <section className="py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div className="lg:flex lg:items-center lg:justify-between">
@@ -165,11 +163,11 @@ const StockPage = () => {
                 <th>คลัง</th>
                 <th>สินค้า</th>
                 <th></th>
+                <th>Serial No.</th>
                 <th>เลขที่ LotNo.</th>
                 <th></th>
                 <th></th>
                 <th>จำนวน</th>
-                <th>กล่อง</th>
                 <th>ชั้น</th>
                 <th>พาเลท</th>
                 <th>อัพเดทล่าสุด</th>
@@ -197,6 +195,7 @@ const StockPage = () => {
                       </Link>
                     </td>
                     <td>{i.part_name}</td>
+                    <td>{i.serial_no}</td>
                     <td>{i.lot_no}</td>
                     <td>
                       <span className="text-blue-600">{i.line_no}</span>
@@ -206,12 +205,7 @@ const StockPage = () => {
                     </td>
                     <td>
                       <span className="text-orange-600">
-                        {(i.qty * i.ctn).toLocaleString()}
-                      </span>
-                    </td>
-                    <td>
-                      <span className="text-green-600">
-                        {i.ctn.toLocaleString()}
+                        {(i.qty).toLocaleString()}
                       </span>
                     </td>
                     <td>{i.shelve}</td>
@@ -226,11 +220,11 @@ const StockPage = () => {
                 <th>คลัง</th>
                 <th>สินค้า</th>
                 <th></th>
+                <th>Serial No.</th>
                 <th>เลขที่ LotNo.</th>
                 <th></th>
                 <th></th>
                 <th>จำนวน</th>
-                <th>กล่อง</th>
                 <th>ชั้น</th>
                 <th>พาเลท</th>
                 <th>อัพเดทล่าสุด</th>

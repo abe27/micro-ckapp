@@ -24,7 +24,7 @@ const StockPage = () => {
       headers: myHeaders,
       redirect: "follow",
     };
-    let host = `${process.env.API_HOST}/stock/${part_no}?tag=${tag}`;
+    let host = `${process.env.API_HOST}/stock/data/${part_no}?tag=${tag}`;
     console.log(host);
     const res = await fetch(host, requestOptions);
 
@@ -45,8 +45,8 @@ const StockPage = () => {
     <>
       <NavBar
         user={session?.user}
-        title="คลังสินค้า"
-        description="จัดการข้อมูลคลังสินค้า"
+        title={`แสดงรายละเอียด ${part_no}`}
+        description="จัดการข้อมูลรายละเอียดของสินค้า"
       />
       <section className="py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div className="lg:flex lg:items-center lg:justify-between">
@@ -164,8 +164,8 @@ const StockPage = () => {
                     </td>
                     <td>{i.part_no}</td>
                     <td>{i.part_name}</td>
-                    <td>{i.lot_no}</td>
                     <td>{i.serial_no}</td>
+                    <td>{i.lot_no}</td>
                     <td>
                       <span className="text-blue-600">{i.line_no}</span>
                     </td>

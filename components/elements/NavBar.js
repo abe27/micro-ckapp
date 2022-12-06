@@ -12,6 +12,7 @@ import {
   ChevronDownIcon,
   CursorArrowRaysIcon,
   TruckIcon,
+  ShoppingBagIcon,
 } from "@heroicons/react/20/solid";
 import Link from "next/link";
 
@@ -68,6 +69,15 @@ const stockMenu = [
     icon: CursorArrowRaysIcon,
   },
 ];
+
+const stockPreMenu = [
+  {
+    name: "Stock Prepare",
+    description: "จัดการข้อมูลการจัดเตรียม",
+    href: "/stock/prepare",
+    icon: ShoppingBagIcon,
+  },
+]
 
 const resources = [
   {
@@ -347,6 +357,24 @@ const NavBar = ({
                             {stockMenu.map((item) => (
                               <Link key={item.name} href={item.href}>
                                 <span className="flex items-start p-3 -m-3 rounded-lg hover:bg-gray-50">
+                                  <item.icon
+                                    className="flex-shrink-0 w-6 h-6 text-indigo-600"
+                                    aria-hidden="true"
+                                  />
+                                  <div className="ml-4">
+                                    <p className="text-base font-medium text-gray-900">
+                                      {item.name}
+                                    </p>
+                                    <p className="mt-1 text-sm text-gray-500">
+                                      {item.description}
+                                    </p>
+                                  </div>
+                                </span>
+                              </Link>
+                            ))}
+                            {stockPreMenu.map((item) => (
+                              <Link key={item.name} href={item.href}>
+                                <span className="flex items-start p-3 -m-2 rounded-lg hover:bg-gray-50">
                                   <item.icon
                                     className="flex-shrink-0 w-6 h-6 text-indigo-600"
                                     aria-hidden="true"
