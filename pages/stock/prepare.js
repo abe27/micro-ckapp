@@ -224,7 +224,7 @@ const StockPage = () => {
                         <div>{ReDateTime(i.updated_at)}</div>
                         <div className="flex justify-end space-x-2">
                           <span
-                            className={i.qty > 0 ? "hover:cursor-pointer" : ""}
+                            className={i.qty > 0 ? "" : "hover:cursor-pointer"}
                           >
                             <Tooltip label={`ดึงยอดรายการ ${i.serial_no} นี้!`}>
                               <ArrowUturnLeftIcon
