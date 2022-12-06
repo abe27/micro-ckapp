@@ -1,7 +1,9 @@
 import { Spinner, Tooltip, useToast } from "@chakra-ui/react";
 import {
   ArrowPathIcon,
-  ArrowUturnLeftIcon, FunnelIcon, XCircleIcon
+  ArrowUturnLeftIcon,
+  FunnelIcon,
+  XCircleIcon,
 } from "@heroicons/react/20/solid";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
@@ -9,7 +11,7 @@ import { NavBar } from "../../components";
 import { ReDateTime } from "../../hooks/greeter";
 
 const StockPage = () => {
-  const toast = useToast()
+  const toast = useToast();
   const { data: session } = useSession();
   const [isLoading, setIsLoading] = useState(false);
   const [stocks, setStocks] = useState([]);
@@ -50,7 +52,7 @@ const StockPage = () => {
 
   const SearchSerialNo = () => {
     if (txtPartFilter.length > 6) {
-      FetchData()
+      FetchData();
     } else {
       toast({
         title: `กรุณาระบุ Serial No ใหม่ครับ!`,
@@ -60,7 +62,7 @@ const StockPage = () => {
         isClosable: true,
       });
     }
-  }
+  };
 
   useEffect(() => {
     setTxtWhs("กรองข้อมูล CK-1");
@@ -97,7 +99,10 @@ const StockPage = () => {
                     value={txtPartFilter}
                     onChange={(e) => setTxtPartFilter(e.target.value)}
                   />
-                  <button className="btn btn-square btn-sm" onClick={SearchSerialNo}>
+                  <button
+                    className="btn btn-square btn-sm"
+                    onClick={SearchSerialNo}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="w-6 h-6"
@@ -218,18 +223,30 @@ const StockPage = () => {
                       <div className="flex justify-end space-x-4">
                         <div>{ReDateTime(i.updated_at)}</div>
                         <div className="flex justify-end space-x-2">
-                          <span className="hover:cursor-pointer">
+                          <span
+                            className={i.qty > 0 ? "hover:cursor-pointer" : ""}
+                          >
                             <Tooltip label={`ดึงยอดรายการ ${i.serial_no} นี้!`}>
                               <ArrowUturnLeftIcon
-                                className="w-5 h-5 mr-2 -ml-1 text-green-500"
+                                className={
+                                  i.qty > 0
+                                    ? "w-5 h-5 mr-2 -ml-1 text-gray-500"
+                                    : "w-5 h-5 mr-2 -ml-1 text-green-500"
+                                }
                                 aria-hidden="true"
                               />
                             </Tooltip>
                           </span>
-                          <span className="hover:cursor-pointer">
+                          <span
+                            className={i.qty > 0 ? "hover:cursor-pointer" : ""}
+                          >
                             <Tooltip label={`ตัดยอดรายการ ${i.serial_no} นี้!`}>
                               <XCircleIcon
-                                className="w-5 h-5 mr-2 -ml-1 text-rose-500"
+                                className={
+                                  i.qty > 0
+                                    ? "w-5 h-5 mr-2 -ml-1 text-rose-500"
+                                    : "w-5 h-5 mr-2 -ml-1 text-gray-500"
+                                }
                                 aria-hidden="true"
                               />
                             </Tooltip>
