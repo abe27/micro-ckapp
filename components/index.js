@@ -14,12 +14,16 @@ import AddPartToPallet from "./elements/AddPartToPallet";
 import SelectPrintShipping from "./elements/SelectPrintShipping";
 import ShowOrderDetail from "./elements/ShowOrderDetail";
 import OrderJobList from "./elements/OrderJobList";
+import ConfirmOutStock from "./elements/ConfirmOutStock";
+import ConfirmSendToStock from "./elements/ConfirmSendToStock";
 
 export {
   AddPartToPallet,
   AlertDialogQuestion,
   ConfirmDeleteItemDialog,
+  ConfirmSendToStock,
   ConfirmSyncData,
+  ConfirmOutStock,
   ModalAddNewItem,
   ModalAddNewPallet,
   ModalOrderPart,

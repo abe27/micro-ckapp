@@ -7,7 +7,7 @@ import {
 } from "@heroicons/react/20/solid";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import { NavBar } from "../../components";
+import { ConfirmOutStock, ConfirmSendToStock, NavBar } from "../../components";
 import { ReDateTime } from "../../hooks/greeter";
 
 const StockPage = () => {
@@ -64,6 +64,51 @@ const StockPage = () => {
     }
   };
 
+  const confirmStock = async (obj) => {
+    // console.dir(obj);
+    let myHeaders = new Headers();
+    myHeaders.append("Authorization", session?.user.accessToken);
+    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+    var urlencoded = new URLSearchParams();
+    urlencoded.append("ctn", obj.ctn);
+    urlencoded.append("shelve", obj.shelve);
+
+    var requestOptions = {
+      method: "PUT",
+      headers: myHeaders,
+      body: urlencoded,
+      redirect: "follow",
+    };
+
+    let host = `${process.env.API_HOST}/stock/serial_no/${obj.serial_no}`;
+    const res = await fetch(host, requestOptions);
+    if (res.ok) {
+      const data = await res.json();
+      // console.dir(data)
+      toast({
+        title: `บันทึกข้อมูลเรียบร้อยแล้ว!`,
+        duration: 3000,
+        status: "success",
+        position: "top",
+        isClosable: true,
+        onCloseComplete: () => {
+          setStocks((prev) => {
+            const items = [...prev];
+            items.map((i) => {
+              if (i.serial_no === data.data.serial_no) {
+                i.qty = data.data.qty;
+                i.ctn = data.data.ctn;
+                i.shelve = data.data.shelve;
+              }
+            });
+            return items;
+          });
+        },
+      });
+    }
+  };
+
   useEffect(() => {
     setTxtWhs("กรองข้อมูล CK-1");
     if (filterWhs !== "D") {
@@ -96,7 +141,7 @@ const StockPage = () => {
                     type="text"
                     placeholder="ระบุเลขที่ Serial No"
                     className="input input-bordered input-sm"
-                    value={txtPartFilter}
+                    defaultValue={txtPartFilter}
                     onChange={(e) => setTxtPartFilter(e.target.value)}
                   />
                   <button
@@ -142,11 +187,9 @@ const StockPage = () => {
               >
                 <select
                   className="w-full max-w-xs select select-info"
+                  defaultValue={filterWhs}
                   onChange={selectWhs}
                 >
-                  <option disabled selected>
-                    เลือกคลังสินค้า
-                  </option>
                   <option value={`D`}>CK-1</option>
                   <option value={`C`}>CK-2</option>
                 </select>
@@ -223,34 +266,34 @@ const StockPage = () => {
                       <div className="flex justify-end space-x-4">
                         <div>{ReDateTime(i.updated_at)}</div>
                         <div className="flex justify-end space-x-2">
-                          <span
-                            className={i.qty > 0 ? "" : "hover:cursor-pointer"}
-                          >
-                            <Tooltip label={`ดึงยอดรายการ ${i.serial_no} นี้!`}>
+                          {i.qty === 0 ? (
+                            <ConfirmSendToStock
+                              id={i.serial_no}
+                              title={`ดึงยอดรายการ ${i.serial_no} นี้!`}
+                              confirm={confirmStock}
+                            />
+                          ) : (
+                            <span>
                               <ArrowUturnLeftIcon
-                                className={
-                                  i.qty > 0
-                                    ? "w-5 h-5 mr-2 -ml-1 text-gray-500"
-                                    : "w-5 h-5 mr-2 -ml-1 text-green-500"
-                                }
+                                className="w-5 h-5 mr-2 -ml-1 text-gray-500"
                                 aria-hidden="true"
                               />
-                            </Tooltip>
-                          </span>
-                          <span
-                            className={i.qty > 0 ? "hover:cursor-pointer" : ""}
-                          >
-                            <Tooltip label={`ตัดยอดรายการ ${i.serial_no} นี้!`}>
+                            </span>
+                          )}
+                          {i.qty > 0 ? (
+                            <ConfirmOutStock
+                              id={i.serial_no}
+                              title={`ตัดยอดรายการ ${i.serial_no} นี้!`}
+                              confirm={confirmStock}
+                            />
+                          ) : (
+                            <span>
                               <XCircleIcon
-                                className={
-                                  i.qty > 0
-                                    ? "w-5 h-5 mr-2 -ml-1 text-rose-500"
-                                    : "w-5 h-5 mr-2 -ml-1 text-gray-500"
-                                }
+                                className="w-5 h-5 mr-2 -ml-1 text-gray-500"
                                 aria-hidden="true"
                               />
-                            </Tooltip>
-                          </span>
+                            </span>
+                          )}
                         </div>
                       </div>
                     </td>
