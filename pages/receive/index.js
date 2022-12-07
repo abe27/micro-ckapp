@@ -1,4 +1,4 @@
-import { NavBar } from "../../components";
+import { ConfirmReSync, NavBar } from "../../components";
 import { useSession } from "next-auth/react";
 import { Spinner, useToast } from "@chakra-ui/react";
 import {
@@ -9,6 +9,7 @@ import {
 } from "@heroicons/react/20/solid";
 import { useEffect, useState } from "react";
 import { ReDate, ReDateTime, SummaryReceiveQty } from "../../hooks/greeter";
+import Link from "next/link";
 
 const ReceiveIndexPage = () => {
   const toast = useToast();
@@ -36,13 +37,13 @@ const ReceiveIndexPage = () => {
       redirect: "follow",
     };
 
-    let host = `${process.env.API_HOST}/receive/ent?is_sync=true`
+    let host = `${process.env.API_HOST}/receive/ent?is_sync=true`;
     if (txtPartFilter) {
-      host = `${process.env.API_HOST}/receive/ent?is_sync=true&etd=${txtPartFilter}`
+      host = `${process.env.API_HOST}/receive/ent?is_sync=true&etd=${txtPartFilter}`;
     }
 
     // console.log(host)
-    const res = await fetch(host,requestOptions);
+    const res = await fetch(host, requestOptions);
     if (res.ok) {
       const response = await res.json();
       // console.dir(response.data);
@@ -50,6 +51,10 @@ const ReceiveIndexPage = () => {
       setIsLoading(false);
     }
   };
+
+  const confirmReSync = (obj) => {
+    console.dir(obj)
+  }
 
   useEffect(() => {
     setTxtWhs("กรองข้อมูล CK-1");
@@ -62,8 +67,8 @@ const ReceiveIndexPage = () => {
 
   useEffect(() => {
     FetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [txtPartFilter])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [txtPartFilter]);
 
   return (
     <>
@@ -185,9 +190,25 @@ const ReceiveIndexPage = () => {
                 <tr key={i.id} className="hover">
                   <th>{(x + 1).toLocaleString()}</th>
                   <td>
-                    <span className={i.receive_type.whs.title !== "DOM" ? "text-rose-500":"text-blue-400"}>{i.receive_type.whs.title}</span>
+                    <span
+                      className={
+                        i.receive_type.whs.title !== "DOM"
+                          ? "text-rose-500"
+                          : "text-blue-400"
+                      }
+                    >
+                      {i.receive_type.whs.title}
+                    </span>
                   </td>
-                  <td>{i.transfer_out_no}</td>
+                  <td>
+                    <Link
+                      href={`/receive/detail?receive_id=${i.id}`}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      {i.transfer_out_no}
+                    </Link>
+                  </td>
                   <td>{ReDate(i.receive_date)}</td>
                   <td>{i.plan_ctn.toLocaleString()}</td>
                   <td>{i.receive_ctn.toLocaleString()}</td>
@@ -196,19 +217,7 @@ const ReceiveIndexPage = () => {
                   <td>
                     {" "}
                     <div className="flex justify-center">
-                      <span>
-                        {i.is_sync ? (
-                          <CheckIcon
-                            className="w-4 h-4 mr-2 -ml-1 text-green-600"
-                            aria-hidden="true"
-                          />
-                        ) : (
-                          <XCircleIcon
-                            className="w-4 h-4 mr-2 -ml-1 text-rose-600"
-                            aria-hidden="true"
-                          />
-                        )}
-                      </span>
+                      <ConfirmReSync isSync={i.is_sync} refNo={i.transfer_out_no} ConfirmReSync={confirmReSync}/>
                     </div>
                   </td>
                   <td>

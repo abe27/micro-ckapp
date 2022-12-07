@@ -16,6 +16,7 @@ import ShowOrderDetail from "./elements/ShowOrderDetail";
 import OrderJobList from "./elements/OrderJobList";
 import ConfirmOutStock from "./elements/ConfirmOutStock";
 import ConfirmSendToStock from "./elements/ConfirmSendToStock";
+import ConfirmReSync from "./elements/ConfirmReSync";
 
 export {
   AddPartToPallet,
@@ -24,6 +25,7 @@ export {
   ConfirmSendToStock,
   ConfirmSyncData,
   ConfirmOutStock,
+  ConfirmReSync,
   ModalAddNewItem,
   ModalAddNewPallet,
   ModalOrderPart,
