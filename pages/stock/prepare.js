@@ -230,7 +230,11 @@ const StockPage = () => {
                 <th>จำนวน</th>
                 <th>ชั้น</th>
                 <th>พาเลท</th>
-                <th>อัพเดทล่าสุด</th>
+                <th>
+                  <div className="flex justify-end">
+                    <span>อัพเดทล่าสุด</span>
+                  </div>
+                </th>
               </tr>
             </thead>
             <tbody>
