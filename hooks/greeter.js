@@ -81,6 +81,14 @@ const SummaryCtn = (obj) => {
   return x.toLocaleString()
 }
 
+const SummaryReceiveQty = (obj) => {
+  let x = 0
+  obj.map(i => {
+    x += i.plan_ctn
+  })
+  return x.toLocaleString()
+}
+
 export {
   classNames,
   GenerateInvoice,
@@ -92,4 +100,5 @@ export {
   ReDateTime,
   ReplaceHashtag,
   SummaryCtn,
+  SummaryReceiveQty,
 };
