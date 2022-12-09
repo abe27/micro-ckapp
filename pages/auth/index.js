@@ -24,6 +24,8 @@ const AuthPage = () => {
       password: data.get("password"),
     });
 
+    console.dir(res)
+
     if (!res.ok) {
       toast({
         title: "เกิดข้อผิดพลาด",

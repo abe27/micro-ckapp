@@ -51,6 +51,8 @@ export const authOptions = {
           if (data) {
             return data;
           }
+        } else {
+          console.dir(res)
         }
         return null;
       },
