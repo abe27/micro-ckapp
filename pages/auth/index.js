@@ -33,18 +33,19 @@ const AuthPage = () => {
         isClosable: true,
         position: "top",
       });
-      return;
     }
 
-    toast({
-      title: `สวัสดี ${data.get("username")}`,
-      description: `ยินดีต้อนรับเข้าสู่ระบบ ${process.env.APP_NAME}.`,
-      status: "success",
-      duration: 3000,
-      isClosable: true,
-      position: "top",
-      onCloseComplete: () => router.push("/"),
-    });
+    if (res.ok) {
+      toast({
+        title: `สวัสดี ${data.get("username")}`,
+        description: `ยินดีต้อนรับเข้าสู่ระบบ ${process.env.APP_NAME}.`,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+        onCloseComplete: () => router.push("/"),
+      });
+    }
   };
 
   useEffect(() => {
