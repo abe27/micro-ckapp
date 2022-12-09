@@ -1,5 +1,5 @@
 import "../styles/globals.css";
-import '@tremor/react/dist/esm/tremor.css'
+// import '@tremor/react/dist/esm/tremor.css'
 
 // 1. import `ChakraProvider` component
 import { Noto_Sans_Thai } from "@next/font/google";
