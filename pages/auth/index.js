@@ -24,8 +24,6 @@ const AuthPage = () => {
       password: data.get("password"),
     });
 
-    console.dir(res)
-
     if (!res.ok) {
       toast({
         title: "เกิดข้อผิดพลาด",
@@ -42,17 +40,17 @@ const AuthPage = () => {
         title: `สวัสดี ${data.get("username")}`,
         description: `ยินดีต้อนรับเข้าสู่ระบบ ${process.env.APP_NAME}.`,
         status: "success",
-        duration: 3000,
+        duration: 2000,
         isClosable: true,
         position: "top",
-        onCloseComplete: () => router.push("/"),
       });
+      router.push("/")
     }
   };
 
-  useEffect(() => {
-    clearAllSessionStorage();
-  }, []);
+  // useEffect(() => {
+  //   clearAllSessionStorage();
+  // }, []);
   return (
     <>
       <Head>

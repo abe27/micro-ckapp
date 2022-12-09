@@ -13,6 +13,7 @@ import {
   CursorArrowRaysIcon,
   TruckIcon,
   ShoppingBagIcon,
+  PresentationChartBarIcon,
 } from "@heroicons/react/20/solid";
 import Link from "next/link";
 
@@ -76,6 +77,12 @@ const stockPreMenu = [
     description: "จัดการข้อมูลการจัดเตรียม",
     href: "/stock/prepare",
     icon: ShoppingBagIcon,
+  },
+  {
+    name: "Stock SNON",
+    description: "จัดการข้อมูลการที่ยังไม่ทำการจัดเก็บ",
+    href: "/stock/snon",
+    icon: PresentationChartBarIcon,
   },
 ]
 
