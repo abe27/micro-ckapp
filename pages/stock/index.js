@@ -1,20 +1,17 @@
-import { NavBar } from "../../components";
-import { useSession } from "next-auth/react";
+import { Spinner, useToast } from "@chakra-ui/react";
 import {
-  ArrowPathIcon,
-  BriefcaseIcon,
-  CalendarIcon,
-  CloudIcon,
-  FunnelIcon,
-  PencilIcon,
-  PrinterIcon,
+  ArrowPathIcon, FunnelIcon
 } from "@heroicons/react/20/solid";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { Spinner } from "@chakra-ui/react";
+import { Router, useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { NavBar } from "../../components";
 import { ReDateTime, SummaryCtn } from "../../hooks/greeter";
 
 const StockPage = () => {
+  const router = useRouter()
+  const toast = useToast()
   const { data: session } = useSession();
   const [isLoading, setIsLoading] = useState(false);
   const [stocks, setStocks] = useState([]);
@@ -43,6 +40,23 @@ const StockPage = () => {
       console.dir(data.data);
       setStocks(data.data);
       setTxtPartFilter("");
+      setIsLoading(false);
+    }
+
+    if (!res.ok) {
+      console.dir(res.statusText)
+      toast({
+        title: res.statusText,
+        status: "error",
+        isClosable: true,
+        duration: 2500,
+        position: "top",
+        onCloseComplete: () => {
+          if (res.status === 401) {
+            Router.push("/auth")
+          }
+        }
+      })
       setIsLoading(false);
     }
   };
@@ -127,11 +141,9 @@ const StockPage = () => {
               >
                 <select
                   className="w-full max-w-xs select select-info"
+                  value={filterWhs}
                   onChange={selectWhs}
                 >
-                  <option disabled selected>
-                    เลือกคลังสินค้า
-                  </option>
                   <option value={`D`}>CK-1</option>
                   <option value={`C`}>CK-2</option>
                 </select>
