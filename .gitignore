@@ -37,3 +37,4 @@ next-env.d.ts
 *-json.lock
 *-lock.json
 yarn.lock
+bun.lockb
