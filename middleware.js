@@ -15,8 +15,8 @@ export const config = {
     "/",
     "/order/:path*",
     // "/dashboard/:path*",
-    "/receive/:path*",
-    "/stock/:path*",
+    // "/receive/:path*",
+    // "/stock/:path*",
     // "/report/:path*",
   ],
 };
