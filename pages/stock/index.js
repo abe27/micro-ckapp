@@ -4,7 +4,7 @@ import {
 } from "@heroicons/react/20/solid";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { NavBar } from "../../components";
 import { ReDateTime, SummaryCtn } from "../../hooks/greeter";
@@ -53,7 +53,7 @@ const StockPage = () => {
         position: "top",
         onCloseComplete: () => {
           if (res.status === 401) {
-            Router.push("/auth")
+            router.push("/auth")
           }
         }
       })
