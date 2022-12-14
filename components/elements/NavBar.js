@@ -14,6 +14,7 @@ import {
   TruckIcon,
   ShoppingBagIcon,
   PresentationChartBarIcon,
+  TableCellsIcon,
 } from "@heroicons/react/20/solid";
 import Link from "next/link";
 
@@ -88,7 +89,7 @@ const stockPreMenu = [
     name: "Stock S-REPALLET",
     description: "จัดการข้อมูลการที่ยังไม่ทำการจัดเก็บเข้าชั้น",
     href: "/stock/repallet",
-    icon: PresentationChartBarIcon,
+    icon: TableCellsIcon,
   },
 ]
 
