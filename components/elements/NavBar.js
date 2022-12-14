@@ -84,6 +84,12 @@ const stockPreMenu = [
     href: "/stock/snon",
     icon: PresentationChartBarIcon,
   },
+  {
+    name: "Stock S-REPALLET",
+    description: "จัดการข้อมูลการที่ยังไม่ทำการจัดเก็บเข้าชั้น",
+    href: "/stock/repallet",
+    icon: PresentationChartBarIcon,
+  },
 ]
 
 const resources = [
