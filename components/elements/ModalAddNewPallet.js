@@ -98,15 +98,16 @@ const ModalAddNewPallet = ({ lastPalletNo = 0, onCommitData }) => {
       setPalletLimit(0);
       FetchPalletType();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
   return (
     <>
       <button
         type="button"
-        className="inline-flex items-center rounded-md border border-transparent bg-orange-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+        className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-orange-600 border border-transparent rounded-md shadow-sm hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
         onClick={onOpen}
       >
-        <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+        <PlusIcon className="w-5 h-5 mr-2 -ml-1" aria-hidden="true" />
         เพิ่มข้อมูลใหม่
       </button>
       <Modal isOpen={isOpen} onClose={onClose}>

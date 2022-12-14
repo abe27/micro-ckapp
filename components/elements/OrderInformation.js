@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
@@ -130,7 +131,7 @@ const OrderInformation = ({ data, isEdit = true, confirmSync }) => {
     <>
       <div>
         <div className="overflow-hidden">
-          <div className="bg-white px-4 py-5 sm:p-6">
+          <div className="px-4 py-5 bg-white sm:p-6">
             <div className="grid grid-cols-6 gap-6">
               <div className="col-span-6 sm:col-span-3 lg:col-span-2">
                 <label
@@ -145,7 +146,7 @@ const OrderInformation = ({ data, isEdit = true, confirmSync }) => {
                   id="etddate"
                   autoComplete="etd date"
                   disabled={isEdit}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   defaultValue={etd}
                 />
               </div>
@@ -161,7 +162,7 @@ const OrderInformation = ({ data, isEdit = true, confirmSync }) => {
                   name="shipment"
                   autoComplete="shipment"
                   disabled={isEdit}
-                  className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                  className="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                   value={shipmentid}
                   onChange={(e) => setShipmentId(e.target.value)}
                 >
@@ -185,7 +186,7 @@ const OrderInformation = ({ data, isEdit = true, confirmSync }) => {
                   name="pc"
                   autoComplete="pc"
                   disabled={isEdit}
-                  className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                  className="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                   value={pcid}
                   onChange={(e) => setPcId(e.target.value)}
                 >
@@ -209,7 +210,7 @@ const OrderInformation = ({ data, isEdit = true, confirmSync }) => {
                   name="commercial"
                   autoComplete="commercial"
                   disabled={isEdit}
-                  className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                  className="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                   value={commercialid}
                   onChange={(e) => setCommercialId(e.target.value)}
                 >
@@ -236,7 +237,7 @@ const OrderInformation = ({ data, isEdit = true, confirmSync }) => {
                   id="affcode"
                   autoComplete="affcode"
                   disabled={isEdit}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   value={affcode}
                   onChange={(e) => setAffCode(e.target.value)}
                 />
@@ -255,7 +256,7 @@ const OrderInformation = ({ data, isEdit = true, confirmSync }) => {
                   id="custcode"
                   autoComplete="custcode"
                   disabled={isEdit}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   value={custcode}
                   onChange={(e) => setCustCode(e.target.value)}
                 />
@@ -274,7 +275,7 @@ const OrderInformation = ({ data, isEdit = true, confirmSync }) => {
                   id="country"
                   autoComplete="country"
                   disabled={isEdit}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   value={country}
                   onChange={(e) => setCountry(e.target.value)}
                 />
@@ -292,7 +293,7 @@ const OrderInformation = ({ data, isEdit = true, confirmSync }) => {
                   id="invno"
                   autoComplete="invno"
                   disabled={isEdit}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   value={invoiceno}
                   onChange={(e) => setInvoiceNo(e.target.value)}
                 />
@@ -311,7 +312,7 @@ const OrderInformation = ({ data, isEdit = true, confirmSync }) => {
                   id="zonecode"
                   autoComplete="zonecode"
                   disabled={isEdit}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   value={zonecode}
                   onChange={(e) => setZoneCode(e.target.value)}
                 />
@@ -330,7 +331,7 @@ const OrderInformation = ({ data, isEdit = true, confirmSync }) => {
                   id="bioat"
                   autoComplete="bioat"
                   disabled={isEdit}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   value={bioat}
                   onChange={(e) => setBioat(e.target.value)}
                 />
@@ -348,7 +349,7 @@ const OrderInformation = ({ data, isEdit = true, confirmSync }) => {
                   name="zoneid"
                   autoComplete="zoneid"
                   disabled={isEdit}
-                  className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                  className="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                   value={zone_id}
                   onChange={(e) => setZone(e.target.value)}
                 >
@@ -375,7 +376,7 @@ const OrderInformation = ({ data, isEdit = true, confirmSync }) => {
                   id="loading_area"
                   autoComplete="loading_area"
                   disabled={isEdit}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   value={loading_area}
                   onChange={(e) => setLoadingArea(e.target.value)}
                 />
@@ -394,7 +395,7 @@ const OrderInformation = ({ data, isEdit = true, confirmSync }) => {
                   id="city"
                   autoComplete="city"
                   disabled={isEdit}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   value={order_title}
                   onChange={(e) => setOrderTitle(e.target.value)}
                 />
@@ -413,7 +414,7 @@ const OrderInformation = ({ data, isEdit = true, confirmSync }) => {
                   id="order_privilege"
                   autoComplete="order_privilege"
                   disabled={isEdit}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   value={privilege}
                   onChange={(e) => setPrivilege(e.target.value)}
                 />
@@ -432,14 +433,14 @@ const OrderInformation = ({ data, isEdit = true, confirmSync }) => {
                   id="carrier_code"
                   autoComplete="carrier_code"
                   disabled={isEdit}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   value={carrier_code}
                   onChange={(e) => setCarrierCode(e.target.value)}
                 />
               </div>
             </div>
           </div>
-          <div className="bg-gray-50 px-4 py-3 text-right sm:px-6 space-x-4">
+          <div className="px-4 py-3 space-x-4 text-right bg-gray-50 sm:px-6">
             <ConfirmSyncData
               id={data?.id}
               labe={`ยืนยันรายการนี้`}
@@ -457,7 +458,7 @@ const OrderInformation = ({ data, isEdit = true, confirmSync }) => {
               }
             >
               <FolderPlusIcon
-                className="-ml-1 mr-2 h-5 w-5"
+                className="w-5 h-5 mr-2 -ml-1"
                 aria-hidden="true"
               />
               บันทึกข้อมูล

@@ -74,6 +74,7 @@ const IndexPage = () => {
     if (vendor !== undefined && session?.user) {
       FetchData();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session?.user, vendor]);
   return (
     <>

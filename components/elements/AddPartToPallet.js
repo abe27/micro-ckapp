@@ -63,6 +63,7 @@ const AddPartToPallet = ({
     }
     setIsValidate("");
     setTotal(ctn - pallet);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
   return (
@@ -106,7 +107,7 @@ const AddPartToPallet = ({
                 />
               </div>
             </div>
-            <div className="mt-4 flex space-x-2">
+            <div className="flex mt-4 space-x-2">
               <div className="w-2/5">เลือกพาเลท/กล่อง:</div>
               <div>
                 <select
