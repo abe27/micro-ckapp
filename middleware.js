@@ -14,10 +14,10 @@ export const config = {
   matcher: [
     "/",
     "/order/:path*",
-    "/dashboard/:path*",
+    // "/dashboard/:path*",
     "/receive/:path*",
     "/stock/:path*",
-    "/report/:path*",
+    // "/report/:path*",
   ],
 };
 
