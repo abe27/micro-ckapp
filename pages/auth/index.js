@@ -14,6 +14,7 @@ const AuthPage = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    clearAllSessionStorage();
     const data = new FormData(event.target);
     data.set("username", data.get("username"));
     data.set("password", data.get("password"));
@@ -32,6 +33,8 @@ const AuthPage = () => {
         duration: 9000,
         isClosable: true,
         position: "top",
+        onClose: () => {
+          router.push("/auth");}
       });
     }
 
@@ -43,8 +46,10 @@ const AuthPage = () => {
         duration: 2000,
         isClosable: true,
         position: "top",
+        onCloseComplete: () => {
+          router.push("/")
+        }
       });
-      router.push("/")
     }
   };
 
