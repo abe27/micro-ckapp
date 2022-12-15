@@ -210,8 +210,8 @@ const ReceiveDetailPage = () => {
               <tr>
                 <th></th>
                 <th colSpan={2}>สินค้า</th>
-                <th>{SummaryReceiveQty(receiveDetail?.receive_detail)}</th>
-                <th>{SummaryReceiveCtn(receiveDetail?.receive_detail)}</th>
+                <th></th>
+                <th></th>
                 <th>รับแล้ว</th>
                 <th>ทำพาเลท</th>
                 <th>คงเหลือ</th>
