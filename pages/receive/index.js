@@ -8,7 +8,7 @@ import {
   XCircleIcon,
 } from "@heroicons/react/20/solid";
 import { useEffect, useState } from "react";
-import { ReDate, ReDateTime, SummaryReceiveQty } from "../../hooks/greeter";
+import { ReDate, ReDateTime } from "../../hooks/greeter";
 import Link from "next/link";
 
 const ReceiveIndexPage = () => {

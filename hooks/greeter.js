@@ -81,10 +81,18 @@ const SummaryCtn = (obj) => {
   return x.toLocaleString()
 }
 
-const SummaryReceiveQty = (obj) => {
+const SummaryReceiveCtn = (obj) => {
   let x = 0
   obj.map(i => {
     x += i.plan_ctn
+  })
+  return x.toLocaleString()
+}
+
+const SummaryReceiveQty = (obj) => {
+  let x = 0
+  obj.map(i => {
+    x += i.plan_qty
   })
   return x.toLocaleString()
 }
@@ -101,4 +109,5 @@ export {
   ReplaceHashtag,
   SummaryCtn,
   SummaryReceiveQty,
+  SummaryReceiveCtn,
 };
