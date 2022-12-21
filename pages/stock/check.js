@@ -228,7 +228,9 @@ const StockPage = () => {
                     <td>{i.partname}</td>
                     <td>{i.total}</td>
                     <td>{i.checked}</td>
-                    <td>{i.notcheck}</td>
+                    <td>
+                      <span className={i.notcheck > 0 ? `text-red-600` : ``}>{i.notcheck}</span>
+                    </td>
                     <td>
                       {i.notcheck > 0 ? (
                         <XCircleIcon
