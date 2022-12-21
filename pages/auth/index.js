@@ -33,8 +33,7 @@ const AuthPage = () => {
         duration: 9000,
         isClosable: true,
         position: "top",
-        onClose: () => {
-          router.push("/auth");}
+        onCloseComplete: () => router.push("/auth")
       });
     }
 
@@ -46,9 +45,7 @@ const AuthPage = () => {
         duration: 2000,
         isClosable: true,
         position: "top",
-        onCloseComplete: () => {
-          router.push("/")
-        }
+        onCloseComplete: () => router.push("/")
       });
     }
   };
