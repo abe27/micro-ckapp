@@ -1,5 +1,8 @@
 import { Spinner } from "@chakra-ui/react";
-import { ArrowPathIcon, FunnelIcon } from "@heroicons/react/20/solid";
+import {
+    ArrowPathIcon,
+    CheckCircleIcon, XCircleIcon
+} from "@heroicons/react/20/solid";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -151,7 +154,19 @@ const CartonPage = () => {
                     </td>
                     <td>{i.shelve}</td>
                     <td>{i.pallet_no}</td>
-                    <td>{i.checked_flg}</td>
+                    <td>
+                      {i.checked_flg ? (
+                        <CheckCircleIcon
+                          className="w-5 h-5 mr-2 -ml-1 text-green-500"
+                          aria-hidden="true"
+                        />
+                      ) : (
+                        <XCircleIcon
+                          className="w-5 h-5 mr-2 -ml-1 text-rose-500"
+                          aria-hidden="true"
+                        />
+                      )}
+                    </td>
                     <td>{ReDateTime(i.last_update)}</td>
                   </tr>
                 ))}
