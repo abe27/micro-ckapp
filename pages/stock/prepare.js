@@ -31,6 +31,9 @@ const StockPage = () => {
 
     if (session?.user.WhsDescription !== undefined) {
       setFilterWhs(session?.user.WhsDescription);
+      if (session?.user.WhsDescription === "-") {
+        setFilterWhs("C");
+      }
     }
 
     let host = `${process.env.API_HOST}/stock/shelve/S-XXX?tag=${filterWhs}`;
@@ -125,6 +128,9 @@ const StockPage = () => {
   useEffect(() => {
     if (session?.user.WhsDescription !== undefined) {
       setFilterWhs(session?.user.WhsDescription);
+      if (session?.user.WhsDescription === "-") {
+        setFilterWhs("C");
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session?.user]);

@@ -26,9 +26,14 @@ const StockPage = () => {
       headers: myHeaders,
       redirect: "follow",
     };
+
     if (session?.user.WhsDescription !== undefined) {
       setFilterWhs(session?.user.WhsDescription);
+      if (session?.user.WhsDescription === "-") {
+        setFilterWhs("C");
+      }
     }
+
     let host = `${process.env.API_HOST}/stock/data?tag=${filterWhs}`;
     if (txtPartFilter !== "") {
       host = `${process.env.API_HOST}/stock/data?part_no=${txtPartFilter}&tag=${filterWhs}`;
@@ -79,6 +84,9 @@ const StockPage = () => {
   useEffect(() => {
     if (session?.user.WhsDescription !== undefined) {
       setFilterWhs(session?.user.WhsDescription);
+      if (session?.user.WhsDescription === "-") {
+        setFilterWhs("C");
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session?.user]);
