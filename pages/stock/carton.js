@@ -38,6 +38,11 @@ const CartonPage = () => {
         setTxtLotNo("");
         setIsLoading(false);
       }
+
+      if (!res.ok) {
+        console.dir(res.error)
+        setIsLoading(false);
+      }
     }
   };
 
