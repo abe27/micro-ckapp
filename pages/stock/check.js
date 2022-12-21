@@ -5,6 +5,7 @@ import {
   FunnelIcon,
   XCircleIcon,
 } from "@heroicons/react/20/solid";
+import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { ConfirmOutStock, ConfirmSendToStock, NavBar } from "../../components";
@@ -216,7 +217,9 @@ const StockPage = () => {
                         <span className="text-blue-500">COM</span>
                       )}
                     </td>
-                    <td>{i.partno}</td>
+                    <td>
+                      <Link href={`/stock/carton?part_no=${i.partno}&tag=${i.tagrp}`} target="_blank">{i.partno}</Link>
+                    </td>
                     <td>{i.partname}</td>
                     <td>{i.total}</td>
                     <td>{i.checked}</td>
