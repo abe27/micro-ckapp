@@ -40,7 +40,7 @@ const CartonPage = () => {
       }
 
       if (!res.ok) {
-        console.dir(res.error)
+        console.dir(res)
         setIsLoading(false);
       }
     }
