@@ -103,6 +103,7 @@ export const authOptions = {
       session.user.fullName = token.fullName;
       session.user.Area = token.Area.title;
       session.user.Whs = token.Whs.title;
+      session.user.WhsDescription = token.Whs.description;
       session.user.Factory = token.Factory.title;
       session.Position = token.Position.title;
       session.Department = token.Department.title;

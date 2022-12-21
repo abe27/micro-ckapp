@@ -1,7 +1,5 @@
 import { Spinner, useToast } from "@chakra-ui/react";
-import {
-  ArrowPathIcon, FunnelIcon
-} from "@heroicons/react/20/solid";
+import { ArrowPathIcon, FunnelIcon } from "@heroicons/react/20/solid";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -10,8 +8,8 @@ import { NavBar } from "../../components";
 import { ReDateTime, SummaryCtn } from "../../hooks/greeter";
 
 const StockPage = () => {
-  const router = useRouter()
-  const toast = useToast()
+  const router = useRouter();
+  const toast = useToast();
   const { data: session } = useSession();
   const [isLoading, setIsLoading] = useState(false);
   const [stocks, setStocks] = useState([]);
@@ -28,23 +26,26 @@ const StockPage = () => {
       headers: myHeaders,
       redirect: "follow",
     };
+    if (session?.user.WhsDescription !== undefined) {
+      setFilterWhs(session?.user.WhsDescription);
+    }
     let host = `${process.env.API_HOST}/stock/data?tag=${filterWhs}`;
     if (txtPartFilter !== "") {
       host = `${process.env.API_HOST}/stock/data?part_no=${txtPartFilter}&tag=${filterWhs}`;
     }
-    console.log(host);
+    // console.log(host);
     const res = await fetch(host, requestOptions);
 
     if (res.ok) {
       const data = await res.json();
-      console.dir(data.data);
+      // console.dir(data.data);
       setStocks(data.data);
       setTxtPartFilter("");
       setIsLoading(false);
     }
 
     if (!res.ok) {
-      console.dir(res.statusText)
+      // console.dir(res.statusText);
       toast({
         title: res.statusText,
         status: "error",
@@ -53,10 +54,10 @@ const StockPage = () => {
         position: "top",
         onCloseComplete: () => {
           if (res.status === 401) {
-            router.push("/auth")
+            router.push("/auth");
           }
-        }
-      })
+        },
+      });
       setIsLoading(false);
     }
   };
@@ -76,8 +77,8 @@ const StockPage = () => {
   }, [filterWhs]);
 
   useEffect(() => {
-    if (session?.user) {
-      FetchData();
+    if (session?.user.WhsDescription !== undefined) {
+      setFilterWhs(session?.user.WhsDescription);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session?.user]);
@@ -122,33 +123,46 @@ const StockPage = () => {
             </section>
           </nav>
           <nav className="flex mt-5 lg:mt-0 lg:ml-4">
-            <div className="dropdown dropdown-bottom dropdown-end dropdown-hover">
-              <span className="sm:ml-3">
-                <button
-                  type="button"
-                  className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-800 bg-white border border-transparent rounded-md shadow-sm hover:bg-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:ring-offset-2"
+            {session?.user.isAdmin ? (
+              <div className="dropdown dropdown-bottom dropdown-end dropdown-hover">
+                <span className="sm:ml-3">
+                  <button
+                    type="button"
+                    className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-800 bg-white border border-transparent rounded-md shadow-sm hover:bg-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:ring-offset-2"
+                  >
+                    <FunnelIcon
+                      className="w-4 h-4 mr-2 -ml-1"
+                      aria-hidden="true"
+                    />
+                    {txtWhs}
+                  </button>
+                </span>
+                <div
+                  tabIndex={0}
+                  className="p-2 shadow dropdown-content menu bg-base-100 rounded-box w-52"
                 >
-                  <FunnelIcon
-                    className="w-4 h-4 mr-2 -ml-1"
-                    aria-hidden="true"
-                  />
-                  {txtWhs}
-                </button>
-              </span>
-              <div
-                tabIndex={0}
-                className="p-2 shadow dropdown-content menu bg-base-100 rounded-box w-52"
-              >
-                <select
-                  className="w-full max-w-xs select select-info"
-                  value={filterWhs}
-                  onChange={selectWhs}
-                >
-                  <option value={`D`}>CK-1</option>
-                  <option value={`C`}>CK-2</option>
-                </select>
+                  <select
+                    className="w-full max-w-xs select select-info"
+                    value={filterWhs}
+                    onChange={selectWhs}
+                  >
+                    <option value={`D`}>CK-1</option>
+                    <option value={`C`}>CK-2</option>
+                  </select>
+                </div>
               </div>
-            </div>
+            ) : (
+              <div>
+                <span className="sm:ml-3">
+                  <button
+                    type="button"
+                    className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-800 bg-white border border-transparent rounded-md shadow-sm hover:bg-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:ring-offset-2"
+                  >
+                    {txtWhs}
+                  </button>
+                </span>
+              </div>
+            )}
             <span className="sm:ml-3">
               <button
                 type="button"

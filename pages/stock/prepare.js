@@ -29,6 +29,10 @@ const StockPage = () => {
       redirect: "follow",
     };
 
+    if (session?.user.WhsDescription !== undefined) {
+      setFilterWhs(session?.user.WhsDescription);
+    }
+
     let host = `${process.env.API_HOST}/stock/shelve/S-XXX?tag=${filterWhs}`;
     if (txtPartFilter !== "") {
       host = `${process.env.API_HOST}/stock/serial_no/${txtPartFilter}`;
@@ -119,8 +123,8 @@ const StockPage = () => {
   }, [filterWhs]);
 
   useEffect(() => {
-    if (session?.user) {
-      FetchData();
+    if (session?.user.WhsDescription !== undefined) {
+      setFilterWhs(session?.user.WhsDescription);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session?.user]);
@@ -168,33 +172,46 @@ const StockPage = () => {
             </section>
           </nav>
           <nav className="flex mt-5 lg:mt-0 lg:ml-4">
-            <div className="dropdown dropdown-bottom dropdown-end dropdown-hover">
-              <span className="sm:ml-3">
-                <button
-                  type="button"
-                  className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-800 bg-white border border-transparent rounded-md shadow-sm hover:bg-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:ring-offset-2"
+            {session?.user.isAdmin ? (
+              <div className="dropdown dropdown-bottom dropdown-end dropdown-hover">
+                <span className="sm:ml-3">
+                  <button
+                    type="button"
+                    className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-800 bg-white border border-transparent rounded-md shadow-sm hover:bg-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:ring-offset-2"
+                  >
+                    <FunnelIcon
+                      className="w-4 h-4 mr-2 -ml-1"
+                      aria-hidden="true"
+                    />
+                    {txtWhs}
+                  </button>
+                </span>
+                <div
+                  tabIndex={0}
+                  className="p-2 shadow dropdown-content menu bg-base-100 rounded-box w-52"
                 >
-                  <FunnelIcon
-                    className="w-4 h-4 mr-2 -ml-1"
-                    aria-hidden="true"
-                  />
-                  {txtWhs}
-                </button>
-              </span>
-              <div
-                tabIndex={0}
-                className="p-2 shadow dropdown-content menu bg-base-100 rounded-box w-52"
-              >
-                <select
-                  className="w-full max-w-xs select select-info"
-                  defaultValue={filterWhs}
-                  onChange={selectWhs}
-                >
-                  <option value={`D`}>CK-1</option>
-                  <option value={`C`}>CK-2</option>
-                </select>
+                  <select
+                    className="w-full max-w-xs select select-info"
+                    defaultValue={filterWhs}
+                    onChange={selectWhs}
+                  >
+                    <option value={`D`}>CK-1</option>
+                    <option value={`C`}>CK-2</option>
+                  </select>
+                </div>
               </div>
-            </div>
+            ) : (
+              <div>
+                <span className="sm:ml-3">
+                  <button
+                    type="button"
+                    className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-800 bg-white border border-transparent rounded-md shadow-sm hover:bg-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:ring-offset-2"
+                  >
+                    {txtWhs}
+                  </button>
+                </span>
+              </div>
+            )}
             <span className="sm:ml-3">
               <button
                 type="button"
