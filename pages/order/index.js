@@ -176,7 +176,12 @@ const OrderPlanPage = () => {
       FetchWhs();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterCustomer, filterWhs, showAll, filterDate, session?.user]);
+  }, [filterCustomer, filterWhs, filterDate, session?.user]);
+
+  useEffect(() => {
+    setOffsetPage(1)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showAll])
 
   useEffect(() => {
     FetchOrder();
