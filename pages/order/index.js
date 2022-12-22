@@ -36,6 +36,7 @@ const OrderPlanPage = () => {
   const [customerData, setCustomerData] = useState(null);
   const [data, setData] = useState(null);
   const [showAll, setShowAll] = useState(true);
+  const [limitPage, setLimitPage] = useState(15)
   const [offsetPage, setOffsetPage] = useState(1);
 
   const OffsetPage = (n) => {
@@ -58,7 +59,7 @@ const OrderPlanPage = () => {
         redirect: "follow",
       };
 
-      let host = `${process.env.API_HOST}/order/ent?etd=${filterDate}&factory=${session.user.Factory}&is_checked=${showAll}&limit=15&offset=${offsetPage}`;
+      let host = `${process.env.API_HOST}/order/ent?etd=${filterDate}&factory=${session.user.Factory}&is_checked=${showAll}&limit=${limitPage}&offset=${offsetPage}`;
       console.dir(host);
       const res = await fetch(host, requestOptions);
 
@@ -102,7 +103,7 @@ const OrderPlanPage = () => {
         });
         customer.sort();
         setCustomerData(customer);
-        console.dir(obj.data);
+        // console.dir(obj.data);
         setIsLoading(false);
       }
     }
