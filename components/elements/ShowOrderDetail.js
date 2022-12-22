@@ -26,7 +26,6 @@ const ShowOrderDetail = ({
             {data?.order_detail.length > 0 ? (
               <Link
                 href={`/order/plan?id=${data.id}`}
-                rel="noopener noreferrer"
                 target="_blank"
               >
                 {x + 1}
@@ -89,7 +88,7 @@ const ShowOrderDetail = ({
           </td>
           <td>
             {data?.order_detail?.length > 0 ? (
-              <Link href={`/order/plan?id=${data.id}`}>
+              <Link href={`/order/plan?id=${data.id}`} target="_blank">
                 <span
                   className={
                     data.is_checked ? `text-rose-600` : `text-gray-600`
@@ -100,7 +99,7 @@ const ShowOrderDetail = ({
                       data.is_checked ? `ยืนยันแล้ว` : `ยังไม่ได้ทำ Invoice`
                     }
                   >
-                    {data.is_checked ? GenerateInvoice(data) : "-"}
+                    {GenerateInvoice(data)}
                   </Tooltip>
                 </span>
               </Link>
@@ -155,7 +154,6 @@ const ShowOrderDetail = ({
               {data?.order_detail?.length > 0 ? (
                 <Link
                   href={`/order/plan?id=${data.id}`}
-                  rel="noopener noreferrer"
                   target="_blank"
                 >
                   {x + 1}
@@ -223,6 +221,7 @@ const ShowOrderDetail = ({
                     ? `/order/plan?id=${data.id}`
                     : `#`
                 }
+                target="_blank"
               >
                 <span
                   className={
@@ -235,7 +234,7 @@ const ShowOrderDetail = ({
                         data.is_checked ? `ยืนยันแล้ว` : `ยังไม่ได้ทำ Invoice`
                       }
                     >
-                      {data.is_checked ? GenerateInvoice(data) : "-"}
+                      {GenerateInvoice(data)}
                     </Tooltip>
                   ) : (
                     <Tooltip
@@ -245,7 +244,7 @@ const ShowOrderDetail = ({
                           : `ยังไม่ได้ทำ Invoice`
                       }
                     >
-                      {data.is_checked ? GenerateInvoice(data) : "-"}
+                      {GenerateInvoice(data)}
                     </Tooltip>
                   )}
                 </span>

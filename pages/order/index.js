@@ -17,6 +17,7 @@ import {
   FunnelIcon,
   UsersIcon,
 } from "@heroicons/react/20/solid";
+import { fetchData } from "next-auth/client/_utils";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -180,6 +181,7 @@ const OrderPlanPage = () => {
 
   useEffect(() => {
     setOffsetPage(1)
+    FetchOrder();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showAll])
 
