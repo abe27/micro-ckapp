@@ -110,8 +110,10 @@ const StockPage = () => {
   };
 
   useEffect(() => {
-    setTxtWhs("กรองข้อมูล CK-1");
-    if (filterWhs !== "D") {
+    setTxtWhs("กรุณาเลือก Whs");
+    if (filterWhs === "D") {
+      setTxtWhs("กรองข้อมูล CK-1");
+    } else if (filterWhs === "C") {
       setTxtWhs("กรองข้อมูล CK-2");
     }
     FetchData();
@@ -119,12 +121,7 @@ const StockPage = () => {
   }, [filterWhs]);
 
   useEffect(() => {
-    if (session?.user.WhsDescription !== undefined) {
-      setFilterWhs(session?.user.WhsDescription);
-      if (session?.user.WhsDescription === "-") {
-        setFilterWhs("C");
-      }
-    }
+    setFilterWhs(session?.user.WhsDescription);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session?.user]);
   return (
@@ -194,6 +191,7 @@ const StockPage = () => {
                     defaultValue={filterWhs}
                     onChange={selectWhs}
                   >
+                    <option value={`-`}>-</option>
                     <option value={`D`}>CK-1</option>
                     <option value={`C`}>CK-2</option>
                   </select>

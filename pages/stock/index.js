@@ -27,13 +27,6 @@ const StockPage = () => {
       redirect: "follow",
     };
 
-    if (session?.user.WhsDescription !== undefined) {
-      setFilterWhs(session?.user.WhsDescription);
-      if (session?.user.WhsDescription === "-") {
-        setFilterWhs("C");
-      }
-    }
-
     let host = `${process.env.API_HOST}/stock/data?tag=${filterWhs}`;
     if (txtPartFilter !== "") {
       host = `${process.env.API_HOST}/stock/data?part_no=${txtPartFilter}&tag=${filterWhs}`;
@@ -73,8 +66,10 @@ const StockPage = () => {
   };
 
   useEffect(() => {
-    setTxtWhs("กรองข้อมูล CK-1");
-    if (filterWhs !== "D") {
+    setTxtWhs("กรุณาเลือก Whs");
+    if (filterWhs === "D") {
+      setTxtWhs("กรองข้อมูล CK-1");
+    } else if (filterWhs === "C") {
       setTxtWhs("กรองข้อมูล CK-2");
     }
     FetchData();
@@ -84,9 +79,6 @@ const StockPage = () => {
   useEffect(() => {
     if (session?.user.WhsDescription !== undefined) {
       setFilterWhs(session?.user.WhsDescription);
-      if (session?.user.WhsDescription === "-") {
-        setFilterWhs("C");
-      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session?.user]);
@@ -154,6 +146,7 @@ const StockPage = () => {
                     value={filterWhs}
                     onChange={selectWhs}
                   >
+                    <option value={`-`}>-</option>
                     <option value={`D`}>CK-1</option>
                     <option value={`C`}>CK-2</option>
                   </select>

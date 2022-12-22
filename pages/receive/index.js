@@ -57,8 +57,10 @@ const ReceiveIndexPage = () => {
   }
 
   useEffect(() => {
-    setTxtWhs("กรองข้อมูล CK-1");
-    if (filterWhs !== "D") {
+    setTxtWhs("กรุณาเลือก Whs");
+    if (filterWhs === "D") {
+      setTxtWhs("กรองข้อมูล CK-1");
+    } else if (filterWhs === "C") {
       setTxtWhs("กรองข้อมูล CK-2");
     }
     FetchData();
