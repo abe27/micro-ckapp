@@ -11,13 +11,10 @@ import {
 } from "@chakra-ui/react";
 import {
   ArrowPathIcon,
-  BriefcaseIcon,
   CalendarIcon,
-  CloudIcon,
   FunnelIcon,
   UsersIcon,
 } from "@heroicons/react/20/solid";
-import { fetchData } from "next-auth/client/_utils";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -37,7 +34,7 @@ const OrderPlanPage = () => {
   const [customerData, setCustomerData] = useState(null);
   const [data, setData] = useState(null);
   const [showAll, setShowAll] = useState(true);
-  const [limitPage, setLimitPage] = useState(15)
+  const [limitPage, setLimitPage] = useState(15);
   const [offsetPage, setOffsetPage] = useState(1);
 
   const OffsetPage = (n) => {
@@ -177,13 +174,13 @@ const OrderPlanPage = () => {
       FetchWhs();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterCustomer, session?.user]);
+  }, [filterDate, session?.user, showAll, offsetPage, filterWhs]);
 
   useEffect(() => {
-    setOffsetPage(1)
+    setOffsetPage(1);
     FetchOrder();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showAll])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showAll]);
 
   useEffect(() => {
     FetchOrder();
@@ -191,12 +188,13 @@ const OrderPlanPage = () => {
   }, [offsetPage]);
 
   useEffect(() => {
-    setOffsetPage(1)
-  }, [filterDate])
+    setOffsetPage(1);
+  }, [filterDate]);
 
   useEffect(() => {
-    setOffsetPage(1)
-  }, [filterWhs])
+    setOffsetPage(1);
+  }, [filterWhs]);
+
 
   return (
     <>
