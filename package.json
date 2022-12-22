@@ -22,7 +22,7 @@
     "daisyui": "^2.43.2",
     "eslint": "8.27.0",
     "eslint-config-next": "13.0.2",
-    "framer-motion": "^7.8.0",
+    "framer-motion": "^8.0.1",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.5.28",
     "next": "latest",

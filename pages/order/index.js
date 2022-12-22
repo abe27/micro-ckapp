@@ -20,7 +20,7 @@ import {
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { NavBar, ShowOrderDetail } from "../../components";
+import { NavBar, ShowOrderDetail, SkeletonLoading } from "../../components";
 import { ReDate } from "../../hooks/greeter";
 import { getSessionStorage, setSessionStorage } from "../../hooks/session";
 
@@ -36,6 +36,14 @@ const OrderPlanPage = () => {
   const [customerData, setCustomerData] = useState(null);
   const [data, setData] = useState(null);
   const [showAll, setShowAll] = useState(true);
+  const [offsetPage, setOffsetPage] = useState(1);
+
+  const OffsetPage = (n) => {
+    if (n <= 0) {
+      n = 1;
+    }
+    setOffsetPage(n);
+  };
 
   const FetchOrder = async () => {
     if (filterDate != null && session != undefined) {
@@ -50,7 +58,7 @@ const OrderPlanPage = () => {
         redirect: "follow",
       };
 
-      let host = `${process.env.API_HOST}/order/ent?etd=${filterDate}&factory=${session.user.Factory}&is_checked=${showAll}`;
+      let host = `${process.env.API_HOST}/order/ent?etd=${filterDate}&factory=${session.user.Factory}&is_checked=${showAll}&limit=15&offset=${offsetPage}`;
       console.dir(host);
       const res = await fetch(host, requestOptions);
 
@@ -69,53 +77,55 @@ const OrderPlanPage = () => {
           },
         });
         console.dir(res.status);
+        setIsLoading(false);
       }
 
       if (res.ok) {
         const obj = await res.json();
-        let doc = []
+        let doc = [];
         if (filterCustomer !== "-") {
           obj.data.map((i, x) => {
-            if (i.consignee.customer.description === filterCustomer){
+            if (i.consignee.customer.description === filterCustomer) {
               doc.push(i);
             }
-          })
+          });
           setData(doc);
         } else {
-          setData(obj.data)
+          setData(obj.data);
         }
 
-        let customer = ["-"]
+        let customer = ["-"];
         obj.data.map((i) => {
           if (customer.indexOf(i.consignee.customer.description) < 0) {
-            customer.push(i.consignee.customer.description)
+            customer.push(i.consignee.customer.description);
           }
-        })
-        customer.sort()
-        setCustomerData(customer)
+        });
+        customer.sort();
+        setCustomerData(customer);
+        console.dir(obj.data);
+        setIsLoading(false);
       }
-      setIsLoading(false);
     }
   };
 
-  const ShowAll = e => {
-    setShowAll(e.target.checked)
-  }
+  const ShowAll = (e) => {
+    setShowAll(e.target.checked);
+  };
 
   const ReloadData = () => {
     let d = getSessionStorage("filterEdtDate");
-      if (d === null) {
-        d = setSessionStorage("filterEdtDate", ReDate(Date.now()));
-      }
-      setFilterDate(d);
-      setFilterCustomer("-")
-      setFilterWhs("-")
-      FetchOrder()
-  }
+    if (d === null) {
+      d = setSessionStorage("filterEdtDate", ReDate(Date.now()));
+    }
+    setFilterDate(d);
+    setFilterCustomer("-");
+    setFilterWhs("-");
+    FetchOrder();
+  };
 
   const FetchWhs = async () => {
     var myHeaders = new Headers();
-    myHeaders.append("Authorization",session?.user.accessToken);
+    myHeaders.append("Authorization", session?.user.accessToken);
 
     var requestOptions = {
       method: "GET",
@@ -162,11 +172,16 @@ const OrderPlanPage = () => {
         setFilterDate(d);
       }
       FetchOrder();
-      FetchWhs()
+      FetchWhs();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterCustomer, filterWhs, showAll, filterDate, session?.user]);
-  
+
+  useEffect(() => {
+    FetchOrder();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [offsetPage]);
+
   return (
     <>
       <NavBar
@@ -197,8 +212,16 @@ const OrderPlanPage = () => {
                       <PopoverCloseButton />
                       <PopoverHeader>เลือกข้อมูล</PopoverHeader>
                       <PopoverBody>
-                        <select className="w-full max-w-xs select select-ghost" defaultValue={filterWhs} onChange={e => setFilterWhs(e.target.value)}>
-                          {whsData?.map((i, x) => (<option key={i.id} value={i.title}>{i.title}</option>))}
+                        <select
+                          className="w-full max-w-xs select select-ghost"
+                          defaultValue={filterWhs}
+                          onChange={(e) => setFilterWhs(e.target.value)}
+                        >
+                          {whsData?.map((i, x) => (
+                            <option key={i.id} value={i.title}>
+                              {i.title}
+                            </option>
+                          ))}
                         </select>
                       </PopoverBody>
                     </PopoverContent>
@@ -218,13 +241,25 @@ const OrderPlanPage = () => {
                       <PopoverCloseButton />
                       <PopoverHeader>เลือกลูกค้า</PopoverHeader>
                       <PopoverBody>
-                        <select className="w-full max-w-xs select select-ghost" defaultValue={filterCustomer} onChange={e => setFilterCustomer(e.target.value)}>
-                          {customerData?.map((i, x) => (<option key={i} value={i}>{i}</option>))}
+                        <select
+                          className="w-full max-w-xs select select-ghost"
+                          defaultValue={filterCustomer}
+                          onChange={(e) => setFilterCustomer(e.target.value)}
+                        >
+                          {customerData?.map((i, x) => (
+                            <option key={i} value={i}>
+                              {i}
+                            </option>
+                          ))}
                         </select>
                       </PopoverBody>
                     </PopoverContent>
                   </Popover>
-                  {filterCustomer !== "-" ? <span>เลือกลูกค้า {filterCustomer}</span> : <span>ค้าหาลูกค้า -</span>}
+                  {filterCustomer !== "-" ? (
+                    <span>เลือกลูกค้า {filterCustomer}</span>
+                  ) : (
+                    <span>ค้าหาลูกค้า -</span>
+                  )}
                 </div>
                 <div className="flex items-center mt-2 text-sm text-gray-500">
                   <Popover>
@@ -312,94 +347,80 @@ const OrderPlanPage = () => {
                   โหลดใหม่
                 </button>
               </span>
-
-              {/* Dropdown */}
-              {/* <Menu as="div" className="relative ml-3 sm:hidden">
-                <Menu.Button className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                  More
-                  <ChevronDownIcon
-                    className="w-5 h-5 ml-2 -mr-1 text-gray-500"
-                    aria-hidden="true"
-                  />
-                </Menu.Button>
-
-                <Transition
-                  as={Fragment}
-                  enter="transition ease-out duration-200"
-                  enterFrom="transform opacity-0 scale-95"
-                  enterTo="transform opacity-100 scale-100"
-                  leave="transition ease-in duration-75"
-                  leaveFrom="transform opacity-100 scale-100"
-                  leaveTo="transform opacity-0 scale-95"
-                >
-                  <Menu.Items className="absolute right-0 z-10 w-48 py-1 mt-2 -mr-1 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                    <Menu.Item>
-                      {({ active }) => (
-                        <a
-                          href="#"
-                          className={classNames(
-                            active ? "bg-gray-100" : "",
-                            "block px-4 py-2 text-sm text-gray-700"
-                          )}
-                        >
-                          Edit
-                        </a>
-                      )}
-                    </Menu.Item>
-                    <Menu.Item>
-                      {({ active }) => (
-                        <a
-                          href="#"
-                          className={classNames(
-                            active ? "bg-gray-100" : "",
-                            "block px-4 py-2 text-sm text-gray-700"
-                          )}
-                        >
-                          View
-                        </a>
-                      )}
-                    </Menu.Item>
-                  </Menu.Items>
-                </Transition>
-              </Menu> */}
             </div>
           </div>
           {/* /End replace */}
           {/* start table */}
           <div className="z-0 mt-6 overflow-x-auto">
-            {data != null && (
-              <table className="z-0 table w-full table-compact">
-                <thead>
-                  <tr>
-                    <th></th>
-                    <th>Whs</th>
-                    <th>ETD Date.</th>
-                    <th>A/B/T</th>
-                    <th>ship from.</th>
-                    <th>ship to.</th>
-                    <th>Comm.</th>
-                    <th>invno.</th>
-                    <th>item</th>
-                    <th>ctn</th>
-                    <th>last update</th>
-                    <th>
-                      <div className="flex">
-                        <input
-                          type="checkbox"
-                          className="checkbox checkbox-xs checkbox-warning"
-                          defaultChecked={showAll}
-                          onChange={e => setShowAll(!showAll)}
-                        />
-                      </div>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.map((i, x) => (
-                    <ShowOrderDetail key={i.id} data={i} x={x} showAll={showAll} filterCustomer={filterCustomer} filterWhs={filterWhs} />
-                  ))}
-                </tbody>
-              </table>
+            {data != null ? (
+              <>
+                <table className="z-0 table w-full table-compact">
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>Whs</th>
+                      <th>ETD Date.</th>
+                      <th>A/B/T</th>
+                      <th>ship from.</th>
+                      <th>ship to.</th>
+                      <th>Comm.</th>
+                      <th>invno.</th>
+                      <th>item</th>
+                      <th>ctn</th>
+                      <th>last update</th>
+                      <th>
+                        <div className="flex">
+                          <input
+                            type="checkbox"
+                            className="checkbox checkbox-xs checkbox-warning"
+                            defaultChecked={showAll}
+                            onChange={(e) => setShowAll(!showAll)}
+                          />
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.map((i, x) => (
+                      <ShowOrderDetail
+                        key={i.id}
+                        data={i}
+                        x={x}
+                        showAll={showAll}
+                        filterCustomer={filterCustomer}
+                        filterWhs={filterWhs}
+                      />
+                    ))}
+                  </tbody>
+                </table>
+                <div className="flex justify-center mt-4">
+                  <div className="btn-group">
+                    <button
+                      className={
+                        offsetPage <= 1
+                          ? `btn btn-sm btn-disabled`
+                          : `btn btn-sm`
+                      }
+                      onClick={() => OffsetPage(offsetPage - 1)}
+                    >
+                      «
+                    </button>
+                    <button className="btn btn-sm">Page {offsetPage}</button>
+                    <button
+                      className={
+                        data?.length <= 0
+                          ? `btn btn-sm btn-disabled`
+                          : `btn btn-sm`
+                      }
+                      onClick={() => OffsetPage(offsetPage + 1)}
+                    >
+                      »
+                    </button>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <SkeletonLoading />
             )}
           </div>
           {/* end table */}
